@@ -204,15 +204,12 @@ export default function App() {
             Maria Teresa Rogani • Freelance Web Designer &amp; Lead Generation
           </motion.div>
 
-          <motion.h1 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
+          <h1
             className="font-display text-4xl md:text-6xl font-extrabold tracking-tighter text-charcoal leading-[1.05]"
           >
             Siti Web che vendono: Design e Strategia
-            <div className="w-24 h-2 grad-sunset mx-auto mt-4 rounded-full"></div>
-          </motion.h1>
+          </h1>
+          <div className="w-24 h-2 grad-sunset mx-auto mt-4 rounded-full"></div>
 
           <motion.p 
             initial={{ opacity: 0, y: 15 }}
