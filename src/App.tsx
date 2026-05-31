@@ -210,7 +210,8 @@ export default function App() {
             transition={{ delay: 0.1 }}
             className="font-display text-4xl md:text-6xl font-extrabold tracking-tighter text-charcoal leading-[1.05]"
           >
-            Siti Web che <span className="text-transparent bg-clip-text grad-sunset">vendono</span>: Design e Strategia
+            Siti Web che vendono: Design e Strategia
+            <div className="w-24 h-2 grad-sunset mx-auto mt-4 rounded-full"></div>
           </motion.h1>
 
           <motion.p 
@@ -515,7 +516,7 @@ export default function App() {
                   <div>
                     <h4 className="font-display text-lg font-bold">Messaggio Inviato!</h4>
                     <p className="text-xs text-muted-grey mt-1 max-w-sm mx-auto">
-                      Grazie per avermi contattato. Ti risponderò al più presto! Se vuoi vedere come viene gestito il tuo contatto, guarda la sezione "Esempio di Gestione" più in alto.
+                      Grazie per avermi contattato. Ti risponderò al più presto per discutere del tuo progetto!
                     </p>
                   </div>
                 </motion.div>
