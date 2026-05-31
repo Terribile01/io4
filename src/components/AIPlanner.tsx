@@ -93,12 +93,19 @@ export default function AIPlanner() {
         })
       });
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || data.error || "Errore nella comunicazione con il server");
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.message || data.error || "Errore nella comunicazione con il server");
+        }
+        setStrategy(data.text);
+      } else {
+        // Fallback for non-JSON responses (like HTML errors from proxy/host)
+        const text = await response.text();
+        console.error("Unexpected response format:", text);
+        throw new Error("Il server ha risposto in un formato non valido. Riprova più tardi.");
       }
-
-      setStrategy(data.text);
       setStep(4); // transition to result
     } catch (err: any) {
       console.error(err);

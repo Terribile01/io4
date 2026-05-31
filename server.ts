@@ -18,8 +18,15 @@ async function startServer() {
     res.json({ status: "ok", time: new Date().toISOString() });
   });
 
+  // Middleware to ensure API requests receive JSON errors
+  app.use("/api/*", (req, res, next) => {
+    res.setHeader("Content-Type", "application/json");
+    next();
+  });
+
   // Secured Gemini API Proxy for the Lead Generation strategy builder
-  app.post("/api/audit", async (req, res) => {
+  // We place this BEFORE Vite middleware to ensure it's not caught by SPA fallback
+  app.post("/api/audit", async (req, res, next) => {
     try {
       const { businessName, niche, goals, budget, webType, currentWebsite } = req.body;
 
@@ -90,22 +97,26 @@ Usa formattazione Markdown elegante, parti in grassetto, punti elenco puliti ed 
 `;
 
       const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
-        contents: userPrompt,
+        model: "gemini-1.5-flash",
+        contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
         config: {
-          systemInstruction: systemPrompt,
+          systemInstruction: { role: 'system', parts: [{ text: systemPrompt }] },
           temperature: 0.7,
         }
       });
 
       res.json({ text: response.text });
     } catch (err: any) {
-      console.error("Gemini proxy error:", err);
-      res.status(500).json({ 
-        error: "Errore interno durante il calcolo dell'audit", 
-        message: err?.message || "Impossibile contattare l'AI al momento." 
-      });
+      next(err);
     }
+  });
+
+  // API 404 handler - also before Vite to prevent HTML responses for missing API endpoints
+  app.all("/api/*", (req, res) => {
+    res.status(404).json({
+      error: "ENDPOINT_NON_TROVATO",
+      message: `L'endpoint ${req.originalUrl} non esiste.`,
+    });
   });
 
   // Vite development vs production asset serving
@@ -114,6 +125,8 @@ Usa formattazione Markdown elegante, parti in grassetto, punti elenco puliti ed 
       server: { middlewareMode: true },
       appType: "spa",
     });
+    // Ensure API routes are handled BEFORE Vite's SPA fallback
+    // But we need to be careful with the order
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
@@ -122,6 +135,15 @@ Usa formattazione Markdown elegante, parti in grassetto, punti elenco puliti ed 
       res.sendFile(path.join(distPath, "index.html"));
     });
   }
+
+  // Global API Error handler
+  app.use("/api/*", (err: any, req: any, res: any, next: any) => {
+    console.error("API Error Handler:", err);
+    res.status(err.status || 500).json({
+      error: "ERRORE_API",
+      message: err.message || "Si è verificato un errore imprevisto.",
+    });
+  });
 
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`[Faciilissimo Web Server] Running on port ${PORT}`);
