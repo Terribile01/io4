@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 import ROICalculator from "./components/ROICalculator";
 import AIPlanner from "./components/AIPlanner";
-import AdminHub from "./components/AdminHub";
 import { LeadSubmission } from "./types";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -119,12 +118,6 @@ export default function App() {
               >
                 AI Planner <Sparkles className="w-3 h-3 text-accent-orange" />
               </a>
-              <a 
-                href="#crm" 
-                className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
-              >
-                CRM Live
-              </a>
             </div>
           </div>
 
@@ -188,15 +181,6 @@ export default function App() {
               onClick={() => {
                 setMobileMenuOpen(false);
               }}
-              href="#crm" 
-              className="text-xs uppercase font-bold tracking-widest text-white/80 py-2 border-b border-white/5"
-            >
-              Simulatore CRM &amp; Lead
-            </a>
-            <a 
-              onClick={() => {
-                setMobileMenuOpen(false);
-              }}
               href="#contatti" 
               className="text-xs uppercase font-bold tracking-widest text-charcoal bg-white py-3 px-4 rounded-none hover:bg-bg-ivory transition-all text-center block mt-2 shadow font-semibold"
             >
@@ -226,7 +210,7 @@ export default function App() {
             transition={{ delay: 0.1 }}
             className="font-display text-4xl md:text-6xl font-extrabold tracking-tighter text-charcoal leading-[1.05]"
           >
-            Siti Web che <span className="text-transparent bg-clip-text grad-sunset">Portano Clienti</span>: Design e Strategia
+            Siti Web che <span className="text-transparent bg-clip-text grad-sunset">vendono</span>: Design e Strategia
           </motion.h1>
 
           <motion.p 
@@ -462,22 +446,6 @@ export default function App() {
           <AIPlanner />
         </section>
 
-        {/* 8. DETAILED CRM LEAD SIMULATOR DEMO CARD */}
-        <section className="space-y-12 scroll-mt-24" id="crm">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-accent-pink bg-accent-pink/10 px-3.5 py-1 rounded-full flex items-center justify-center gap-1 mx-auto w-max">
-              Esempio di Gestione <Database className="w-3.5 h-3.5" />
-            </span>
-            <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-charcoal">
-              Gestisci i tuoi nuovi contatti con facilità
-            </h2>
-            <p className="text-xs text-muted-grey">
-              Ogni richiesta che riceverai dal sito verrà organizzata in modo semplice. Potrai vedere chi ti ha contattato e quanto valore può portare alla tua azienda. Prova a compilare il modulo in fondo alla pagina per vedere come funziona!
-            </p>
-          </div>
-
-          <AdminHub />
-        </section>
 
 
         {/* 10. ABOUT MARIE TERESA ROGANI BIOS */}
