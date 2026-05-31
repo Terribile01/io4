@@ -118,13 +118,13 @@ export default function AdminHub() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-6 border-b border-line-ivory">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-accent-purple bg-accent-purple/10 px-3 py-1 rounded-full mb-2 inline-block">
-            Ingegneria Gestionale Custom
+            Gestione Semplice
           </span>
           <h3 className="font-display text-2xl font-bold text-charcoal">
-            Hub Acquisizione &amp; CRM Simulator
+            I Tuoi Nuovi Contatti
           </h3>
           <p className="text-xs text-muted-grey mt-1">
-            Qui vedi in tempo reale come i tuoi contatti vengono incanalati, tracciati e pronti per essere monetizzati.
+            In questa sezione puoi vedere come vengono organizzate le richieste che arrivano dal tuo sito.
           </p>
         </div>
         
@@ -153,7 +153,7 @@ export default function AdminHub() {
             <Users className="w-5 h-5" />
           </div>
           <div>
-            <p className="text-[10px] uppercase text-muted-grey">Total Lead Raccolte</p>
+            <p className="text-[10px] uppercase text-muted-grey">Totale Richieste</p>
             <p className="font-display text-lg font-bold text-charcoal">{totalLeads}</p>
           </div>
         </div>
@@ -173,7 +173,7 @@ export default function AdminHub() {
             <Euro className="w-5 h-5" />
           </div>
           <div>
-            <p className="text-[10px] uppercase text-muted-grey">Stima Ecosistema Pipeline</p>
+            <p className="text-[10px] uppercase text-muted-grey">Valore Potenziale</p>
             <p className="font-display text-lg font-bold text-charcoal">€ {pipelineValue.toLocaleString("it-IT")}</p>
           </div>
         </div>
@@ -186,8 +186,8 @@ export default function AdminHub() {
           {filteredLeads.length === 0 ? (
             <div className="p-12 text-center border-2 border-dashed border-line-ivory rounded-2xl">
               <Users className="w-8 h-8 text-muted-grey/60 mx-auto mb-2" />
-              <p className="text-sm font-semibold text-charcoal">Nessu contatto in questo stato</p>
-              <p className="text-xs text-muted-grey mt-0.5">Usa il form dell'Audit sopra per simularne l'invio!</p>
+              <p className="text-sm font-semibold text-charcoal">Nessun contatto trovato</p>
+              <p className="text-xs text-muted-grey mt-0.5">Compila il modulo in fondo alla pagina per vederne uno!</p>
             </div>
           ) : (
             filteredLeads.map((lead) => (
@@ -266,7 +266,7 @@ export default function AdminHub() {
                     </div>
                   )}
                   <div className="grid grid-cols-3">
-                    <span className="text-muted-grey">Piattaforma:</span>
+                    <span className="text-muted-grey">Tipo di Sito:</span>
                     <span className="col-span-2 font-medium text-charcoal">{selectedLead.webType}</span>
                   </div>
                   <div className="grid grid-cols-3">

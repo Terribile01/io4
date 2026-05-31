@@ -41,10 +41,10 @@ export default function ROICalculator() {
             Simulatore ROI & Strategia
           </span>
           <h3 className="font-display text-2xl font-bold text-charcoal">
-            Calcola la tua Potenza di Acquisizione
+            Calcola il Tuo Potenziale
           </h3>
           <p className="text-xs text-muted-grey mt-1">
-            Visualizza l'impatto reale di un sito performante e campagne pubblicitarie attive.
+            Scopri come un sito web che funziona può aumentare i tuoi guadagni.
           </p>
         </div>
         <button
@@ -62,8 +62,7 @@ export default function ROICalculator() {
           <div className="space-y-2">
             <div className="flex justify-between items-center text-sm">
               <label className="font-medium text-charcoal flex items-center gap-1.5">
-                Investimento Pubblicitario Mensile
-                <span className="text-xs text-muted-grey">(Meta & Google Ads)</span>
+                Quanto vorresti investire ogni mese in pubblicità?
               </label>
               <span className="font-mono font-bold text-charcoal bg-white px-2.5 py-1 rounded-md shadow-sm border border-line-ivory/30">
                 € {budget.toLocaleString("it-IT")}
@@ -89,8 +88,7 @@ export default function ROICalculator() {
           <div className="space-y-2">
             <div className="flex justify-between items-center text-sm">
               <label className="font-medium text-charcoal flex items-center gap-1.5">
-                Costo stimato per singolo Click (CPC)
-                <span className="text-xs text-muted-grey">(Competitività settore)</span>
+                Costo per ogni click (CPC)
               </label>
               <span className="font-mono font-bold text-charcoal bg-white px-2.5 py-1 rounded-md shadow-sm border border-line-ivory/30">
                 € {cpc.toFixed(2)}
@@ -116,9 +114,9 @@ export default function ROICalculator() {
           <div className="space-y-2">
             <div className="flex justify-between items-center text-sm">
               <label className="font-medium text-charcoal flex items-center gap-1.5">
-                Tasso di Conversione del Sito Web
+                Efficacia del Sito Web
                 <span className="text-[11px] font-bold text-accent-pink bg-accent-pink/10 px-2 py-0.5 rounded-none whitespace-nowrap">
-                  {convRate < 1.0 ? "Scarso (Standard)" : convRate < 2.5 ? "Medio (WordPress)" : "Eccellente (Codice Custom)"}
+                  {convRate < 1.0 ? "Bassa" : convRate < 2.5 ? "Normale" : "Alta"}
                 </span>
               </label>
               <span className="font-mono font-bold text-charcoal bg-white px-2.5 py-1 rounded-md shadow-sm border border-line-ivory/30">
@@ -145,8 +143,7 @@ export default function ROICalculator() {
           <div className="space-y-2">
             <div className="flex justify-between items-center text-sm">
               <label className="font-medium text-charcoal flex items-center gap-1.5">
-                Tasso di Chiusura dei Contatti (Vendite)
-                <span className="text-xs text-muted-grey">(Quante richieste diventano clienti veri)</span>
+                Quanti contatti diventano clienti?
               </label>
               <span className="font-mono font-bold text-charcoal bg-white px-2.5 py-1 rounded-md shadow-sm border border-line-ivory/30">
                 {closeRate}%
@@ -172,8 +169,7 @@ export default function ROICalculator() {
           <div className="space-y-2">
             <div className="flex justify-between items-center text-sm">
               <label className="font-medium text-charcoal flex items-center gap-1.5">
-                Valore Economico Medio di un Cliente
-                <span className="text-xs text-muted-grey">(Valore medio acquisto / contratto)</span>
+                Quanto vale in media un tuo cliente?
               </label>
               <span className="font-mono font-bold text-charcoal bg-white px-2.5 py-1 rounded-md shadow-sm border border-line-ivory/30">
                 € {customerValue.toLocaleString("it-IT")}
@@ -232,12 +228,12 @@ export default function ROICalculator() {
             </div>
 
             <div className="pt-2">
-              <p className="text-[10px] text-muted-grey uppercase">Fatturato Netto Stimato</p>
+              <p className="text-[10px] text-muted-grey uppercase">Possibile Incasso Mensile</p>
               <div className="flex items-baseline gap-2 mt-1">
                 <p className="font-display text-3xl font-black font-mono text-white">
                   € {estimatedRevenue.toLocaleString("it-IT")}
                 </p>
-                <span className="text-xs text-white/60">mensili</span>
+                <span className="text-xs text-white/60">stimati</span>
               </div>
             </div>
           </div>
@@ -248,11 +244,11 @@ export default function ROICalculator() {
             <div>
               <div className="flex items-center gap-1.5 text-xs font-bold uppercase mb-2">
                 <Sparkles className="w-3.5 h-3.5" />
-                Il Potere del Codice &amp; UX
+                Perché conta avere un buon sito?
               </div>
               <p className="text-white/90 text-xs leading-relaxed">
-                Ottimizzando il sito dal classico <strong>0.5%</strong> al nostro standard medio di <strong>{convRate}%</strong>, 
-                attiri il triplo di lead reali allo stesso costo pubblicitario!
+                Se il tuo sito convince più persone a contattarti (passando per esempio dallo 0.5% al <strong>{convRate}%</strong>),
+                puoi raddoppiare o triplicare i tuoi clienti senza spendere un euro in più in pubblicità!
               </p>
             </div>
             {extraRevenue > 0 && (
@@ -261,7 +257,7 @@ export default function ROICalculator() {
                   <TrendingUp className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-wider text-white/75">Guadagno extra stimato</p>
+                  <p className="text-[10px] uppercase tracking-wider text-white/75">Guadagno extra possibile</p>
                   <p className="font-mono text-sm font-bold text-white">+ € {extraRevenue.toLocaleString("it-IT")} / mese</p>
                 </div>
               </div>
@@ -272,13 +268,13 @@ export default function ROICalculator() {
 
       <div className="mt-6 flex flex-col sm:flex-row gap-4 items-center justify-between p-4 bg-bg-ivory rounded-none border border-line-ivory/60 text-xs">
         <span className="text-muted-grey text-left">
-          * Nota: questi calcoli si basano su medie statistiche di mercato locali nel mercato italiano. I risultati effettivi dipendono dalla tua offerta, concorrenza geografica e forza commerciale.
+          * Nota: questi calcoli sono stime basate su medie di mercato. I risultati reali dipendono dal tuo settore e dalla tua zona.
         </span>
         <a 
-          href="#pricing"
+          href="#contatti"
           className="bg-charcoal text-white hover:bg-[#2A2A2F] transition-all px-4 py-2.5 rounded-none font-bold text-center w-full sm:w-auto shrink-0 uppercase tracking-widest text-[10px]"
         >
-          Richiedi Studio Completo
+          Chiedimi una consulenza
         </a>
       </div>
     </div>

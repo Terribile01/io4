@@ -8,13 +8,11 @@ import {
 import ROICalculator from "./components/ROICalculator";
 import AIPlanner from "./components/AIPlanner";
 import AdminHub from "./components/AdminHub";
-import MySkillsPage from "./components/MySkillsPage";
 import { LeadSubmission } from "./types";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [viewSkillsPage, setViewSkillsPage] = useState(false);
   const [privacyModalOpen, setPrivacyModalOpen] = useState(false);
   const [cookiesAccepted, setCookiesAccepted] = useState(() => {
     try {
@@ -89,7 +87,6 @@ export default function App() {
             <a 
               href="#hero" 
               onClick={() => {
-                setViewSkillsPage(false);
                 window.scrollTo(0, 0);
               }}
               className="flex items-center gap-2 group cursor-pointer"
@@ -104,41 +101,26 @@ export default function App() {
             
             {/* Desktop Links */}
             <div className="hidden md:flex items-center gap-7">
-              <button 
-                onClick={() => {
-                  setViewSkillsPage(true);
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
-                className={`text-[10px] font-bold uppercase tracking-widest transition-colors cursor-pointer bg-transparent border-none outline-none ${
-                  viewSkillsPage ? "text-accent-pink" : "text-[#BDBAB2] hover:text-white"
-                }`}
-              >
-                Le Mie Competenze
-              </button>
               <a 
                 href="#servizi" 
-                onClick={() => setViewSkillsPage(false)}
                 className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
               >
                 Servizi
               </a>
               <a 
                 href="#comparativa" 
-                onClick={() => setViewSkillsPage(false)}
                 className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
               >
                 Codice vs WP
               </a>
               <a 
                 href="#ai-planner" 
-                onClick={() => setViewSkillsPage(false)}
                 className="text-[10px] font-bold uppercase tracking-widest text-accent-orange hover:text-white transition-colors flex items-center gap-1"
               >
                 AI Planner <Sparkles className="w-3 h-3 text-accent-orange" />
               </a>
               <a 
                 href="#crm" 
-                onClick={() => setViewSkillsPage(false)}
                 className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
               >
                 CRM Live
@@ -149,7 +131,6 @@ export default function App() {
           <div className="flex items-center gap-3">
             <a 
               href="#contatti" 
-              onClick={() => setViewSkillsPage(false)}
               className="hidden md:flex bg-white text-charcoal hover:bg-bg-ivory transition-all text-[9px] h-9 font-bold px-4 rounded-none items-center justify-center uppercase tracking-wider shrink-0 shadow"
             >
               Parliamo del tuo Progetto
@@ -176,20 +157,9 @@ export default function App() {
             className="fixed inset-x-4 top-[84px] bg-charcoal text-white rounded-none p-6 z-[100] border-2 border-white/20 shadow-2xl flex flex-col gap-4 md:hidden"
             style={{ pointerEvents: 'auto' }}
           >
-            <button 
-              onClick={() => {
-                setViewSkillsPage(true);
-                setMobileMenuOpen(false);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className="text-xs uppercase font-bold tracking-widest text-[#FFF] py-2 border-b border-white/5 text-left bg-transparent"
-            >
-              Le Mie Competenze
-            </button>
             <a 
               onClick={() => {
                 setMobileMenuOpen(false);
-                setViewSkillsPage(false);
               }}
               href="#servizi" 
               className="text-xs uppercase font-bold tracking-widest text-white/80 py-2 border-b border-white/5"
@@ -199,7 +169,6 @@ export default function App() {
             <a 
               onClick={() => {
                 setMobileMenuOpen(false);
-                setViewSkillsPage(false);
               }}
               href="#comparativa" 
               className="text-xs uppercase font-bold tracking-widest text-white/80 py-2 border-b border-white/5"
@@ -209,7 +178,6 @@ export default function App() {
             <a 
               onClick={() => {
                 setMobileMenuOpen(false);
-                setViewSkillsPage(false);
               }}
               href="#ai-planner" 
               className="text-xs uppercase font-bold tracking-widest text-accent-orange py-2 border-b border-white/5 flex items-center gap-1.5"
@@ -219,7 +187,6 @@ export default function App() {
             <a 
               onClick={() => {
                 setMobileMenuOpen(false);
-                setViewSkillsPage(false);
               }}
               href="#crm" 
               className="text-xs uppercase font-bold tracking-widest text-white/80 py-2 border-b border-white/5"
@@ -229,7 +196,6 @@ export default function App() {
             <a 
               onClick={() => {
                 setMobileMenuOpen(false);
-                setViewSkillsPage(false);
               }}
               href="#contatti" 
               className="text-xs uppercase font-bold tracking-widest text-charcoal bg-white py-3 px-4 rounded-none hover:bg-bg-ivory transition-all text-center block mt-2 shadow font-semibold"
@@ -241,22 +207,6 @@ export default function App() {
       </AnimatePresence>
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-8 space-y-24 md:space-y-40 mt-12">
-        {viewSkillsPage ? (
-          <MySkillsPage 
-            onBack={() => {
-              setViewSkillsPage(false);
-              window.scrollTo(0, 0);
-            }}
-            onSelectGoal={(chosenGoal) => {
-              setGoals([chosenGoal]);
-              setViewSkillsPage(false);
-              setTimeout(() => {
-                const el = document.getElementById("contatti");
-                if (el) el.scrollIntoView({ behavior: "smooth" });
-              }, 120);
-            }}
-          />
-        ) : (
           <>
             {/* 2. HERO LANDING SECTION */}
         <section className="pt-24 md:pt-36 flex flex-col items-center text-center relative max-w-4xl mx-auto pb-10" id="hero">
@@ -267,7 +217,7 @@ export default function App() {
             className="bg-charcoal text-white rounded-none px-4 py-1.5 text-[9px] uppercase font-bold tracking-widest flex items-center gap-2 mb-6 shadow-md"
           >
             <span className="w-1.5 h-1.5 bg-green-400 rounded-full live-beacon"></span>
-            Maria Teresa Rogani • Web Designer &amp; Lead Specialist
+            Maria Teresa Rogani • Freelance Web Designer &amp; Lead Generation
           </motion.div>
 
           <motion.h1 
@@ -276,7 +226,7 @@ export default function App() {
             transition={{ delay: 0.1 }}
             className="font-display text-4xl md:text-6xl font-extrabold tracking-tighter text-charcoal leading-[1.05]"
           >
-            Siti Web d'Élite, Codice Custom e <span className="text-transparent bg-clip-text grad-sunset">Macchine Lead Generation</span>
+            Siti Web che <span className="text-transparent bg-clip-text grad-sunset">Portano Clienti</span>: Design e Strategia
           </motion.h1>
 
           <motion.p 
@@ -285,7 +235,7 @@ export default function App() {
             transition={{ delay: 0.2 }}
             className="text-sm md:text-base text-muted-grey mt-6 max-w-2xl leading-relaxed font-sans font-light"
           >
-            Dall'eleganza autonoma del <strong>Web Design Classico</strong> (WordPress, Wix, Squarespace) alla potenza esplosiva del <strong>Puro Codice Custom</strong> (React, Tailwind CSS). Integro funnel di acquisizione e campagne pubblicitarie ottimizzate per massimizzare il ROI del tuo brand.
+            Sono Maria Teresa, freelance specializzata nella creazione di siti web moderni e sistemi per generare nuovi contatti. Ti aiuto a far crescere il tuo business con soluzioni dirette, efficaci e facili da gestire.
           </motion.p>
 
           {/* Quick Pillar Badge Strip */}
@@ -314,25 +264,16 @@ export default function App() {
             className="flex flex-col sm:flex-row gap-3.5 justify-center items-center mt-10 w-full max-w-2xl"
           >
             <a 
-              href="#ai-planner" 
-              className="grad-electric hover:shadow-xl hover:scale-[1.03] transition-all text-white font-bold px-6 py-3 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[10px] w-full sm:w-auto cursor-pointer"
+              href="#contatti"
+              className="grad-electric hover:shadow-xl hover:scale-[1.03] transition-all text-white font-bold px-8 py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
             >
-              Fai un Audit AI Istantaneo <Sparkles className="w-4 h-4 text-white" />
+              Inizia Ora - Parlami del tuo Progetto <ArrowRight className="w-4 h-4" />
             </a>
-            <button 
-              onClick={() => {
-                setViewSkillsPage(true);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className="bg-charcoal text-white hover:bg-black transition-all font-bold px-6 py-3 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[10px] w-full sm:w-auto cursor-pointer pointer-events-auto shadow-md"
-            >
-              Le Mie Competenze <ArrowRight className="w-4 h-4 text-accent-orange animate-pulse" />
-            </button>
             <a 
               href="#servizi" 
-              className="bg-transparent border border-charcoal/30 text-charcoal hover:bg-charcoal hover:text-white transition-all font-bold px-6 py-3 rounded-none flex items-center justify-center uppercase tracking-widest text-[10px] w-full sm:w-auto cursor-pointer"
+              className="bg-transparent border border-charcoal/30 text-charcoal hover:bg-charcoal hover:text-white transition-all font-bold px-8 py-4 rounded-none flex items-center justify-center uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
             >
-              Scopri i Servizi
+              Cosa Posso Fare Per Te
             </a>
           </motion.div>
         </section>
@@ -341,13 +282,13 @@ export default function App() {
         <section className="space-y-12" id="servizi">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="text-[10px] font-bold uppercase tracking-widest text-accent-pink bg-accent-pink/10 px-3.5 py-1 rounded-none">
-              Cosa Posso Fare Per Te
+              Servizi Freelance
             </span>
             <h2 className="font-display text-2xl md:text-3xl font-bold mt-2">
-              Un Unico Punto di Contatto per Tutto il Tuo Marketing Online
+              Soluzioni Semplici per Crescere Online
             </h2>
             <p className="text-xs text-muted-grey">
-              Basta rimpalli tra web agency costose e digital marketer improvvisati. Offro soluzioni coordinate e sartoriali.
+              Ti aiuto a costruire una presenza digitale forte che attira nuovi clienti ogni giorno.
             </p>
           </div>
 
@@ -358,15 +299,15 @@ export default function App() {
                 <div className="w-10 h-10 rounded-2xl bg-accent-blue/10 flex items-center justify-center text-accent-blue mb-4">
                   <Laptop className="w-5 h-5" />
                 </div>
-                <h3 className="font-display text-lg font-bold">Web Design Classico e custom</h3>
+                <h3 className="font-display text-lg font-bold">Sito Web Professionale</h3>
                 <p className="text-xs text-muted-grey leading-relaxed">
-                  Progetto siti web su WordPress, Wix o Squarespace se cerchi indipendenza d'uso immediata. Se vuoi scalare, creo interfacce d'élite scritte in codice custom (React) per tempi di caricamento istantanei e SEO d'acciaio.
+                  Realizzo il tuo sito web su misura, veloce e ottimizzato per i motori di ricerca. Che tu preferisca WordPress per gestirlo in autonomia o una soluzione su misura in codice per prestazioni massime, ho la soluzione giusta.
                 </p>
               </div>
               <div className="pt-6 border-t border-line-ivory/50 mt-6 flex justify-between items-center text-xs">
-                <span className="font-medium text-charcoal font-mono">Dettaglio</span>
+                <span className="font-medium text-charcoal font-mono">Web Design</span>
                 <a href="#comparativa" className="text-accent-blue hover:underline flex items-center gap-1">
-                  Vedi differenze <ArrowRight className="w-3.5 h-3.5" />
+                  Scopri di più <ArrowRight className="w-3.5 h-3.5" />
                 </a>
               </div>
             </div>
@@ -377,15 +318,15 @@ export default function App() {
                 <div className="w-10 h-10 rounded-2xl bg-accent-pink/10 flex items-center justify-center text-accent-pink mb-4">
                   <Flame className="w-5 h-5" />
                 </div>
-                <h3 className="font-display text-lg font-bold">Ingegneria Lead Generation</h3>
+                <h3 className="font-display text-lg font-bold">Trovare Nuovi Clienti</h3>
                 <p className="text-xs text-muted-grey leading-relaxed">
-                  Un bel sito è inutile se non porta contatti. Strutturo funnel blindati di acquisizione clienti, magneti ad alta conversione, moduli interattivi e automatizzo il trasferimento delle informazioni dei lead alle tue email o al tuo CRM.
+                  Non solo un bel sito, ma uno strumento che lavora per te. Creo sistemi per raccogliere contatti di persone interessate ai tuoi servizi e automatizzo il processo per farti risparmiare tempo prezioso.
                 </p>
               </div>
               <div className="pt-6 border-t border-line-ivory/50 mt-6 flex justify-between items-center text-xs">
-                <span className="font-medium text-charcoal font-mono">Ottimizza</span>
+                <span className="font-medium text-charcoal font-mono">Lead Gen</span>
                 <a href="#calcolatore" className="text-accent-pink hover:underline flex items-center gap-1">
-                  Simula contatti <ArrowRight className="w-3.5 h-3.5" />
+                  Prova il simulatore <ArrowRight className="w-3.5 h-3.5" />
                 </a>
               </div>
             </div>
@@ -396,15 +337,15 @@ export default function App() {
                 <div className="w-10 h-10 rounded-2xl bg-accent-orange/10 flex items-center justify-center text-accent-orange mb-4">
                   <BarChart2 className="w-5 h-5" />
                 </div>
-                <h3 className="font-display text-lg font-bold font-semibold text-charcoal">Social &amp; Campaign ADS</h3>
+                <h3 className="font-display text-lg font-bold font-semibold text-charcoal">Pubblicità Google e Meta</h3>
                 <p className="text-xs text-muted-grey leading-relaxed">
-                  Gestisco campagne pubblicitarie per massimizzare la visibilità del brand. Google Search Ads per catturare chi ti cerca attivamente e Meta Ads (Facebook/Instagram) per stimolare la domanda con immagini mozzafiato.
+                  Porto traffico qualificato sul tuo sito attraverso campagne pubblicitarie mirate su Google, Facebook e Instagram. Massimizziamo insieme il tuo budget per ottenere il miglior risultato possibile.
                 </p>
               </div>
               <div className="pt-6 border-t border-line-ivory/50 mt-6 flex justify-between items-center text-xs">
-                <span className="font-medium text-charcoal font-mono">Monetizza</span>
-                <a href="#ai-planner" className="text-accent-orange hover:underline flex items-center gap-1">
-                  Crea piano ADS <ArrowRight className="w-3.5 h-3.5" />
+                <span className="font-medium text-charcoal font-mono">Marketing</span>
+                <a href="#contatti" className="text-accent-orange hover:underline flex items-center gap-1">
+                  Chiedi info <ArrowRight className="w-3.5 h-3.5" />
                 </a>
               </div>
             </div>
@@ -416,13 +357,13 @@ export default function App() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div className="space-y-6">
               <span className="text-[10px] font-bold uppercase tracking-widest text-accent-blue bg-accent-blue/10 px-3 py-1 rounded-full">
-                Scegli la Tua Tecnologia
+                La Tecnologia Giusta
               </span>
               <h2 className="font-display text-3xl font-extrabold tracking-tight text-charcoal leading-tight">
-                Metodo Classico (WP/Wix) oppure Codice Custom? Facciamo chiarezza.
+                WordPress o Codice Su Misura?
               </h2>
               <p className="text-sm text-muted-grey leading-relaxed">
-                Chi dice che si deve usare per forza la stessa tecnologia si sbaglia. Ogni azienda ha esigenze differenti: chi desidera un sito vetrina leggero da modificare in autonomia trova nel <strong>Web Design Classico</strong> lo strumento migliore. Chi cerca invece velocità folgorante, scalabilità estrema ed un'identità indimenticabile necessita di <strong>Codice Scritto a Mano</strong>.
+                Non esiste una soluzione universale. Se hai bisogno di un sito semplice da aggiornare da solo, <strong>WordPress</strong> è la scelta migliore. Se invece cerchi il massimo della velocità e un design unico, un sito in <strong>codice puro</strong> ti darà quel vantaggio competitivo necessario oggi.
               </p>
               <div className="space-y-4 text-xs font-semibold">
                 <div className="flex gap-3 items-start">
@@ -430,7 +371,7 @@ export default function App() {
                     <Check className="w-3 h-3" />
                   </div>
                   <p className="text-charcoal/90">
-                    WordPress/Squarespace: Perfetti per restyling veloci, blog autonomi e budget iniziali contenuti.
+                    WordPress: Ideale per blog, piccoli siti e per chi vuole gestire i testi in autonomia.
                   </p>
                 </div>
                 <div className="flex gap-3 items-start">
@@ -438,7 +379,7 @@ export default function App() {
                     <Check className="w-3 h-3" />
                   </div>
                   <p className="text-charcoal/90">
-                    Codice React/CSS Custom: Velocità e posizionamento Google d'élite, senza plugin pesanti potenzialmente insicuri.
+                    Codice Custom: Il top per velocità e sicurezza. Google lo ama perché è leggerissimo.
                   </p>
                 </div>
               </div>
@@ -450,17 +391,17 @@ export default function App() {
               <div className="bg-white border border-line-ivory rounded-2xl p-6 shadow-sm space-y-4 relative overflow-hidden group hover:border-[#BF5AF2]/35 transition-all">
                 <div className="absolute top-0 right-0 w-16 h-16 bg-[#BF5AF2]/5 rounded-bl-3xl pointer-events-none transition-all group-hover:scale-130"></div>
                 <span className="text-[9px] font-bold tracking-widest uppercase text-[#BF5AF2] bg-[#BF5AF2]/10 px-2 py-0.5 rounded">
-                  WP • WIX • SQUERASPACE
+                  FACILE E VELOCE
                 </span>
-                <h4 className="font-display text-base font-bold text-charcoal">Design Classico</h4>
+                <h4 className="font-display text-base font-bold text-charcoal">WordPress &amp; Co.</h4>
                 <p className="text-[11px] text-muted-grey leading-relaxed">
-                  Impostazione strutturale su base prefabbricata o costruttori software famosi.
+                  Perfetto per chi vuole un sito professionale in tempi brevi.
                 </p>
                 <div className="space-y-2 text-[10px] text-charcoal pt-3 border-t border-line-ivory/50">
-                  <div className="flex justify-between font-mono"><span>Autonomia:</span><strong>Massima (100%)</strong></div>
-                  <div className="flex justify-between font-mono"><span>Tempi Lancio:</span><strong>Rapidi (1-2 settimane)</strong></div>
-                  <div className="flex justify-between font-mono"><span>Sicurezza:</span><strong>Richiede update costanti</strong></div>
-                  <div className="flex justify-between font-mono"><span>Performance:</span><b>Medio-Bassa (Grandi file)</b></div>
+                  <div className="flex justify-between font-mono"><span>Gestione:</span><strong>Autonoma al 100%</strong></div>
+                  <div className="flex justify-between font-mono"><span>Consegna:</span><strong>1-2 settimane</strong></div>
+                  <div className="flex justify-between font-mono"><span>Costo:</span><strong>Contenuto</strong></div>
+                  <div className="flex justify-between font-mono"><span>Performance:</span><b>Standard</b></div>
                 </div>
               </div>
 
@@ -468,19 +409,19 @@ export default function App() {
               <div className="bg-charcoal text-white rounded-2xl p-6 shadow-md space-y-4 relative overflow-hidden group hover:shadow-lg transition-all">
                 <div className="absolute top-0 right-0 w-16 h-16 bg-accent-orange/10 rounded-bl-3xl pointer-events-none transition-all group-hover:scale-130"></div>
                 <span className="text-[9px] font-bold tracking-widest uppercase text-accent-orange bg-accent-orange/10 px-2.5 py-0.5 rounded">
-                  PURA INGEGNERIA CUSTOM
+                  MASSIME PRESTAZIONI
                 </span>
                 <h4 className="font-display text-base font-bold text-white flex items-center gap-1">
-                  Codice Custom <Code className="w-4 h-4 text-accent-orange" />
+                  Codice Puro <Code className="w-4 h-4 text-accent-orange" />
                 </h4>
                 <p className="text-[11px] text-white/70 leading-relaxed">
-                  Interfaccia programmata ad-hoc in React, HTML5 e Tailwind. Codice super pulito.
+                  Creato riga per riga per chi vuole solo il meglio.
                 </p>
                 <div className="space-y-2 text-[10px] text-white/80 pt-3 border-t border-white/10">
-                  <div className="flex justify-between font-mono"><span>Velocità Caricamento:</span><strong className="text-green-400">Fulminea (0.4s)</strong></div>
-                  <div className="flex justify-between font-mono"><span>Impatto SEO:</span><strong className="text-green-400">Ottimizzazione strutturale</strong></div>
-                  <div className="flex justify-between font-mono"><span>Personalizzazione:</span><strong>Senza alcun limite</strong></div>
-                  <div className="flex justify-between font-mono"><span>Affidabilità:</span><strong>Sito blindato (Zero hacking)</strong></div>
+                  <div className="flex justify-between font-mono"><span>Velocità:</span><strong className="text-green-400">Istantanea</strong></div>
+                  <div className="flex justify-between font-mono"><span>SEO:</span><strong className="text-green-400">Superiore</strong></div>
+                  <div className="flex justify-between font-mono"><span>Design:</span><strong>Senza Limiti</strong></div>
+                  <div className="flex justify-between font-mono"><span>Sicurezza:</span><strong>Totale</strong></div>
                 </div>
               </div>
             </div>
@@ -491,13 +432,13 @@ export default function App() {
         <section className="space-y-8 scroll-mt-24" id="calcolatore">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
-              Strumenti Professionali
+              Strumento di Calcolo
             </span>
             <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-charcoal">
-              Simula il Tuo Successo: Calcolatore ROI Pubblicitario
+              Quanto puoi guadagnare con la pubblicità?
             </h2>
             <p className="text-xs text-muted-grey">
-              Fai scorrere i parametri per tastare il potenziale di crescita. Modificando il "tasso di conversione del sito" scoprirai perché un sito custom performante genera introiti doppi rispetto a costruttori obsoleti.
+              Usa questo simulatore per capire quanto può rendere il tuo investimento in pubblicità. Un sito che funziona meglio ti permette di ottenere più clienti a parità di spesa.
             </p>
           </div>
 
@@ -508,13 +449,13 @@ export default function App() {
         <section className="space-y-12 scroll-mt-24" id="ai-planner">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="text-[10px] font-bold uppercase tracking-widest text-[#BF5AF2] bg-[#BF5AF2]/10 px-3.5 py-1 rounded-full flex items-center justify-center gap-1 mx-auto w-max">
-              Generazione Avanzata <Sparkles className="w-3.5 h-3.5" />
+              Assistente Strategico <Sparkles className="w-3.5 h-3.5" />
             </span>
             <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-charcoal">
-              Audit Digitale Istantaneo con Intelligenza Artificiale
+              Ricevi un'Idea di Strategia Subito
             </h2>
             <p className="text-xs text-muted-grey">
-              Fornisci pochissime indicazioni sul tuo business locale e lascia che la nostra mente artificiale componga per te un preventivo con linee guida e indicazioni strategicamente studiate in italiano per raddoppiare i tuoi contatti.
+              Rispondi a qualche domanda sulla tua attività e riceverai immediatamente alcuni suggerimenti su come migliorare la tua presenza online per trovare più contatti.
             </p>
           </div>
 
@@ -525,13 +466,13 @@ export default function App() {
         <section className="space-y-12 scroll-mt-24" id="crm">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="text-[10px] font-bold uppercase tracking-widest text-accent-pink bg-accent-pink/10 px-3.5 py-1 rounded-full flex items-center justify-center gap-1 mx-auto w-max">
-              Dimostrazione Tracciamento <Database className="w-3.5 h-3.5" />
+              Esempio di Gestione <Database className="w-3.5 h-3.5" />
             </span>
             <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-charcoal">
-              La Gestione Clienti che Ti Costruirò
+              Gestisci i tuoi nuovi contatti con facilità
             </h2>
             <p className="text-xs text-muted-grey">
-              Non limitarti ad accumulare email vaghe. Ogni form inviato sul tuo sito confluisce in un database ordinato, tracciato e stimato in fatturato potenziale. Simula compilando il modulo sotto e vedi l'aggiunta istantanea.
+              Ogni richiesta che riceverai dal sito verrà organizzata in modo semplice. Potrai vedere chi ti ha contattato e quanto valore può portare alla tua azienda. Prova a compilare il modulo in fondo alla pagina per vedere come funziona!
             </p>
           </div>
 
@@ -551,27 +492,27 @@ export default function App() {
           </div>
           <div className="space-y-4 text-left flex-1 min-w-0">
             <span className="text-[10px] font-bold uppercase tracking-widest text-[#00C7BE] bg-[#00C7BE]/10 px-3 py-1 rounded-full">
-              Sartorialità Digitale 1-to-1
+              Freelance al tuo fianco
             </span>
             <h3 className="font-display text-2xl md:text-3xl font-extrabold text-charcoal">
-              Dietro Faciilissimo Web: Maria Teresa Rogani
+              Chi Sono: Maria Teresa Rogani
             </h3>
             <p className="text-xs md:text-sm text-charcoal/80 leading-relaxed font-sans font-light">
-              Mi occupo di <strong>Web Design</strong> sia in maniera classica (WordPress, Wix, Squarespace) che programmando a livello codice. Unisco questa disciplina ad una viscerale passione per i tracciamenti digitali e la <strong>Lead Generation</strong> strategica. 
+              Sono una libera professionista che aiuta le piccole e medie imprese a farsi strada nel mondo digitale. Mi occupo di creare siti web che funzionano davvero e di portare nuovi clienti attraverso strategie di marketing mirate.
             </p>
             <p className="text-xs md:text-sm text-muted-grey leading-relaxed font-sans font-light">
-              Aiuto i miei clienti ad ottimizzare la visibilità online del proprio brand impostando campagne pubblicitarie di assoluta trasparenza. Con me non avrai costosi direttori d'agenzia da retribuire o risposte robotizzate: lavoro a stretto contatto con te per scolpire un prodotto digitale unico che converta in opportunità tangibili.
+              A differenza delle grandi agenzie, con me avrai un rapporto diretto e trasparente. Il mio obiettivo è farti ottenere risultati concreti, senza tecnicismi inutili, lavorando insieme per far crescere la tua attività.
             </p>
             
             <div className="flex flex-wrap gap-4 pt-2">
               <div className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
-                <Check className="w-4 h-4 text-green-500 font-bold" /> Trasparenza d'Esecuzione
+                <Check className="w-4 h-4 text-green-500 font-bold" /> Rapporto Diretto
               </div>
               <div className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
-                <Check className="w-4 h-4 text-green-500 font-bold" /> Zero Abbonamenti Occulti
+                <Check className="w-4 h-4 text-green-500 font-bold" /> Zero Costi Nascosti
               </div>
               <div className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
-                <Check className="w-4 h-4 text-green-500 font-bold" /> Strategia Data-Driven
+                <Check className="w-4 h-4 text-green-500 font-bold" /> Risultati Concreti
               </div>
             </div>
           </div>
@@ -581,13 +522,13 @@ export default function App() {
         <section className="space-y-12 scroll-mt-24 pb-16" id="contatti">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
-              Avvia la Collaborazione
+              Inizia Ora
             </span>
             <h2 className="font-display text-2xl md:text-3xl font-extrabold text-charcoal">
-              Scrivimi del Tuo Brand
+              Raccontami il Tuo Progetto
             </h2>
             <p className="text-xs text-muted-grey">
-              Inserisci i tuoi dati nel form interattivo. Vedrai istantaneamente la tua richiesta incanalarsi nello schedulo del CRM simulator sopra, a prova di efficienza tecnica.
+              Compila il modulo qui sotto. Riceverò i tuoi dati e ti ricontatterò per fissare una breve chiamata gratuita.
             </p>
           </div>
 
@@ -604,14 +545,11 @@ export default function App() {
                     <CheckCircle className="w-8 h-8" />
                   </div>
                   <div>
-                    <h4 className="font-display text-lg font-bold">Richiesta Inviata con Successo!</h4>
+                    <h4 className="font-display text-lg font-bold">Messaggio Inviato!</h4>
                     <p className="text-xs text-muted-grey mt-1 max-w-sm mx-auto">
-                      La tua lead è stata depositata sul database locale. Puoi scorrere in alto alla sezione **Dashboard CRM Live** per vederla caricata in cima alla lista!
+                      Grazie per avermi contattato. Ti risponderò al più presto! Se vuoi vedere come viene gestito il tuo contatto, guarda la sezione "Esempio di Gestione" più in alto.
                     </p>
                   </div>
-                  <p className="text-[11px] text-accent-blue font-bold animate-pulse">
-                    Il database si aggiorna all'istante mediante custom dispatch event.
-                  </p>
                 </motion.div>
               ) : (
                 <motion.form 
@@ -713,7 +651,6 @@ export default function App() {
           </div>
         </section>
           </>
-        )}
       </main>
 
       {/* 12. HIGH END GRAPHICAL SLATE FOOTER */}

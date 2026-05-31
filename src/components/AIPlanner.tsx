@@ -21,12 +21,11 @@ export default function AIPlanner() {
 
   // Auto incremental tips on the loading screen to maximize engagement
   const loadingPhrases = [
-    "Sto interpretando la nicchia del mercato di riferimento...",
-    "Studiando gli obiettivi di visibilità indicati...",
-    "Valutando l'architettura ideale (Sito Classico vs Custom Code)...",
-    "Configurando le tattiche ottimali di Lead Generation...",
-    "Progettando la roadmap ideale basata sul budget...",
-    "Il report strategico di Maria Teresa Rogani è in compilazione...",
+    "Analizzando la tua attività...",
+    "Studiando i tuoi obiettivi...",
+    "Cercando la soluzione tecnica migliore...",
+    "Preparando i consigli per trovare più clienti...",
+    "Compilando la tua strategia personalizzata...",
   ];
 
   useEffect(() => {
@@ -213,14 +212,11 @@ export default function AIPlanner() {
             <Sparkles className="w-6 h-6 text-accent-orange absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-bounce" />
           </div>
           <div>
-            <h4 className="font-display text-lg font-bold">Generando il tuo Piano di Crescita</h4>
+            <h4 className="font-display text-lg font-bold">Sto preparando i tuoi consigli...</h4>
             <div className="text-xs text-muted-grey mt-2 block h-6 font-medium animate-pulse text-accent-blue">
               {loadingText}
             </div>
           </div>
-          <p className="text-[11px] text-muted-grey max-w-xs leading-relaxed">
-            Un algoritmo avanzato integra i modelli di business di Maria Teresa con le statistiche locali del tuo settore.
-          </p>
         </div>
       )}
 
@@ -231,10 +227,9 @@ export default function AIPlanner() {
             <Sparkles className="w-8 h-8 text-accent-blue" />
           </div>
           <div className="max-w-xl mx-auto">
-            <h3 className="font-display text-2xl md:text-3xl font-bold">Genera un Audit Digitale Gratis</h3>
+            <h3 className="font-display text-2xl md:text-3xl font-bold">Ricevi un Consiglio Strategico Gratis</h3>
             <p className="text-sm text-muted-grey mt-2 leading-relaxed">
-              Hai bisogno di un sito o di convertire meglio? Inserisci i tuoi obiettivi ed ottieni all'istante
-              una bozza strategica e un preventivo iniziale generato appositamente per te da FW AI.
+              Vuoi far crescere la tua attività online? Rispondi a 3 semplici domande e ricevi subito dei suggerimenti personalizzati e un'idea di spesa per il tuo progetto.
             </p>
           </div>
           <div className="flex justify-center">
@@ -494,9 +489,9 @@ export default function AIPlanner() {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-line-ivory">
             <div>
               <span className="text-xs uppercase font-mono bg-accent-orange/10 text-accent-orange font-bold px-3 py-1 rounded-none">
-                Audit AI Personalizzato Generato
+                I Tuoi Consigli Personalizzati
               </span>
-              <h3 className="font-display text-2xl font-bold mt-1 text-charcoal">La Tua Strategia di Crescita</h3>
+              <h3 className="font-display text-2xl font-bold mt-1 text-charcoal">Ecco come puoi crescere</h3>
             </div>
             <button
               onClick={restartPlanner}
@@ -516,11 +511,11 @@ export default function AIPlanner() {
             <div className="space-y-1">
               <div className="flex items-center gap-2 text-accent-orange font-bold text-xs uppercase tracking-widest">
                 <Clock className="w-4 h-4" />
-                CONVALIDA LA STRATEGIA IN 1-TO-1
+                PARLIAMONE INSIEME
               </div>
-              <h4 className="font-display text-lg font-bold">Fissa una Mini-Call Conoscitiva (15 Minuti)</h4>
+              <h4 className="font-display text-lg font-bold">Fissa una chiamata gratuita (15 min)</h4>
               <p className="text-xs text-muted-grey">
-                Spiegheremo questa bozza nel dettaglio, valutando l'avvio della collaborazione. No stress, 0 impegni.
+                Approfondiremo questi consigli e vedremo come applicarli alla tua attività. Senza impegno.
               </p>
             </div>
             <a
