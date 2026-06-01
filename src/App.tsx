@@ -9,9 +9,16 @@ import {
 import ROICalculator from "./components/ROICalculator";
 import AIPlanner from "./components/AIPlanner";
 import { LeadSubmission } from "./types";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 
 export default function App() {
+  const bannerRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: bannerRef,
+    offset: ["start end", "end start"]
+  });
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [privacyModalOpen, setPrivacyModalOpen] = useState(false);
   const [chiSonoModalOpen, setChiSonoModalOpen] = useState(false);
@@ -286,6 +293,53 @@ export default function App() {
               >
                 Cosa Posso Fare Per Te
               </a>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* 2.5 PARALLAX MARQUEE BANNER SECTION */}
+        <section
+          ref={bannerRef}
+          className="relative h-[500px] w-full overflow-hidden flex items-center justify-center bg-charcoal"
+        >
+          {/* Parallax Background */}
+          <motion.div
+            style={{ y: backgroundY }}
+            className="absolute inset-0 z-0 h-[120%] w-full"
+          >
+            <img
+              src="/images/fondo%20per%20home%20.png"
+              alt="Banner Background"
+              className="w-full h-full object-cover"
+            />
+            {/* Overlay for better text contrast */}
+            <div className="absolute inset-0 bg-black/40"></div>
+          </motion.div>
+
+          {/* Infinite Marquee Content */}
+          <div className="relative z-10 w-full overflow-hidden">
+            <motion.div
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{
+                repeat: Infinity,
+                duration: 25,
+                ease: "linear"
+              }}
+              className="flex whitespace-nowrap items-center"
+            >
+              {/* Double the content to create seamless loop */}
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="flex items-center gap-12 md:gap-20 px-6 md:px-10">
+                  <img
+                    src="/images/logo%20facilissimo%20web.png"
+                    alt="Logo"
+                    className="h-24 md:h-36 w-auto object-contain"
+                  />
+                  <span className="text-6xl md:text-[120px] font-black text-white uppercase tracking-tighter font-mono leading-none">
+                    FACILISSIMO WEB
+                  </span>
+                </div>
+              ))}
             </motion.div>
           </div>
         </section>
