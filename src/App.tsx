@@ -3,7 +3,8 @@ import {
   Sparkles, Code, Globe, MessageSquare, TrendingUp, Compass, 
   Menu, X, Phone, Layers, Smartphone, Star, Check, ArrowRight,
   Send, Database, ArrowUpRight, BarChart2, ShieldCheck, Mail, Pin, HelpCircle,
-  Clock, CheckCircle, Flame, Server, Laptop, ChevronRight
+  Clock, CheckCircle, Flame, Server, Laptop, ChevronRight,
+  Instagram, Facebook, Linkedin
 } from "lucide-react";
 import ROICalculator from "./components/ROICalculator";
 import AIPlanner from "./components/AIPlanner";
@@ -106,6 +107,12 @@ export default function App() {
               >
                 Servizi
               </a>
+              <a
+                href="#chi-sono"
+                className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
+              >
+                Chi Sono
+              </a>
               <a 
                 href="#comparativa" 
                 className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
@@ -158,6 +165,15 @@ export default function App() {
               className="text-xs uppercase font-bold tracking-widest text-white/80 py-2 border-b border-white/5"
             >
               I Miei Servizi
+            </a>
+            <a
+              onClick={() => {
+                setMobileMenuOpen(false);
+              }}
+              href="#chi-sono"
+              className="text-xs uppercase font-bold tracking-widest text-white/80 py-2 border-b border-white/5"
+            >
+              Chi Sono
             </a>
             <a 
               onClick={() => {
@@ -658,6 +674,27 @@ export default function App() {
                   title="Contatta via Email"
                 >
                   <Mail className="w-4 h-4" />
+                </a>
+                <a
+                  href="#"
+                  className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
+                  title="Instagram (Prossimamente)"
+                >
+                  <Instagram className="w-4 h-4" />
+                </a>
+                <a
+                  href="#"
+                  className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
+                  title="Facebook (Prossimamente)"
+                >
+                  <Facebook className="w-4 h-4" />
+                </a>
+                <a
+                  href="#"
+                  className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
+                  title="LinkedIn (Prossimamente)"
+                >
+                  <Linkedin className="w-4 h-4" />
                 </a>
                 <a 
                   href="#hero" 
