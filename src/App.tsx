@@ -106,8 +106,8 @@ export default function App() {
                   <span className="text-bg-ivory font-black font-display text-xs tracking-widest">FW</span>
                 </div>
               </div>
-              <span className="font-display font-bold text-sm uppercase tracking-widest text-[#FFF] group-hover:text-accent-orange transition-colors">
-                Facilissimo
+              <span className="font-display font-bold text-sm uppercase tracking-widest text-[#FFF] transition-colors">
+                Facilissimo <span className="text-accent-orange">Web</span>
               </span>
             </a>
             
@@ -218,153 +218,157 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-8 space-y-24 md:space-y-40 mt-12">
+      <main className="flex-1 w-full">
           <>
             {/* 2. HERO LANDING SECTION */}
-        <section className="pt-24 md:pt-36 flex flex-col items-center text-center relative max-w-4xl mx-auto pb-10" id="hero">
-          {/* Active Work Tag */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-charcoal text-white rounded-none px-4 py-1.5 text-[9px] uppercase font-bold tracking-widest flex items-center gap-2 mb-6 shadow-md"
-          >
-            <span className="w-1.5 h-1.5 bg-green-400 rounded-full live-beacon"></span>
-            Maria Teresa Rogani • Freelance Web Designer &amp; Lead Generation
-          </motion.div>
+        <section className="bg-bg-ivory pt-24 md:pt-36 pb-20 md:pb-32" id="hero">
+          <div className="max-w-4xl mx-auto px-4 md:px-8 flex flex-col items-center text-center relative">
+            {/* Active Work Tag */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-charcoal text-white rounded-none px-4 py-1.5 text-[9px] uppercase font-bold tracking-widest flex items-center gap-2 mb-6 shadow-md"
+            >
+              <span className="w-1.5 h-1.5 bg-green-400 rounded-full live-beacon"></span>
+              Maria Teresa Rogani • Freelance Web Designer &amp; Lead Generation
+            </motion.div>
 
-          <h1
-            className="font-display text-4xl md:text-6xl font-extrabold tracking-tighter text-charcoal leading-[1.05]"
-          >
-            Siti Web che vendono: Design e Strategia
-          </h1>
-          <div className="w-24 h-2 grad-sunset mx-auto mt-4 rounded-full"></div>
+            <h1
+              className="font-display text-4xl md:text-6xl font-extrabold tracking-tighter text-charcoal leading-[1.05]"
+            >
+              Siti Web che vendono: Design e Strategia
+            </h1>
+            <div className="w-24 h-2 grad-sunset mx-auto mt-4 rounded-full"></div>
 
-          <motion.p 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-sm md:text-base text-muted-grey mt-6 max-w-2xl leading-relaxed font-sans font-light"
-          >
-            Sono Maria Teresa, freelance specializzata nella creazione di siti web moderni e sistemi per generare nuovi contatti. Ti aiuto a far crescere il tuo business con soluzioni dirette, efficaci e facili da gestire.
-          </motion.p>
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-sm md:text-base text-muted-grey mt-6 max-w-2xl leading-relaxed font-sans font-light"
+            >
+              Sono Maria Teresa, freelance specializzata nella creazione di siti web moderni e sistemi per generare nuovi contatti. Ti aiuto a far crescere il tuo business con soluzioni dirette, efficaci e facili da gestire.
+            </motion.p>
 
-          {/* Quick Pillar Badge Strip */}
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex flex-wrap gap-2.5 justify-center items-center mt-8"
-          >
-            {["WordPress, Wix & Squarespace", "Codice React su Misura", "Lead Generation Strategica", "Campagne ADS (Meta & Google)"].map((tag, idx) => (
-              <span 
-                key={idx} 
-                className="text-[10px] font-bold bg-white text-charcoal px-3 py-1.5 border border-line-ivory rounded-none shadow-sm flex items-center gap-1.5 hover:border-accent-orange/40 transition-colors"
+            {/* Quick Pillar Badge Strip */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-wrap gap-2.5 justify-center items-center mt-8"
+            >
+              {["WordPress, Wix & Squarespace", "Codice React su Misura", "Lead Generation Strategica", "Campagne ADS (Meta & Google)"].map((tag, idx) => (
+                <span
+                  key={idx}
+                  className="text-[10px] font-bold bg-white text-charcoal px-3 py-1.5 border border-line-ivory rounded-none shadow-sm flex items-center gap-1.5 hover:border-accent-orange/40 transition-colors"
+                >
+                  <Check className="w-3 h-3 text-accent-pink" />
+                  {tag}
+                </span>
+              ))}
+            </motion.div>
+
+            {/* Call to Actions */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="flex flex-col sm:flex-row gap-3.5 justify-center items-center mt-10 w-full max-w-2xl"
+            >
+              <a
+                href="#contatti"
+                className="grad-electric hover:shadow-xl hover:scale-[1.03] transition-all text-white font-bold px-8 py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
               >
-                <Check className="w-3 h-3 text-accent-pink" />
-                {tag}
-              </span>
-            ))}
-          </motion.div>
-
-          {/* Call to Actions */}
-          <motion.div 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-3.5 justify-center items-center mt-10 w-full max-w-2xl"
-          >
-            <a 
-              href="#contatti"
-              className="grad-electric hover:shadow-xl hover:scale-[1.03] transition-all text-white font-bold px-8 py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
-            >
-              Inizia Ora - Parlami del tuo Progetto <ArrowRight className="w-4 h-4" />
-            </a>
-            <a 
-              href="#servizi" 
-              className="bg-transparent border border-charcoal/30 text-charcoal hover:bg-charcoal hover:text-white transition-all font-bold px-8 py-4 rounded-none flex items-center justify-center uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
-            >
-              Cosa Posso Fare Per Te
-            </a>
-          </motion.div>
+                Inizia Ora - Parlami del tuo Progetto <ArrowRight className="w-4 h-4" />
+              </a>
+              <a
+                href="#servizi"
+                className="bg-transparent border border-charcoal/30 text-charcoal hover:bg-charcoal hover:text-white transition-all font-bold px-8 py-4 rounded-none flex items-center justify-center uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
+              >
+                Cosa Posso Fare Per Te
+              </a>
+            </motion.div>
+          </div>
         </section>
 
         {/* 3. CORE VALUE PROPOSITIONS SERVICES */}
-        <section className="space-y-12" id="servizi">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-accent-pink bg-accent-pink/10 px-3.5 py-1 rounded-none">
-              Servizi Freelance
-            </span>
-            <h2 className="font-display text-2xl md:text-3xl font-bold mt-2">
-              Soluzioni Semplici per Crescere Online
-            </h2>
-            <p className="text-xs text-muted-grey">
-              Ti aiuto a costruire una presenza digitale forte che attira nuovi clienti ogni giorno.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {/* Box 1: Web Design Sartoriale */}
-            <div className="glass-panel rounded-3xl p-6 border border-line-ivory flex flex-col justify-between hover:shadow-xl transition-all">
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-2xl bg-accent-blue/10 flex items-center justify-center text-accent-blue mb-4">
-                  <Laptop className="w-5 h-5" />
-                </div>
-                <h3 className="font-display text-lg font-bold">Sito Web Professionale</h3>
-                <p className="text-xs text-muted-grey leading-relaxed">
-                  Realizzo il tuo sito web su misura, veloce e ottimizzato per i motori di ricerca. Che tu preferisca WordPress per gestirlo in autonomia o una soluzione su misura in codice per prestazioni massime, ho la soluzione giusta.
-                </p>
-              </div>
-              <div className="pt-6 border-t border-line-ivory/50 mt-6 flex justify-between items-center text-xs">
-                <span className="font-medium text-charcoal font-mono">Web Design</span>
-                <a href="#comparativa" className="text-accent-blue hover:underline flex items-center gap-1">
-                  Scopri di più <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
+        <section className="bg-bg-soft-blue py-20 md:py-32" id="servizi">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-12">
+            <div className="text-center max-w-xl mx-auto space-y-2">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-accent-pink bg-accent-pink/10 px-3.5 py-1 rounded-none">
+                Servizi Freelance
+              </span>
+              <h2 className="font-display text-2xl md:text-3xl font-bold mt-2">
+                Soluzioni Semplici per Crescere Online
+              </h2>
+              <p className="text-xs text-muted-grey">
+                Ti aiuto a costruire una presenza digitale forte che attira nuovi clienti ogni giorno.
+              </p>
             </div>
 
-            {/* Box 2: Lead Generation Specialist */}
-            <div className="glass-panel rounded-3xl p-6 border border-line-ivory flex flex-col justify-between hover:shadow-xl transition-all">
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-2xl bg-accent-pink/10 flex items-center justify-center text-accent-pink mb-4">
-                  <Flame className="w-5 h-5" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+              {/* Box 1: Web Design Sartoriale */}
+              <div className="glass-panel rounded-3xl p-6 border border-line-ivory flex flex-col justify-between hover:shadow-xl transition-all">
+                <div className="space-y-4">
+                  <div className="w-10 h-10 rounded-2xl bg-accent-blue/10 flex items-center justify-center text-accent-blue mb-4">
+                    <Laptop className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-display text-lg font-bold">Sito Web Professionale</h3>
+                  <p className="text-xs text-muted-grey leading-relaxed">
+                    Realizzo il tuo sito web su misura, veloce e ottimizzato per i motori di ricerca. Che tu preferisca WordPress per gestirlo in autonomia o una soluzione su misura in codice per prestazioni massime, ho la soluzione giusta.
+                  </p>
                 </div>
-                <h3 className="font-display text-lg font-bold">Trovare Nuovi Clienti</h3>
-                <p className="text-xs text-muted-grey leading-relaxed">
-                  Non solo un bel sito, ma uno strumento che lavora per te. Creo sistemi per raccogliere contatti di persone interessate ai tuoi servizi e automatizzo il processo per farti risparmiare tempo prezioso.
-                </p>
+                <div className="pt-6 border-t border-line-ivory/50 mt-6 flex justify-between items-center text-xs">
+                  <span className="font-medium text-charcoal font-mono">Web Design</span>
+                  <a href="#comparativa" className="text-accent-blue hover:underline flex items-center gap-1">
+                    Scopri di più <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
-              <div className="pt-6 border-t border-line-ivory/50 mt-6 flex justify-between items-center text-xs">
-                <span className="font-medium text-charcoal font-mono">Lead Gen</span>
-                <a href="#calcolatore" className="text-accent-pink hover:underline flex items-center gap-1">
-                  Prova il simulatore <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
 
-            {/* Box 3: Social & Ads Management */}
-            <div className="glass-panel rounded-3xl p-6 border border-line-ivory flex flex-col justify-between hover:shadow-xl transition-all">
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-2xl bg-accent-orange/10 flex items-center justify-center text-accent-orange mb-4">
-                  <BarChart2 className="w-5 h-5" />
+              {/* Box 2: Lead Generation Specialist */}
+              <div className="glass-panel rounded-3xl p-6 border border-line-ivory flex flex-col justify-between hover:shadow-xl transition-all">
+                <div className="space-y-4">
+                  <div className="w-10 h-10 rounded-2xl bg-accent-pink/10 flex items-center justify-center text-accent-pink mb-4">
+                    <Flame className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-display text-lg font-bold">Trovare Nuovi Clienti</h3>
+                  <p className="text-xs text-muted-grey leading-relaxed">
+                    Non solo un bel sito, ma uno strumento che lavora per te. Creo sistemi per raccogliere contatti di persone interessate ai tuoi servizi e automatizzo il processo per farti risparmiare tempo prezioso.
+                  </p>
                 </div>
-                <h3 className="font-display text-lg font-bold font-semibold text-charcoal">Pubblicità Google e Meta</h3>
-                <p className="text-xs text-muted-grey leading-relaxed">
-                  Porto traffico qualificato sul tuo sito attraverso campagne pubblicitarie mirate su Google, Facebook e Instagram. Massimizziamo insieme il tuo budget per ottenere il miglior risultato possibile.
-                </p>
+                <div className="pt-6 border-t border-line-ivory/50 mt-6 flex justify-between items-center text-xs">
+                  <span className="font-medium text-charcoal font-mono">Lead Gen</span>
+                  <a href="#calcolatore" className="text-accent-pink hover:underline flex items-center gap-1">
+                    Prova il simulatore <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
-              <div className="pt-6 border-t border-line-ivory/50 mt-6 flex justify-between items-center text-xs">
-                <span className="font-medium text-charcoal font-mono">Marketing</span>
-                <a href="#contatti" className="text-accent-orange hover:underline flex items-center gap-1">
-                  Chiedi info <ArrowRight className="w-3.5 h-3.5" />
-                </a>
+
+              {/* Box 3: Social & Ads Management */}
+              <div className="glass-panel rounded-3xl p-6 border border-line-ivory flex flex-col justify-between hover:shadow-xl transition-all">
+                <div className="space-y-4">
+                  <div className="w-10 h-10 rounded-2xl bg-accent-orange/10 flex items-center justify-center text-accent-orange mb-4">
+                    <BarChart2 className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-display text-lg font-bold font-semibold text-charcoal">Pubblicità Google e Meta</h3>
+                  <p className="text-xs text-muted-grey leading-relaxed">
+                    Porto traffico qualificato sul tuo sito attraverso campagne pubblicitarie mirate su Google, Facebook e Instagram. Massimizziamo insieme il tuo budget per ottenere il miglior risultato possibile.
+                  </p>
+                </div>
+                <div className="pt-6 border-t border-line-ivory/50 mt-6 flex justify-between items-center text-xs">
+                  <span className="font-medium text-charcoal font-mono">Marketing</span>
+                  <a href="#contatti" className="text-accent-orange hover:underline flex items-center gap-1">
+                    Chiedi info <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* 4. COMPARISON CHART SECTION (CLASSIC VS DESIGN CODE) */}
-        <section className="space-y-12" id="comparativa">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        <section className="bg-bg-ivory py-20 md:py-32" id="comparativa">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div className="space-y-6">
               <span className="text-[10px] font-bold uppercase tracking-widest text-accent-blue bg-accent-blue/10 px-3 py-1 rounded-full">
                 La Tecnologia Giusta
@@ -439,57 +443,59 @@ export default function App() {
         </section>
 
         {/* 5. INTERACTIVE WIDGET 1: THE ROI CONVERSION CALCULATOR */}
-        <section className="space-y-8 scroll-mt-24" id="calcolatore">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
-              Strumento di Calcolo
-            </span>
-            <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-charcoal">
-              Quanto puoi guadagnare con la pubblicità?
-            </h2>
-            <p className="text-xs text-muted-grey">
-              Usa questo simulatore per capire quanto può rendere il tuo investimento in pubblicità. Un sito che funziona meglio ti permette di ottenere più clienti a parità di spesa.
-            </p>
-          </div>
+        <section className="bg-bg-soft-orange py-20 md:py-32 scroll-mt-24" id="calcolatore">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-8">
+            <div className="text-center max-w-xl mx-auto space-y-2">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
+                Strumento di Calcolo
+              </span>
+              <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-charcoal">
+                Quanto puoi guadagnare con la pubblicità?
+              </h2>
+              <p className="text-xs text-muted-grey">
+                Usa questo simulatore per capire quanto può rendere il tuo investimento in pubblicità. Un sito che funziona meglio ti permette di ottenere più clienti a parità di spesa.
+              </p>
+            </div>
 
-          <ROICalculator />
+            <ROICalculator />
+          </div>
         </section>
 
         {/* 6. INTERACTIVE WIDGET 2: THE AI PLANNER (GEMINI INTEGRATION) */}
-        <section className="space-y-12 scroll-mt-24" id="ai-planner">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#BF5AF2] bg-[#BF5AF2]/10 px-3.5 py-1 rounded-full flex items-center justify-center gap-1 mx-auto w-max">
-              Assistente Strategico <Sparkles className="w-3.5 h-3.5" />
-            </span>
-            <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-charcoal">
-              Ricevi un'Idea di Strategia Subito
-            </h2>
-            <p className="text-xs text-muted-grey">
-              Rispondi a qualche domanda sulla tua attività e riceverai immediatamente alcuni suggerimenti su come migliorare la tua presenza online per trovare più contatti.
-            </p>
-          </div>
+        <section className="bg-bg-soft-purple py-20 md:py-32 scroll-mt-24" id="ai-planner">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-12">
+            <div className="text-center max-w-xl mx-auto space-y-2">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[#BF5AF2] bg-[#BF5AF2]/10 px-3.5 py-1 rounded-full flex items-center justify-center gap-1 mx-auto w-max">
+                Assistente Strategico <Sparkles className="w-3.5 h-3.5" />
+              </span>
+              <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-charcoal">
+                Ricevi un'Idea di Strategia Subito
+              </h2>
+              <p className="text-xs text-muted-grey">
+                Rispondi a qualche domanda sulla tua attività e riceverai immediatamente alcuni suggerimenti su come migliorare la tua presenza online per trovare più contatti.
+              </p>
+            </div>
 
-          <AIPlanner />
+            <AIPlanner />
+          </div>
         </section>
 
-
-
-
         {/* 11. LEAD INTAKE CONTACT FORM WORKFLOW */}
-        <section className="space-y-12 scroll-mt-24 pb-16" id="contatti">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
-              Inizia Ora
-            </span>
-            <h2 className="font-display text-2xl md:text-3xl font-extrabold text-charcoal">
-              Raccontami il Tuo Progetto
-            </h2>
-            <p className="text-xs text-muted-grey">
-              Compila il modulo qui sotto. Riceverò i tuoi dati e ti ricontatterò per fissare una breve chiamata gratuita.
-            </p>
-          </div>
+        <section className="bg-bg-soft-pink py-20 md:py-32 scroll-mt-24" id="contatti">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-12">
+            <div className="text-center max-w-xl mx-auto space-y-2">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
+                Inizia Ora
+              </span>
+              <h2 className="font-display text-2xl md:text-3xl font-extrabold text-charcoal">
+                Raccontami il Tuo Progetto
+              </h2>
+              <p className="text-xs text-muted-grey">
+                Compila il modulo qui sotto. Riceverò i tuoi dati e ti ricontatterò per fissare una breve chiamata gratuita.
+              </p>
+            </div>
 
-          <div className="glass-panel rounded-none p-6 md:p-8 border border-line-ivory max-w-2xl mx-auto shadow-md relative overflow-hidden">
+            <div className="glass-panel rounded-none p-6 md:p-8 border border-line-ivory max-w-2xl mx-auto shadow-md relative overflow-hidden">
             <AnimatePresence mode="wait">
               {formSubmitted ? (
                 <motion.div 
@@ -605,6 +611,7 @@ export default function App() {
                 </motion.form>
               )}
             </AnimatePresence>
+            </div>
           </div>
         </section>
           </>
