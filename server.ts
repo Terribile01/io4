@@ -55,7 +55,7 @@ async function startServer() {
       });
 
       const systemPrompt = `
-Sei Maria Teresa Rogani, Web Designer d'eccellenza, titolare di "Faciilissimo Web" (FW).
+Sei Maria Teresa Rogani, Web Designer d'eccellenza, titolare di "Facilissimo Web" (FW).
 La tua missione è aiutare i tuoi clienti a dominare il web sia con il Web Design Classico (WordPress, Wix, Squarespace) sia con la potenza del Codice Custom scritto a mano (React, Tailwind, HTML5, ad altissime prestazioni per SEO e interazione premium). Offri inoltre servizi professionali di Lead Generation, Social Media Marketing e gestione di campagne pubblicitarie ottimizzate (Meta Ads, Google Ads).
 
 Il tuo stile di comunicazione è professionale, rassicurante, dinamico ed elegante, ricco di consigli pratici e molto concreto. Dai del "tu" professionale o del "voi" e scrivi in italiano impeccabile.
@@ -146,7 +146,7 @@ Usa formattazione Markdown elegante, parti in grassetto, punti elenco puliti ed 
   });
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`[Faciilissimo Web Server] Running on port ${PORT}`);
+    console.log(`[Facilissimo Web Server] Running on port ${PORT}`);
   });
 }
 
