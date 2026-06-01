@@ -94,7 +94,7 @@ export default function App() {
                 <span className="text-bg-ivory font-black font-display text-sm tracking-widest">FW</span>
               </div>
               <span className="font-display font-bold text-xs uppercase tracking-widest text-[#FFF] group-hover:text-accent-orange transition-colors">
-                Faciilissimo
+                Facilissimo
               </span>
             </a>
             
@@ -628,7 +628,7 @@ export default function App() {
               <div className="w-10 h-10 rounded-none border border-white/20 bg-white/10 flex items-center justify-center font-mono">
                 <span className="text-white font-black font-display text-base tracking-widest">FW</span>
               </div>
-              <h4 className="font-display font-black text-xs uppercase tracking-widest text-white">Faciilissimo Web</h4>
+              <h4 className="font-display font-black text-xs uppercase tracking-widest text-white">Facilissimo Web</h4>
               <p className="text-xs text-[#BDBAB2] leading-relaxed font-sans font-light">
                 Metodo d'eccellenza per la digitalizzazione delle imprese locali in tutta Italia. Sviluppo custom-code, design, visibilità e monetizzazione.
               </p>
@@ -671,7 +671,7 @@ export default function App() {
           </div>
 
           <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-[#8C8880] font-mono">
-            <p>© 2026 Faciilissimo Web / FW di Maria Teresa Rogani. Tutti i diritti riservati.</p>
+            <p>© 2026 Facilissimo Web / FW di Maria Teresa Rogani. Tutti i diritti riservati.</p>
             <div className="flex gap-4">
               <a href="#contatti" className="hover:text-white">P.IVA: 01234567890</a>
               <span>•</span>
@@ -742,7 +742,7 @@ export default function App() {
               <div className="space-y-3 text-[11px] text-muted-grey leading-relaxed">
                 <p>
                   <strong>1. TITOLARE DEL TRATTAMENTO:</strong><br />
-                  Il titolare del trattamento è Maria Teresa Rogani per Faciilissimo Web / FW di Maria Teresa Rogani.
+                  Il titolare del trattamento è Maria Teresa Rogani per Facilissimo Web / FW di Maria Teresa Rogani.
                 </p>
                 <p>
                   <strong>2. DATI RACCOLTI:</strong><br />
