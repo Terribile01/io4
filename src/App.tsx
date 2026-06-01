@@ -14,6 +14,7 @@ import { motion, AnimatePresence } from "motion/react";
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [privacyModalOpen, setPrivacyModalOpen] = useState(false);
+  const [chiSonoModalOpen, setChiSonoModalOpen] = useState(false);
   const [cookiesAccepted, setCookiesAccepted] = useState(() => {
     try {
       return sessionStorage.getItem("fw_cookies_accepted") === "true";
@@ -107,12 +108,12 @@ export default function App() {
               >
                 Servizi
               </a>
-              <a
-                href="#chi-sono"
-                className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
+              <button
+                onClick={() => setChiSonoModalOpen(true)}
+                className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors cursor-pointer"
               >
                 Chi Sono
-              </a>
+              </button>
               <a 
                 href="#comparativa" 
                 className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
@@ -166,15 +167,15 @@ export default function App() {
             >
               I Miei Servizi
             </a>
-            <a
+            <button
               onClick={() => {
                 setMobileMenuOpen(false);
+                setChiSonoModalOpen(true);
               }}
-              href="#chi-sono"
-              className="text-xs uppercase font-bold tracking-widest text-white/80 py-2 border-b border-white/5"
+              className="text-xs uppercase font-bold tracking-widest text-white/80 py-2 border-b border-white/5 text-left cursor-pointer"
             >
               Chi Sono
-            </a>
+            </button>
             <a 
               onClick={() => {
                 setMobileMenuOpen(false);
@@ -462,43 +463,6 @@ export default function App() {
 
 
 
-        {/* 10. ABOUT MARIE TERESA ROGANI BIOS */}
-        <section className="glass-panel rounded-3xl p-6 md:p-10 border border-line-ivory/80 flex flex-col lg:flex-row gap-8 items-center" id="chi-sono">
-          <div className="w-44 h-44 md:w-56 md:h-56 rounded-full overflow-hidden shrink-0 shadow-lg border-4 border-white">
-            <img 
-              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop" 
-              alt="Maria Teresa Rogani" 
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300"
-            />
-          </div>
-          <div className="space-y-4 text-left flex-1 min-w-0">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#00C7BE] bg-[#00C7BE]/10 px-3 py-1 rounded-full">
-              Freelance al tuo fianco
-            </span>
-            <h3 className="font-display text-2xl md:text-3xl font-extrabold text-charcoal">
-              Chi Sono: Maria Teresa Rogani
-            </h3>
-            <p className="text-xs md:text-sm text-charcoal/80 leading-relaxed font-sans font-light">
-              Sono una libera professionista che aiuta le piccole e medie imprese a farsi strada nel mondo digitale. Mi occupo di creare siti web che funzionano davvero e di portare nuovi clienti attraverso strategie di marketing mirate.
-            </p>
-            <p className="text-xs md:text-sm text-muted-grey leading-relaxed font-sans font-light">
-              A differenza delle grandi agenzie, con me avrai un rapporto diretto e trasparente. Il mio obiettivo è farti ottenere risultati concreti, senza tecnicismi inutili, lavorando insieme per far crescere la tua attività.
-            </p>
-            
-            <div className="flex flex-wrap gap-4 pt-2">
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
-                <Check className="w-4 h-4 text-green-500 font-bold" /> Rapporto Diretto
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
-                <Check className="w-4 h-4 text-green-500 font-bold" /> Zero Costi Nascosti
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
-                <Check className="w-4 h-4 text-green-500 font-bold" /> Risultati Concreti
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* 11. LEAD INTAKE CONTACT FORM WORKFLOW */}
         <section className="space-y-12 scroll-mt-24 pb-16" id="contatti">
@@ -754,6 +718,75 @@ export default function App() {
               Accetto Cookie di Sessione
             </button>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* CHI SONO MODAL */}
+      <AnimatePresence>
+        {chiSonoModalOpen && (
+          <div className="fixed inset-0 bg-black/75 z-[200] backdrop-blur-sm flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white max-w-4xl w-full border border-line-ivory p-6 md:p-10 rounded-none shadow-2xl overflow-y-auto max-h-[90vh] text-left relative"
+            >
+              <button
+                onClick={() => setChiSonoModalOpen(false)}
+                className="absolute top-4 right-4 text-muted-grey hover:text-charcoal p-1 cursor-pointer font-bold font-mono text-xs"
+              >
+                CHIUDI [X]
+              </button>
+
+              <div className="flex flex-col lg:flex-row gap-8 items-center">
+                <div className="w-44 h-44 md:w-56 md:h-56 rounded-full overflow-hidden shrink-0 shadow-lg border-4 border-white">
+                  <img
+                    src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop"
+                    alt="Maria Teresa Rogani"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300"
+                  />
+                </div>
+                <div className="space-y-4 text-left flex-1 min-w-0">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#00C7BE] bg-[#00C7BE]/10 px-3 py-1 rounded-full">
+                    Freelance al tuo fianco
+                  </span>
+                  <h3 className="font-display text-2xl md:text-3xl font-extrabold text-charcoal">
+                    Chi Sono: Maria Teresa Rogani
+                  </h3>
+                  <p className="text-xs md:text-sm text-charcoal/80 leading-relaxed font-sans font-light">
+                    Sono una libera professionista che aiuta le piccole e medie imprese a farsi strada nel mondo digitale. Mi occupo di creare siti web che funzionano davvero e di portare nuovi clienti attraverso strategie di marketing mirate.
+                  </p>
+                  <p className="text-xs md:text-sm text-muted-grey leading-relaxed font-sans font-light">
+                    A differenza delle grandi agenzie, con me avrai un rapporto diretto e trasparente. Il mio obiettivo è farti ottenere risultati concreti, senza tecnicismi inutili, lavorando insieme per far crescere la tua attività.
+                  </p>
+
+                  <div className="flex flex-wrap gap-4 pt-2">
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
+                      <Check className="w-4 h-4 text-green-500 font-bold" /> Rapporto Diretto
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
+                      <Check className="w-4 h-4 text-green-500 font-bold" /> Zero Costi Nascosti
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
+                      <Check className="w-4 h-4 text-green-500 font-bold" /> Risultati Concreti
+                    </div>
+                  </div>
+
+                  <div className="pt-6">
+                    <a
+                      href="https://wa.me/390000000000"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-[#25D366] text-white hover:bg-[#128C7E] transition-all font-bold px-6 py-3 rounded-none uppercase tracking-widest text-xs shadow-md"
+                    >
+                      <MessageSquare className="w-4 h-4" /> WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
 
