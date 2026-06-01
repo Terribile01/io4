@@ -741,10 +741,13 @@ export default function App() {
               <div className="flex flex-col lg:flex-row gap-8 items-center">
                 <div className="w-44 h-44 md:w-56 md:h-56 rounded-full overflow-hidden shrink-0 shadow-lg border-4 border-white">
                   <img
-                    src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop"
+                    src="/images/profile.jpg"
                     alt="Maria Teresa Rogani"
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop";
+                    }}
                   />
                 </div>
                 <div className="space-y-4 text-left flex-1 min-w-0">
