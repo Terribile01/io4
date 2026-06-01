@@ -94,7 +94,7 @@ export default function App() {
                 <span className="text-bg-ivory font-black font-display text-sm tracking-widest">FW</span>
               </div>
               <span className="font-display font-bold text-xs uppercase tracking-widest text-[#FFF] group-hover:text-accent-orange transition-colors">
-                Facilissimo
+                Facilissimo Web
               </span>
             </a>
             
