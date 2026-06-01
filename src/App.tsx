@@ -90,13 +90,24 @@ export default function App() {
               onClick={() => {
                 window.scrollTo(0, 0);
               }}
-              className="flex items-center gap-2 group cursor-pointer"
+              className="flex items-center gap-3 group cursor-pointer"
             >
-              <div className="w-8 h-8 rounded-none border border-bg-ivory/50 bg-white/15 flex items-center justify-center shrink-0 font-mono">
-                <span className="text-bg-ivory font-black font-display text-sm tracking-widest">FW</span>
+              <div className="h-8 md:h-10 flex items-center shrink-0 overflow-hidden">
+                <img
+                  src="/images/logo%20facilissimo%20web.png"
+                  alt="Facilissimo Web"
+                  className="h-full w-auto object-contain transition-transform group-hover:scale-105"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                    (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                  }}
+                />
+                <div className="hidden h-8 w-8 rounded-none border border-bg-ivory/50 bg-white/15 flex items-center justify-center font-mono">
+                  <span className="text-bg-ivory font-black font-display text-xs tracking-widest">FW</span>
+                </div>
               </div>
-              <span className="font-display font-bold text-xs uppercase tracking-widest text-[#FFF] group-hover:text-accent-orange transition-colors">
-                Facilissimo Web
+              <span className="font-display font-bold text-sm uppercase tracking-widest text-[#FFF] group-hover:text-accent-orange transition-colors">
+                Facilissimo
               </span>
             </a>
             
@@ -739,12 +750,15 @@ export default function App() {
               </button>
 
               <div className="flex flex-col lg:flex-row gap-8 items-center">
-                <div className="w-44 h-44 md:w-56 md:h-56 rounded-full overflow-hidden shrink-0 shadow-lg border-4 border-white">
+                <div className="w-44 h-44 md:w-56 md:h-56 rounded-full overflow-hidden shrink-0 shadow-xl border-4 border-white bg-bg-ivory relative">
                   <img
-                    src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop"
+                    src="/images/maria%20teresa%20rogani.jpg"
                     alt="Maria Teresa Rogani"
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop";
+                    }}
                   />
                 </div>
                 <div className="space-y-4 text-left flex-1 min-w-0">
