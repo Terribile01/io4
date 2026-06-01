@@ -17,7 +17,7 @@ export default function App() {
     target: bannerRef,
     offset: ["start end", "end start"]
   });
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [privacyModalOpen, setPrivacyModalOpen] = useState(false);
@@ -305,7 +305,7 @@ export default function App() {
           {/* Parallax Background */}
           <motion.div
             style={{ y: backgroundY }}
-            className="absolute inset-0 z-0 h-[120%] w-full"
+            className="absolute -top-[10%] left-0 z-0 h-[120%] w-full"
           >
             <img
               src="/images/fondo%20per%20home%20.png"
@@ -322,7 +322,7 @@ export default function App() {
               animate={{ x: ["0%", "-50%"] }}
               transition={{
                 repeat: Infinity,
-                duration: 25,
+                duration: 8,
                 ease: "linear"
               }}
               className="flex whitespace-nowrap items-center"
@@ -330,11 +330,6 @@ export default function App() {
               {/* Double the content to create seamless loop */}
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="flex items-center gap-12 md:gap-20 px-6 md:px-10">
-                  <img
-                    src="/images/logo%20facilissimo%20web.png"
-                    alt="Logo"
-                    className="h-24 md:h-36 w-auto object-contain"
-                  />
                   <span className="text-6xl md:text-[120px] font-black text-white uppercase tracking-tighter font-mono leading-none">
                     FACILISSIMO WEB
                   </span>
