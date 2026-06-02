@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import ROICalculator from "./components/ROICalculator";
 import AIPlanner from "./components/AIPlanner";
+import AIChat from "./components/AIChat";
 import { LeadSubmission } from "./types";
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 
@@ -882,6 +883,9 @@ export default function App() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* AI CHAT FLOATING INTERFACE */}
+      <AIChat />
 
       {/* PRIVACY POLICY MODAL (GDPR) */}
       <AnimatePresence>

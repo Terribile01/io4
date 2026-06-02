@@ -111,6 +111,47 @@ Usa formattazione Markdown elegante, parti in grassetto, punti elenco puliti ed 
     }
   });
 
+  // Chat endpoint for AIChat component
+  app.post("/api/chat", async (req, res, next) => {
+    try {
+      const { message, history } = req.body;
+
+      if (!message) {
+        return res.status(400).json({ error: "Messaggio mancante" });
+      }
+
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey) {
+        return res.status(400).json({ error: "Chiave API non configurata" });
+      }
+
+      const ai = new GoogleGenAI({ apiKey });
+      const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+      const chat = model.startChat({
+        history: (history || []).map((msg: any) => ({
+          role: msg.role === "bot" ? "model" : "user",
+          parts: [{ text: msg.content }],
+        })),
+        generationConfig: {
+          maxOutputTokens: 500,
+        },
+        systemInstruction: {
+          role: "system",
+          parts: [{
+            text: "Sei Maria Teresa Rogani, esperta consulente digitale di Facilissimo Web. Il tuo obiettivo è aiutare i clienti a capire come un sito web professionale o una strategia di lead generation possa far crescere il loro business. Sii professionale, gentile e concisa. Promuovi i servizi di Facilissimo Web: creazione siti (WordPress o React), campagne ADS e Lead Generation."
+          }],
+        },
+      });
+
+      const result = await chat.sendMessage(message);
+      const response = await result.response;
+      res.json({ text: response.text() });
+    } catch (err: any) {
+      next(err);
+    }
+  });
+
   // API 404 handler - also before Vite to prevent HTML responses for missing API endpoints
   app.all("/api/*", (req, res) => {
     res.status(404).json({
