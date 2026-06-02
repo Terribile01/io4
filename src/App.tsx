@@ -1,17 +1,19 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { 
   Sparkles, Code, Globe, MessageSquare, TrendingUp, Compass, 
   Menu, X, Phone, Layers, Smartphone, Star, Check, ArrowRight,
   Send, Database, ArrowUpRight, BarChart2, ShieldCheck, Mail, Pin, HelpCircle,
   Clock, CheckCircle, Flame, Server, Laptop, ChevronRight,
-  Instagram, Facebook, Linkedin, ChevronDown
+  Instagram, Facebook, Linkedin, ChevronDown, Search, Calendar, Tag, ChevronLeft
 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import ROICalculator from "./components/ROICalculator";
 import AIPlanner from "./components/AIPlanner";
 import AIChat from "./components/AIChat";
 import TechnicalSheetModal from "./components/TechnicalSheetModal";
 import { LeadSubmission } from "./types";
-import { TECHNICAL_SHEETS, TechnicalSheet } from "./data";
+import { TECHNICAL_SHEETS, TechnicalSheet, BIO_DATA, BlogPost } from "./data";
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 
 export default function App() {
@@ -25,6 +27,14 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [privacyModalOpen, setPrivacyModalOpen] = useState(false);
   const [chiSonoModalOpen, setChiSonoModalOpen] = useState(false);
+
+  // Blog State
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+  const [postContent, setPostContent] = useState("");
+  const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
+  const blogScrollRef = useRef<HTMLDivElement>(null);
   const [cookiesAccepted, setCookiesAccepted] = useState(() => {
     try {
       return sessionStorage.getItem("fw_cookies_accepted") === "true";
@@ -46,6 +56,41 @@ export default function App() {
   // Technical Sheets Modal state
   const [selectedSheet, setSelectedSheet] = useState<TechnicalSheet | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  useEffect(() => {
+    fetch("/blog/posts.json")
+      .then(res => res.json())
+      .then(data => setBlogPosts(data))
+      .catch(err => console.error("Error loading blog posts:", err));
+  }, []);
+
+  const openPost = async (post: BlogPost) => {
+    try {
+      const response = await fetch(`/blog/${post.slug}.md`);
+      const text = await response.text();
+      setPostContent(text);
+      setSelectedPost(post);
+      setIsBlogModalOpen(true);
+    } catch (err) {
+      console.error("Error loading post content:", err);
+    }
+  };
+
+  const filteredPosts = blogPosts.filter(post =>
+    post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    post.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  const scrollBlog = (direction: 'left' | 'right') => {
+    if (blogScrollRef.current) {
+      const scrollAmount = 350;
+      blogScrollRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   const openSheet = (sheetId: string) => {
     const sheet = TECHNICAL_SHEETS.find(s => s.id === sheetId);
@@ -152,6 +197,13 @@ export default function App() {
                 Chi Sono
               </button>
 
+              <a
+                href="#blog"
+                className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
+              >
+                Blog
+              </a>
+
               {/* Servizi Dropdown */}
               <div className="relative group/dropdown">
                 <button
@@ -220,6 +272,26 @@ export default function App() {
             className="fixed inset-x-4 top-[84px] bg-accent-purple/20 backdrop-blur-2xl text-white rounded-none p-6 z-[100] border-2 border-white/20 shadow-2xl flex flex-col gap-4 lg:hidden"
             style={{ pointerEvents: 'auto' }}
           >
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setChiSonoModalOpen(true);
+              }}
+              className="text-xs uppercase font-bold tracking-widest text-white/80 py-4 border-b border-white/5 text-left cursor-pointer"
+            >
+              Chi Sono
+            </button>
+
+            <a
+              onClick={() => {
+                setMobileMenuOpen(false);
+              }}
+              href="#blog"
+              className="text-xs uppercase font-bold tracking-widest text-white/80 py-4 border-b border-white/5"
+            >
+              Blog
+            </a>
+
             <div className="border-b border-white/5 py-2">
               <span className="text-[10px] uppercase font-bold tracking-widest text-white/30 mb-2 block">I Miei Servizi</span>
               <div className="flex flex-col gap-2 pl-2">
@@ -238,15 +310,6 @@ export default function App() {
                 ))}
               </div>
             </div>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                setChiSonoModalOpen(true);
-              }}
-              className="text-xs uppercase font-bold tracking-widest text-white/80 py-2 border-b border-white/5 text-left cursor-pointer"
-            >
-              Chi Sono
-            </button>
             <a 
               onClick={() => {
                 setMobileMenuOpen(false);
@@ -290,7 +353,7 @@ export default function App() {
               className="bg-white/10 backdrop-blur-md text-white rounded-none px-4 py-1.5 text-[9px] uppercase font-bold tracking-widest flex items-center gap-2 mb-6 shadow-md border border-white/10"
             >
               <span className="w-1.5 h-1.5 bg-green-400 rounded-full live-beacon"></span>
-              Maria Teresa Rogani • Freelance Web Designer &amp; Lead Generation
+              {BIO_DATA.name} • {BIO_DATA.role}
             </motion.div>
 
             <h1
@@ -306,7 +369,7 @@ export default function App() {
               transition={{ delay: 0.2 }}
               className="text-sm md:text-base text-white/70 mt-6 max-w-2xl leading-relaxed font-sans font-light"
             >
-              Sono Maria Teresa, freelance specializzata nella creazione di siti web moderni e sistemi per generare nuovi contatti. Ti aiuto a far crescere il tuo business con soluzioni dirette, efficaci e facili da gestire.
+              {BIO_DATA.shortDescription}
             </motion.p>
 
             {/* Quick Pillar Badge Strip */}
@@ -469,6 +532,114 @@ export default function App() {
                     Chiedi info <ArrowRight className="w-3.5 h-3.5" />
                   </a>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 11.5 BLOG SECTION - ONE PAGE STYLE */}
+        <section className="bg-transparent py-20 md:py-32 scroll-mt-24 border-t border-white/5" id="blog">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <div className="space-y-2 text-left">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-accent-blue bg-accent-blue/10 px-3.5 py-1 rounded-none">
+                  Approfondimenti & News
+                </span>
+                <h2 className="font-display text-2xl md:text-3xl font-extrabold text-white">
+                  Il Blog di Facilissimo Web
+                </h2>
+                <p className="text-xs text-white/60 max-w-md">
+                  Consigli, strategie e novità dal mondo del web design e della lead generation per far crescere il tuo business.
+                </p>
+              </div>
+
+              {/* Search Bar */}
+              <div className="relative w-full md:w-64">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+                <input
+                  type="text"
+                  placeholder="Cerca articoli..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue text-white"
+                />
+              </div>
+            </div>
+
+            {/* Horizontal Scroll Area */}
+            <div className="relative group">
+              <button
+                onClick={() => scrollBlog('left')}
+                className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-white/20 cursor-pointer"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => scrollBlog('right')}
+                className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-white/20 cursor-pointer"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+
+              <div
+                ref={blogScrollRef}
+                className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory px-2"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {filteredPosts.map((post) => (
+                  <motion.div
+                    key={post.id}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="min-w-[300px] md:min-w-[350px] snap-start glass-panel border border-white/10 overflow-hidden group/card cursor-pointer hover:border-accent-blue/30 transition-all"
+                    onClick={() => openPost(post)}
+                  >
+                    <div className="h-48 overflow-hidden relative">
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=600&auto=format&fit=crop";
+                        }}
+                      />
+                      <div className="absolute top-4 left-4">
+                        <span className="bg-accent-blue/80 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-widest px-2 py-1">
+                          {post.category}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-6 space-y-3">
+                      <div className="flex items-center gap-3 text-[10px] text-white/40 font-mono">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          {post.date}
+                        </div>
+                        <span>•</span>
+                        <div className="flex items-center gap-1">
+                          <Tag className="w-3 h-3" />
+                          {post.tags[0]}
+                        </div>
+                      </div>
+                      <h3 className="font-display text-lg font-bold text-white group-hover/card:text-accent-blue transition-colors line-clamp-2">
+                        {post.title}
+                      </h3>
+                      <p className="text-xs text-white/60 leading-relaxed line-clamp-3">
+                        {post.excerpt}
+                      </p>
+                      <div className="pt-4 flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest">
+                        Leggi tutto <ArrowRight className="w-3.5 h-3.5" />
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+
+                {filteredPosts.length === 0 && (
+                  <div className="w-full py-20 text-center text-white/40 text-sm italic">
+                    Nessun articolo trovato per la tua ricerca.
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -761,6 +932,7 @@ export default function App() {
                 <li><a href="#comparativa" className="hover:text-white transition-colors">Web Design Classico (WP/Wix)</a></li>
                 <li><a href="#servizi" className="hover:text-white transition-colors">Campagne Pubblicitarie ADS</a></li>
                 <li><a href="#servizi" className="hover:text-white transition-colors">Sistemi di Lead Generation</a></li>
+                <li><a href="#blog" className="hover:text-white transition-colors">Blog & Risorse</a></li>
               </ul>
             </div>
 
@@ -837,25 +1009,41 @@ export default function App() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-0 inset-x-0 bg-charcoal text-white border-t border-white/10 shadow-2xl p-4 sm:p-5 z-[200] flex flex-col sm:flex-row items-center justify-between gap-4"
+            className="fixed bottom-6 inset-x-6 z-[200] flex justify-center pointer-events-none"
           >
-            <div className="text-left max-w-3xl space-y-1">
-              <h5 className="text-[10px] uppercase font-bold text-accent-orange tracking-widest font-mono">Informativa sui Cookie &amp; Tracciamenti</h5>
-              <p className="text-[11px] text-[#BDBAB2] leading-relaxed">
-                Questo sito utilizza esclusivamente cookie tecnici di sessione per garantire il corretto funzionamento dei simulatori interattivi (es. CRM e AI Planner). Questi cookie non profilano le tue abitudini e scadono automaticamente al termine della navigazione.
-              </p>
+            <div className="pointer-events-auto max-w-4xl w-full bg-accent-purple/20 backdrop-blur-2xl border border-white/20 p-6 md:p-8 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-1 h-full bg-accent-orange"></div>
+              <div className="text-left space-y-3 relative z-10">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-none bg-accent-orange/20 flex items-center justify-center text-accent-orange">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                  <h5 className="text-xs uppercase font-bold text-white tracking-widest">Privacy & Session Control</h5>
+                </div>
+                <p className="text-[11px] text-white/70 leading-relaxed max-w-2xl">
+                  Per offrirti un'esperienza interattiva d'eccellenza con i nostri simulatori AI e CRM, utilizziamo esclusivamente <strong>cookie tecnici di sessione</strong>. Non profilano i tuoi dati e vengono eliminati automaticamente quando chiudi il browser. Navigando accetti il loro utilizzo per questa sessione.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0 relative z-10">
+                <button
+                  onClick={() => setPrivacyModalOpen(true)}
+                  className="text-[10px] font-bold text-white/50 hover:text-white uppercase tracking-widest transition-colors px-4 py-2"
+                >
+                  Leggi Policy
+                </button>
+                <button
+                  onClick={() => {
+                    try {
+                      sessionStorage.setItem("fw_cookies_accepted", "true");
+                    } catch {}
+                    setCookiesAccepted(true);
+                  }}
+                  className="grad-electric text-white hover:shadow-lg transition-all text-[10px] font-bold px-8 py-3 rounded-none uppercase tracking-widest shrink-0 cursor-pointer w-full sm:w-auto text-center border border-white/10"
+                >
+                  Accetto e Proseguo
+                </button>
+              </div>
             </div>
-            <button 
-              onClick={() => {
-                try {
-                  sessionStorage.setItem("fw_cookies_accepted", "true");
-                } catch {}
-                setCookiesAccepted(true);
-              }}
-              className="bg-white text-charcoal hover:bg-bg-ivory transition-all text-[10px] font-bold px-5 py-2 rounded-none uppercase tracking-widest shrink-0 shadow cursor-pointer w-full sm:w-auto text-center"
-            >
-              Accetto Cookie di Sessione
-            </button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -880,8 +1068,8 @@ export default function App() {
               <div className="flex flex-col lg:flex-row gap-8 items-center">
                 <div className="w-44 h-44 md:w-56 md:h-56 rounded-full overflow-hidden shrink-0 shadow-xl border-4 border-white bg-bg-ivory relative">
                   <img
-                    src="/images/maria%20teresa%20rogani.jpg"
-                    alt="Maria Teresa Rogani"
+                    src={BIO_DATA.image}
+                    alt={BIO_DATA.name}
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300"
                     onError={(e) => {
@@ -891,33 +1079,29 @@ export default function App() {
                 </div>
                 <div className="space-y-4 text-left flex-1 min-w-0">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-[#00C7BE] bg-[#00C7BE]/10 px-3 py-1 rounded-full">
-                    Freelance al tuo fianco
+                    {BIO_DATA.badge}
                   </span>
                   <h3 className="font-display text-2xl md:text-3xl font-extrabold text-charcoal">
-                    Chi Sono: Maria Teresa Rogani
+                    Chi Sono: {BIO_DATA.name}
                   </h3>
                   <p className="text-xs md:text-sm text-charcoal/80 leading-relaxed font-sans font-light">
-                    Sono una libera professionista che aiuta le piccole e medie imprese a farsi strada nel mondo digitale. Mi occupo di creare siti web che funzionano davvero e di portare nuovi clienti attraverso strategie di marketing mirate.
+                    {BIO_DATA.shortDescription}
                   </p>
                   <p className="text-xs md:text-sm text-muted-grey leading-relaxed font-sans font-light">
-                    A differenza delle grandi agenzie, con me avrai un rapporto diretto e trasparente. Il mio obiettivo è farti ottenere risultati concreti, senza tecnicismi inutili, lavorando insieme per far crescere la tua attività.
+                    {BIO_DATA.longDescription}
                   </p>
 
                   <div className="flex flex-wrap gap-4 pt-2">
-                    <div className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
-                      <Check className="w-4 h-4 text-green-500 font-bold" /> Rapporto Diretto
-                    </div>
-                    <div className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
-                      <Check className="w-4 h-4 text-green-500 font-bold" /> Zero Costi Nascosti
-                    </div>
-                    <div className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
-                      <Check className="w-4 h-4 text-green-500 font-bold" /> Risultati Concreti
-                    </div>
+                    {BIO_DATA.highlights.map((highlight, idx) => (
+                      <div key={idx} className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
+                        <Check className="w-4 h-4 text-green-500 font-bold" /> {highlight}
+                      </div>
+                    ))}
                   </div>
 
                   <div className="pt-6">
                     <a
-                      href="https://wa.me/390000000000"
+                      href={`https://wa.me/${BIO_DATA.whatsapp}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 bg-[#25D366] text-white hover:bg-[#128C7E] transition-all font-bold px-6 py-3 rounded-none uppercase tracking-widest text-xs shadow-md"
@@ -941,6 +1125,96 @@ export default function App() {
         onClose={() => setIsSheetOpen(false)}
         sheet={selectedSheet}
       />
+
+      {/* BLOG POST MODAL */}
+      <AnimatePresence>
+        {isBlogModalOpen && selectedPost && (
+          <div className="fixed inset-0 bg-black/90 z-[200] backdrop-blur-md flex items-center justify-center p-0 md:p-4">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 50 }}
+              className="bg-[#0a0015] w-full max-w-4xl h-full md:h-auto md:max-h-[90vh] border-x md:border border-white/10 overflow-hidden flex flex-col relative"
+            >
+              {/* Header */}
+              <div className="sticky top-0 z-30 bg-[#0a0015]/80 backdrop-blur-xl border-b border-white/10 p-4 md:p-6 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={() => setIsBlogModalOpen(false)}
+                    className="p-2 hover:bg-white/5 text-white transition-colors"
+                  >
+                    <ChevronLeft className="w-6 h-6" />
+                  </button>
+                  <div className="hidden sm:block">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-accent-blue">{selectedPost.category}</span>
+                    <h4 className="text-sm font-bold text-white line-clamp-1">{selectedPost.title}</h4>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIsBlogModalOpen(false)}
+                  className="text-[10px] font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors"
+                >
+                  Chiudi [ESC]
+                </button>
+              </div>
+
+              {/* Content Area */}
+              <div className="flex-1 overflow-y-auto p-6 md:p-12">
+                <div className="max-w-2xl mx-auto space-y-8">
+                  <header className="space-y-4">
+                    <div className="flex items-center gap-4 text-xs text-white/40 font-mono">
+                      <span>{selectedPost.date}</span>
+                      <span>•</span>
+                      <span>{selectedPost.author}</span>
+                    </div>
+                    <h1 className="font-display text-3xl md:text-4xl font-black text-white leading-tight">
+                      {selectedPost.title}
+                    </h1>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedPost.tags.map(tag => (
+                        <span key={tag} className="text-[10px] font-bold uppercase tracking-widest text-white/60 bg-white/5 px-2 py-1">#{tag}</span>
+                      ))}
+                    </div>
+                  </header>
+
+                  <div className="aspect-video w-full overflow-hidden">
+                    <img
+                      src={selectedPost.image}
+                      alt={selectedPost.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=600&auto=format&fit=crop";
+                      }}
+                    />
+                  </div>
+
+                  <article className="prose prose-invert prose-sm md:prose-base max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:text-white prose-p:text-white/70 prose-p:leading-relaxed prose-strong:text-white prose-a:text-accent-blue hover:prose-a:underline prose-img:rounded-none">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {postContent}
+                    </ReactMarkdown>
+                  </article>
+
+                  <footer className="pt-12 border-t border-white/10 mt-12 text-center space-y-6">
+                    <div className="space-y-2">
+                      <p className="text-xs text-white/40 uppercase tracking-widest font-bold">Ti è piaciuto l'articolo?</p>
+                      <h4 className="text-lg font-bold text-white">Parliamo di come applicare queste strategie al tuo business</h4>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setIsBlogModalOpen(false);
+                        window.location.hash = "#contatti";
+                      }}
+                      className="grad-electric px-8 py-4 text-xs font-bold uppercase tracking-widest text-white hover:shadow-xl transition-all"
+                    >
+                      Prenota una consulenza gratuita
+                    </button>
+                  </footer>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* PRIVACY POLICY MODAL (GDPR) */}
       <AnimatePresence>
