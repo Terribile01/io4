@@ -4,7 +4,8 @@ import {
   Menu, X, Phone, Layers, Smartphone, Star, Check, ArrowRight,
   Send, Database, ArrowUpRight, BarChart2, ShieldCheck, Mail, Pin, HelpCircle,
   Clock, CheckCircle, Flame, Server, Laptop, ChevronRight,
-  Instagram, Facebook, Linkedin, ChevronDown, Search, Calendar, Tag, ChevronLeft
+  Instagram, Facebook, Linkedin, ChevronDown, Search, Calendar, Tag, ChevronLeft,
+  Share2
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -197,13 +198,6 @@ export default function App() {
                 Chi Sono
               </button>
 
-              <a
-                href="#blog"
-                className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
-              >
-                Blog
-              </a>
-
               {/* Servizi Dropdown */}
               <div className="relative group/dropdown">
                 <button
@@ -239,6 +233,12 @@ export default function App() {
                 className="text-[10px] font-bold uppercase tracking-widest text-accent-orange hover:text-white transition-colors flex items-center gap-1"
               >
                 AI Planner <Sparkles className="w-3 h-3 text-accent-orange" />
+              </a>
+              <a
+                href="#blog"
+                className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
+              >
+                Blog
               </a>
             </div>
           </div>
@@ -282,16 +282,6 @@ export default function App() {
               Chi Sono
             </button>
 
-            <a
-              onClick={() => {
-                setMobileMenuOpen(false);
-              }}
-              href="#blog"
-              className="text-xs uppercase font-bold tracking-widest text-white/80 py-4 border-b border-white/5"
-            >
-              Blog
-            </a>
-
             <div className="border-b border-white/5 py-2">
               <span className="text-[10px] uppercase font-bold tracking-widest text-white/30 mb-2 block">I Miei Servizi</span>
               <div className="flex flex-col gap-2 pl-2">
@@ -327,6 +317,15 @@ export default function App() {
               className="text-xs uppercase font-bold tracking-widest text-accent-orange py-2 border-b border-white/5 flex items-center gap-1.5"
             >
               Strategia AI Istantanea <Sparkles className="w-3.5 h-3.5" />
+            </a>
+            <a
+              onClick={() => {
+                setMobileMenuOpen(false);
+              }}
+              href="#blog"
+              className="text-xs uppercase font-bold tracking-widest text-white/80 py-4 border-b border-white/5"
+            >
+              Blog
             </a>
             <a 
               onClick={() => {
@@ -537,113 +536,6 @@ export default function App() {
           </div>
         </section>
 
-        {/* 11.5 BLOG SECTION - ONE PAGE STYLE */}
-        <section className="bg-transparent py-20 md:py-32 scroll-mt-24 border-t border-white/5" id="blog">
-          <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-12">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-              <div className="space-y-2 text-left">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-accent-blue bg-accent-blue/10 px-3.5 py-1 rounded-none">
-                  Approfondimenti & News
-                </span>
-                <h2 className="font-display text-2xl md:text-3xl font-extrabold text-white">
-                  Il Blog di Facilissimo Web
-                </h2>
-                <p className="text-xs text-white/60 max-w-md">
-                  Consigli, strategie e novità dal mondo del web design e della lead generation per far crescere il tuo business.
-                </p>
-              </div>
-
-              {/* Search Bar */}
-              <div className="relative w-full md:w-64">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
-                <input
-                  type="text"
-                  placeholder="Cerca articoli..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue text-white"
-                />
-              </div>
-            </div>
-
-            {/* Horizontal Scroll Area */}
-            <div className="relative group">
-              <button
-                onClick={() => scrollBlog('left')}
-                className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-white/20 cursor-pointer"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => scrollBlog('right')}
-                className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-white/20 cursor-pointer"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
-
-              <div
-                ref={blogScrollRef}
-                className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory px-2"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-              >
-                {filteredPosts.map((post) => (
-                  <motion.div
-                    key={post.id}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="min-w-[300px] md:min-w-[350px] snap-start glass-panel border border-white/10 overflow-hidden group/card cursor-pointer hover:border-accent-blue/30 transition-all"
-                    onClick={() => openPost(post)}
-                  >
-                    <div className="h-48 overflow-hidden relative">
-                      <img
-                        src={post.image}
-                        alt={post.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=600&auto=format&fit=crop";
-                        }}
-                      />
-                      <div className="absolute top-4 left-4">
-                        <span className="bg-accent-blue/80 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-widest px-2 py-1">
-                          {post.category}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="p-6 space-y-3">
-                      <div className="flex items-center gap-3 text-[10px] text-white/40 font-mono">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-3 h-3" />
-                          {post.date}
-                        </div>
-                        <span>•</span>
-                        <div className="flex items-center gap-1">
-                          <Tag className="w-3 h-3" />
-                          {post.tags[0]}
-                        </div>
-                      </div>
-                      <h3 className="font-display text-lg font-bold text-white group-hover/card:text-accent-blue transition-colors line-clamp-2">
-                        {post.title}
-                      </h3>
-                      <p className="text-xs text-white/60 leading-relaxed line-clamp-3">
-                        {post.excerpt}
-                      </p>
-                      <div className="pt-4 flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest">
-                        Leggi tutto <ArrowRight className="w-3.5 h-3.5" />
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-
-                {filteredPosts.length === 0 && (
-                  <div className="w-full py-20 text-center text-white/40 text-sm italic">
-                    Nessun articolo trovato per la tua ricerca.
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* 4. COMPARISON CHART SECTION (CLASSIC VS DESIGN CODE) */}
         <section className="bg-transparent py-20 md:py-32" id="comparativa">
@@ -890,6 +782,114 @@ export default function App() {
                 </motion.form>
               )}
             </AnimatePresence>
+            </div>
+          </div>
+        </section>
+
+        {/* 11.5 BLOG SECTION - ONE PAGE STYLE */}
+        <section className="bg-transparent py-20 md:py-32 scroll-mt-24 border-t border-white/5" id="blog">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <div className="space-y-2 text-left">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-accent-blue bg-accent-blue/10 px-3.5 py-1 rounded-none">
+                  Approfondimenti & News
+                </span>
+                <h2 className="font-display text-2xl md:text-3xl font-extrabold text-white">
+                  Il Blog di Facilissimo Web
+                </h2>
+                <p className="text-xs text-white/60 max-w-md">
+                  Consigli, strategie e novità dal mondo del web design e della lead generation per far crescere il tuo business.
+                </p>
+              </div>
+
+              {/* Search Bar */}
+              <div className="relative w-full md:w-64">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+                <input
+                  type="text"
+                  placeholder="Cerca articoli..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue text-white"
+                />
+              </div>
+            </div>
+
+            {/* Horizontal Scroll Area */}
+            <div className="relative group">
+              <button
+                onClick={() => scrollBlog('left')}
+                className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-white/20 cursor-pointer"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => scrollBlog('right')}
+                className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-white/20 cursor-pointer"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+
+              <div
+                ref={blogScrollRef}
+                className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory px-2"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {filteredPosts.map((post) => (
+                  <motion.div
+                    key={post.id}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="min-w-[300px] md:min-w-[350px] snap-start glass-panel border border-white/10 overflow-hidden group/card cursor-pointer hover:border-accent-blue/30 transition-all"
+                    onClick={() => openPost(post)}
+                  >
+                    <div className="h-48 overflow-hidden relative">
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=600&auto=format&fit=crop";
+                        }}
+                      />
+                      <div className="absolute top-4 left-4">
+                        <span className="bg-accent-blue/80 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-widest px-2 py-1">
+                          {post.category}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-6 space-y-3">
+                      <div className="flex items-center gap-3 text-[10px] text-white/40 font-mono">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          {post.date}
+                        </div>
+                        <span>•</span>
+                        <div className="flex items-center gap-1">
+                          <Tag className="w-3 h-3" />
+                          {post.tags[0]}
+                        </div>
+                      </div>
+                      <h3 className="font-display text-lg font-bold text-white group-hover/card:text-accent-blue transition-colors line-clamp-2">
+                        {post.title}
+                      </h3>
+                      <p className="text-xs text-white/60 leading-relaxed line-clamp-3">
+                        {post.excerpt}
+                      </p>
+                      <div className="pt-4 flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest">
+                        Leggi tutto <ArrowRight className="w-3.5 h-3.5" />
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+
+                {filteredPosts.length === 0 && (
+                  <div className="w-full py-20 text-center text-white/40 text-sm italic">
+                    Nessun articolo trovato per la tua ricerca.
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </section>
@@ -1194,7 +1194,58 @@ export default function App() {
                     </ReactMarkdown>
                   </article>
 
-                  <footer className="pt-12 border-t border-white/10 mt-12 text-center space-y-6">
+                  {/* Social Sharing Buttons */}
+                  <div className="pt-8 border-t border-white/10 mt-12">
+                    <div className="flex flex-col items-center gap-4">
+                      <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/40">
+                        <Share2 className="w-3 h-3" /> Condividi questo articolo
+                      </div>
+                      <div className="flex flex-wrap justify-center gap-3">
+                        <a
+                          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + "/#blog?post=" + selectedPost.slug)}`}
+                          target="_blank" rel="noopener noreferrer"
+                          className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:bg-[#1877F2] hover:text-white hover:border-[#1877F2] transition-all"
+                          title="Condividi su Facebook"
+                        >
+                          <Facebook className="w-4 h-4" />
+                        </a>
+                        <a
+                          href={`https://www.instagram.com/`}
+                          target="_blank" rel="noopener noreferrer"
+                          className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] hover:text-white hover:border-transparent transition-all"
+                          title="Condividi su Instagram"
+                        >
+                          <Instagram className="w-4 h-4" />
+                        </a>
+                        <a
+                          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.origin + "/#blog?post=" + selectedPost.slug)}`}
+                          target="_blank" rel="noopener noreferrer"
+                          className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:bg-[#0A66C2] hover:text-white hover:border-[#0A66C2] transition-all"
+                          title="Condividi su LinkedIn"
+                        >
+                          <Linkedin className="w-4 h-4" />
+                        </a>
+                        <a
+                          href={`https://wa.me/?text=${encodeURIComponent("Leggi questo articolo su Facilissimo Web: " + selectedPost.title + " " + window.location.origin + "/#blog?post=" + selectedPost.slug)}`}
+                          target="_blank" rel="noopener noreferrer"
+                          className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:bg-[#25D366] hover:text-white hover:border-[#25D366] transition-all"
+                          title="Condividi su WhatsApp"
+                        >
+                          <MessageSquare className="w-4 h-4" />
+                        </a>
+                        <a
+                          href={`https://www.google.com/search?q=${encodeURIComponent(selectedPost.title + " Facilissimo Web")}`}
+                          target="_blank" rel="noopener noreferrer"
+                          className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:bg-white hover:text-charcoal hover:border-white transition-all"
+                          title="Cerca su Google"
+                        >
+                          <Globe className="w-4 h-4" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <footer className="pt-12 border-t border-white/10 mt-6 text-center space-y-6">
                     <div className="space-y-2">
                       <p className="text-xs text-white/40 uppercase tracking-widest font-bold">Ti è piaciuto l'articolo?</p>
                       <h4 className="text-lg font-bold text-white">Parliamo di come applicare queste strategie al tuo business</h4>
