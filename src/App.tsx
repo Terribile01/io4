@@ -126,7 +126,7 @@ export default function App() {
             >
               <div className="h-8 md:h-10 flex items-center shrink-0 overflow-hidden">
                 <img
-                  src="/images/logo%20facilissimo%20web.png"
+                  src="/images/def.logo%20facilissimo%20web%20.jpg"
                   alt="Facilissimo Web"
                   className="h-full w-auto object-contain transition-transform group-hover:scale-105"
                   onError={(e) => {
@@ -733,7 +733,7 @@ export default function App() {
             <div className="space-y-6 text-left flex flex-col items-start">
               <div className="w-[250px] h-auto overflow-hidden">
                 <img
-                  src="/images/logo%20facilissimo%20web.png"
+                  src="/images/def.logo%20facilissimo%20web%20.jpg"
                   alt="Facilissimo Web"
                   className="w-full h-auto object-contain"
                   onError={(e) => {
