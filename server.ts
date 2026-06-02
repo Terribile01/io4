@@ -126,27 +126,27 @@ Usa formattazione Markdown elegante, parti in grassetto, punti elenco puliti ed 
       }
 
       const ai = new GoogleGenAI({ apiKey });
-      const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-      const chat = model.startChat({
+      const chat = ai.chats.create({
+        model: "gemini-1.5-flash",
         history: (history || []).map((msg: any) => ({
           role: msg.role === "bot" ? "model" : "user",
           parts: [{ text: msg.content }],
         })),
-        generationConfig: {
+        config: {
           maxOutputTokens: 500,
-        },
-        systemInstruction: {
-          role: "system",
-          parts: [{
-            text: "Sei Maria Teresa Rogani, esperta consulente digitale di Facilissimo Web. Il tuo obiettivo è aiutare i clienti a capire come un sito web professionale o una strategia di lead generation possa far crescere il loro business. Sii professionale, gentile e concisa. Promuovi i servizi di Facilissimo Web: creazione siti (WordPress o React), campagne ADS e Lead Generation."
-          }],
+          systemInstruction: {
+            role: "system",
+            parts: [{
+              text: "Sei Maria Teresa Rogani, esperta consulente digitale di Facilissimo Web. Il tuo obiettivo è aiutare i clienti a capire come un sito web professionale o una strategia di lead generation possa far crescere il loro business. Sii professionale, gentile e concisa. Promuovi i servizi di Facilissimo Web: creazione siti (WordPress o React), campagne ADS e Lead Generation."
+            }],
+          },
         },
       });
 
-      const result = await chat.sendMessage(message);
-      const response = await result.response;
-      res.json({ text: response.text() });
+      const response = await chat.sendMessage({
+        message: message
+      });
+      res.json({ text: response.text });
     } catch (err: any) {
       next(err);
     }

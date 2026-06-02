@@ -5,7 +5,7 @@ import {
   Send, Database, ArrowUpRight, BarChart2, ShieldCheck, Mail, Pin, HelpCircle,
   Clock, CheckCircle, Flame, Server, Laptop, ChevronRight,
   Instagram, Facebook, Linkedin, ChevronDown, Search, Calendar, Tag, ChevronLeft,
-  Share2
+  Share2, Play, Pause, Square, Twitter, Send as SendIcon, Link as LinkIcon
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -35,6 +35,10 @@ export default function App() {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [postContent, setPostContent] = useState("");
   const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const blogScrollRef = useRef<HTMLDivElement>(null);
   const [cookiesAccepted, setCookiesAccepted] = useState(() => {
     try {
@@ -72,9 +76,61 @@ export default function App() {
       setPostContent(text);
       setSelectedPost(post);
       setIsBlogModalOpen(true);
+      // Reset speech
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      setIsPaused(false);
     } catch (err) {
       console.error("Error loading post content:", err);
     }
+  };
+
+  const toggleSpeech = () => {
+    if (isSpeaking) {
+      window.speechSynthesis.pause();
+      setIsPaused(true);
+      setIsSpeaking(false);
+    } else if (isPaused) {
+      window.speechSynthesis.resume();
+      setIsPaused(false);
+      setIsSpeaking(true);
+    } else {
+      window.speechSynthesis.cancel();
+      const textToRead = `${selectedPost?.title}. ${postContent.replace(/[#*`]/g, '')}`;
+      const utterance = new SpeechSynthesisUtterance(textToRead);
+      utterance.lang = 'it-IT';
+      utterance.onend = () => {
+        setIsSpeaking(false);
+        setIsPaused(false);
+      };
+      utteranceRef.current = utterance;
+      window.speechSynthesis.speak(utterance);
+      setIsSpeaking(true);
+    }
+  };
+
+  const stopSpeech = () => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+    setIsPaused(false);
+  };
+
+  const getReadingTime = (content: string) => {
+    const words = content.trim().split(/\s+/).length;
+    return Math.ceil(words / 200);
+  };
+
+  const getShareSnippet = (post: BlogPost, content: string) => {
+    const cleanContent = content.replace(/[#*`]/g, '').trim();
+    const words = cleanContent.split(/\s+/).slice(0, 15).join(" ");
+    return `${words}...`;
+  };
+
+  const copyPostLink = (slug: string) => {
+    const url = `${window.location.origin}/#blog?post=${slug}`;
+    navigator.clipboard.writeText(url);
+    setLinkCopied(true);
+    setTimeout(() => setLinkCopied(false), 2000);
   };
 
   const filteredPosts = blogPosts.filter(post =>
@@ -942,42 +998,99 @@ export default function App() {
               <p className="text-xs text-[#BDBAB2] leading-relaxed">
                 Tutte le consulenze partono da una mini-call conoscitiva gratuita di 15 minuti su zoom o whatsapp.
               </p>
-              <div className="flex gap-4">
-                <a 
-                  href="mailto:mariateresarogani@gmail.com" 
-                  className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
-                  title="Contatta via Email"
-                >
-                  <Mail className="w-4 h-4" />
-                </a>
-                <a
-                  href="#"
-                  className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
-                  title="Instagram (Prossimamente)"
-                >
-                  <Instagram className="w-4 h-4" />
-                </a>
-                <a
-                  href="#"
-                  className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
-                  title="Facebook (Prossimamente)"
-                >
-                  <Facebook className="w-4 h-4" />
-                </a>
-                <a
-                  href="#"
-                  className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
-                  title="LinkedIn (Prossimamente)"
-                >
-                  <Linkedin className="w-4 h-4" />
-                </a>
-                <a 
-                  href="#hero" 
-                  className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
-                  title="Torna all'inizio"
-                >
-                  <Compass className="w-4 h-4" />
-                </a>
+              <div className="space-y-6">
+                <div className="flex gap-4">
+                  <a
+                    href="mailto:mariateresarogani@gmail.com"
+                    className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
+                    title="Contatta via Email"
+                  >
+                    <Mail className="w-4 h-4" />
+                  </a>
+                  <a
+                    href="#"
+                    className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
+                    title="Instagram (Prossimamente)"
+                  >
+                    <Instagram className="w-4 h-4" />
+                  </a>
+                  <a
+                    href="#"
+                    className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
+                    title="Facebook (Prossimamente)"
+                  >
+                    <Facebook className="w-4 h-4" />
+                  </a>
+                  <a
+                    href="#"
+                    className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
+                    title="LinkedIn (Prossimamente)"
+                  >
+                    <Linkedin className="w-4 h-4" />
+                  </a>
+                  <a
+                    href="#hero"
+                    className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
+                    title="Torna all'inizio"
+                  >
+                    <Compass className="w-4 h-4" />
+                  </a>
+                </div>
+
+                {/* Sharing Suite */}
+                <div className="space-y-3 pt-4 border-t border-white/5">
+                  <span className="text-[9px] uppercase font-bold text-white/30 tracking-widest block">Condividi Facilissimo Web</span>
+                  <div className="flex flex-wrap gap-2">
+                    <a
+                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin)}`}
+                      target="_blank" rel="noopener noreferrer"
+                      className="w-8 h-8 rounded-full bg-[#1877F2] flex items-center justify-center text-white shadow hover:scale-110 transition-all"
+                      title="Facebook"
+                    >
+                      <Facebook className="w-3.5 h-3.5" />
+                    </a>
+                    <a
+                      href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(window.location.origin)}&media=${encodeURIComponent(window.location.origin + "/images/def.logo%20facilissimo%20web%20.jpg")}&description=${encodeURIComponent("Facilissimo Web - Design e Strategia per Siti Web che vendono")}`}
+                      target="_blank" rel="noopener noreferrer"
+                      className="w-8 h-8 rounded-full bg-[#E60023] flex items-center justify-center text-white shadow hover:scale-110 transition-all"
+                      title="Pinterest"
+                    >
+                      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.965 1.406-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/></svg>
+                    </a>
+                    <a
+                      href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.origin)}`}
+                      target="_blank" rel="noopener noreferrer"
+                      className="w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center text-white shadow hover:scale-110 transition-all"
+                      title="LinkedIn"
+                    >
+                      <Linkedin className="w-3.5 h-3.5" />
+                    </a>
+                    <a
+                      href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.origin)}&text=${encodeURIComponent("Facilissimo Web - Design e Strategia per Siti Web che vendono")}`}
+                      target="_blank" rel="noopener noreferrer"
+                      className="w-8 h-8 rounded-full bg-black flex items-center justify-center text-white shadow hover:scale-110 transition-all border border-white/20"
+                      title="X"
+                    >
+                      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <a
+                      href={`https://wa.me/?text=${encodeURIComponent("Facilissimo Web - Design e Strategia per Siti Web che vendono: " + window.location.origin)}`}
+                      target="_blank" rel="noopener noreferrer"
+                      className="w-8 h-8 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow hover:scale-110 transition-all"
+                      title="WhatsApp"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5" />
+                    </a>
+                    <a
+                      href={`https://t.me/share/url?url=${encodeURIComponent(window.location.origin)}&text=${encodeURIComponent("Facilissimo Web - Design e Strategia per Siti Web che vendono")}`}
+                      target="_blank" rel="noopener noreferrer"
+                      className="w-8 h-8 rounded-full bg-[#0088cc] flex items-center justify-center text-white shadow hover:scale-110 transition-all"
+                      title="Telegram"
+                    >
+                      <SendIcon className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1161,19 +1274,47 @@ export default function App() {
               {/* Content Area */}
               <div className="flex-1 overflow-y-auto p-6 md:p-12">
                 <div className="max-w-2xl mx-auto space-y-8">
-                  <header className="space-y-4">
-                    <div className="flex items-center gap-4 text-xs text-white/40 font-mono">
-                      <span>{selectedPost.date}</span>
-                      <span>•</span>
-                      <span>{selectedPost.author}</span>
+                  <header className="space-y-6">
+                    <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/5 pb-6">
+                      <div className="flex items-center gap-4 text-[10px] text-white/40 font-mono uppercase tracking-widest">
+                        <div className="flex items-center gap-1.5">
+                          <Calendar className="w-3 h-3" /> {selectedPost.date}
+                        </div>
+                        <span>•</span>
+                        <div className="flex items-center gap-1.5">
+                          <Clock className="w-3 h-3" /> {getReadingTime(postContent)} MIN LETTURA
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={toggleSpeech}
+                          className="flex items-center gap-2 px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] font-bold uppercase tracking-widest transition-all cursor-pointer"
+                        >
+                          {isSpeaking ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+                          {isSpeaking ? 'Pausa' : isPaused ? 'Riprendi' : 'Ascolta'}
+                        </button>
+                        {(isSpeaking || isPaused) && (
+                          <button
+                            onClick={stopSpeech}
+                            className="p-1.5 bg-white/5 hover:bg-white/10 border border-white/10 transition-all cursor-pointer"
+                            title="Stop"
+                          >
+                            <Square className="w-3 h-3 fill-white" />
+                          </button>
+                        )}
+                      </div>
                     </div>
-                    <h1 className="font-display text-3xl md:text-4xl font-black text-white leading-tight">
-                      {selectedPost.title}
-                    </h1>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedPost.tags.map(tag => (
-                        <span key={tag} className="text-[10px] font-bold uppercase tracking-widest text-white/60 bg-white/5 px-2 py-1">#{tag}</span>
-                      ))}
+
+                    <div className="space-y-4">
+                      <h1 className="font-display text-3xl md:text-4xl font-black text-white leading-tight">
+                        {selectedPost.title}
+                      </h1>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedPost.tags.map(tag => (
+                          <span key={tag} className="text-[10px] font-bold uppercase tracking-widest text-white/60 bg-white/5 px-2 py-1">#{tag}</span>
+                        ))}
+                      </div>
                     </div>
                   </header>
 
@@ -1196,51 +1337,66 @@ export default function App() {
 
                   {/* Social Sharing Buttons */}
                   <div className="pt-8 border-t border-white/10 mt-12">
-                    <div className="flex flex-col items-center gap-4">
+                    <div className="flex flex-col items-center gap-6">
                       <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/40">
                         <Share2 className="w-3 h-3" /> Condividi questo articolo
                       </div>
-                      <div className="flex flex-wrap justify-center gap-3">
+                      <div className="flex flex-wrap justify-center gap-4">
                         <a
                           href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + "/#blog?post=" + selectedPost.slug)}`}
                           target="_blank" rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:bg-[#1877F2] hover:text-white hover:border-[#1877F2] transition-all"
-                          title="Condividi su Facebook"
+                          className="w-12 h-12 rounded-full bg-[#1877F2] flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all"
+                          title="Facebook"
                         >
-                          <Facebook className="w-4 h-4" />
+                          <Facebook className="w-5 h-5" />
                         </a>
                         <a
-                          href={`https://www.instagram.com/`}
+                          href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(window.location.origin + "/#blog?post=" + selectedPost.slug)}&media=${encodeURIComponent(window.location.origin + selectedPost.image)}&description=${encodeURIComponent(selectedPost.title + " - " + getShareSnippet(selectedPost, postContent))}`}
                           target="_blank" rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] hover:text-white hover:border-transparent transition-all"
-                          title="Condividi su Instagram"
+                          className="w-12 h-12 rounded-full bg-[#E60023] flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all"
+                          title="Pinterest"
                         >
-                          <Instagram className="w-4 h-4" />
+                          <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.965 1.406-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/></svg>
                         </a>
                         <a
                           href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.origin + "/#blog?post=" + selectedPost.slug)}`}
                           target="_blank" rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:bg-[#0A66C2] hover:text-white hover:border-[#0A66C2] transition-all"
-                          title="Condividi su LinkedIn"
+                          className="w-12 h-12 rounded-full bg-[#0A66C2] flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all"
+                          title="LinkedIn"
                         >
-                          <Linkedin className="w-4 h-4" />
+                          <Linkedin className="w-5 h-5" />
                         </a>
                         <a
-                          href={`https://wa.me/?text=${encodeURIComponent("Leggi questo articolo su Facilissimo Web: " + selectedPost.title + " " + window.location.origin + "/#blog?post=" + selectedPost.slug)}`}
+                          href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.origin + "/#blog?post=" + selectedPost.slug)}&text=${encodeURIComponent(selectedPost.title + " - " + getShareSnippet(selectedPost, postContent))}&hashtags=${encodeURIComponent(selectedPost.tags.join(","))}`}
                           target="_blank" rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:bg-[#25D366] hover:text-white hover:border-[#25D366] transition-all"
-                          title="Condividi su WhatsApp"
+                          className="w-12 h-12 rounded-full bg-black flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all border border-white/20"
+                          title="X"
                         >
-                          <MessageSquare className="w-4 h-4" />
+                          <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                         </a>
                         <a
-                          href={`https://www.google.com/search?q=${encodeURIComponent(selectedPost.title + " Facilissimo Web")}`}
+                          href={`https://wa.me/?text=${encodeURIComponent(selectedPost.title + " - " + getShareSnippet(selectedPost, postContent) + " " + window.location.origin + "/#blog?post=" + selectedPost.slug)}`}
                           target="_blank" rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:bg-white hover:text-charcoal hover:border-white transition-all"
-                          title="Cerca su Google"
+                          className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all"
+                          title="WhatsApp"
                         >
-                          <Globe className="w-4 h-4" />
+                          <MessageSquare className="w-5 h-5" />
                         </a>
+                        <a
+                          href={`https://t.me/share/url?url=${encodeURIComponent(window.location.origin + "/#blog?post=" + selectedPost.slug)}&text=${encodeURIComponent(selectedPost.title + " - " + getShareSnippet(selectedPost, postContent))}`}
+                          target="_blank" rel="noopener noreferrer"
+                          className="w-12 h-12 rounded-full bg-[#0088cc] flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all"
+                          title="Telegram"
+                        >
+                          <SendIcon className="w-5 h-5" />
+                        </a>
+                        <button
+                          onClick={() => copyPostLink(selectedPost.slug)}
+                          className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all cursor-pointer ${linkCopied ? 'bg-green-500 text-white' : 'bg-white/10 text-white/70 border border-white/20'}`}
+                          title="Copia Link"
+                        >
+                          {linkCopied ? <Check className="w-5 h-5" /> : <LinkIcon className="w-5 h-5" />}
+                        </button>
                       </div>
                     </div>
                   </div>
