@@ -100,7 +100,7 @@ export default function App() {
 
       {/* 1. FLOATING NAVIGATION BAR (GLASSMORPHIC CHIC RECTANGULAR) */}
       <nav className="fixed top-5 left-0 right-0 z-[100] flex items-center justify-center px-4 w-full pointer-events-none">
-        <div className="pointer-events-auto w-full max-w-5xl flex items-center justify-between bg-charcoal/95 backdrop-blur-md rounded-none px-5 py-2.5 shadow-xl border border-white/10 h-14">
+        <div className="pointer-events-auto w-full max-w-5xl flex items-center justify-between bg-accent-purple/10 backdrop-blur-xl rounded-none px-5 py-2.5 shadow-xl border border-white/10 h-14">
           <div className="flex items-center gap-8 pl-1">
             <a 
               href="#hero" 
@@ -124,12 +124,12 @@ export default function App() {
                 </div>
               </div>
               <span className="font-display font-bold text-sm uppercase tracking-widest text-[#FFF] transition-colors">
-                Facilissimo <span className="text-accent-orange">Web</span>
+                FACILISSIMO <span className="text-accent-orange">WEB</span>
               </span>
             </a>
             
             {/* Desktop Links */}
-            <div className="hidden md:flex items-center gap-7">
+            <div className="hidden lg:flex items-center gap-7">
               <a 
                 href="#servizi" 
                 className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
@@ -160,7 +160,7 @@ export default function App() {
           <div className="flex items-center gap-3">
             <a 
               href="#contatti" 
-              className="hidden md:flex bg-white text-charcoal hover:bg-bg-ivory transition-all text-[9px] h-9 font-bold px-4 rounded-none items-center justify-center uppercase tracking-wider shrink-0 shadow"
+              className="hidden lg:flex bg-white text-charcoal hover:bg-bg-ivory transition-all text-[9px] h-9 font-bold px-4 rounded-none items-center justify-center uppercase tracking-wider shrink-0 shadow"
             >
               Parliamo del tuo Progetto
             </a>
@@ -168,7 +168,7 @@ export default function App() {
             {/* Mobile Menu Toggle */}
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden text-[#BDBAB2] hover:text-white p-1 cursor-pointer pointer-events-auto"
+              className="lg:hidden text-[#BDBAB2] hover:text-white p-1 cursor-pointer pointer-events-auto"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -183,7 +183,7 @@ export default function App() {
             initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
-            className="fixed inset-x-4 top-[84px] bg-charcoal text-white rounded-none p-6 z-[100] border-2 border-white/20 shadow-2xl flex flex-col gap-4 md:hidden"
+            className="fixed inset-x-4 top-[84px] bg-accent-purple/20 backdrop-blur-2xl text-white rounded-none p-6 z-[100] border-2 border-white/20 shadow-2xl flex flex-col gap-4 lg:hidden"
             style={{ pointerEvents: 'auto' }}
           >
             <a 
@@ -681,14 +681,27 @@ export default function App() {
         <div className="max-w-5xl mx-auto space-y-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {/* Logo Column */}
-            <div className="space-y-4 text-left">
-              <div className="w-10 h-10 rounded-none border border-white/20 bg-white/10 flex items-center justify-center font-mono">
-                <span className="text-white font-black font-display text-base tracking-widest">FW</span>
+            <div className="space-y-6 text-left flex flex-col items-start">
+              <div className="w-[250px] h-auto overflow-hidden">
+                <img
+                  src="/images/logo%20facilissimo%20web.png"
+                  alt="Facilissimo Web"
+                  className="w-full h-auto object-contain"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                    (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                  }}
+                />
+                <div className="hidden w-[250px] h-[250px] rounded-none border border-white/20 bg-white/10 flex items-center justify-center font-mono">
+                  <span className="text-white font-black font-display text-5xl tracking-widest">FW</span>
+                </div>
               </div>
-              <h4 className="font-display font-black text-xs uppercase tracking-widest text-white">Facilissimo Web</h4>
-              <p className="text-xs text-[#BDBAB2] leading-relaxed font-sans font-light">
-                Metodo d'eccellenza per la digitalizzazione delle imprese locali in tutta Italia. Sviluppo custom-code, design, visibilità e monetizzazione.
-              </p>
+              <div className="space-y-2">
+                <h4 className="font-display font-black text-xs uppercase tracking-widest text-white">FACILISSIMO WEB</h4>
+                <p className="text-xs text-[#BDBAB2] leading-relaxed font-sans font-light max-w-xs">
+                  Metodo d'eccellenza per la digitalizzazione delle imprese locali in tutta Italia. Sviluppo custom-code, design, visibilità e monetizzazione.
+                </p>
+              </div>
             </div>
 
             {/* Services Links column */}
