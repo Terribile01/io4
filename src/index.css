@@ -25,17 +25,17 @@
 /* Custom global layout scrollbars and styling */
 html {
   scroll-behavior: smooth;
-  background-color: var(--color-bg-ivory);
-  color: var(--color-charcoal);
+  background-color: #0a0015;
+  color: rgba(255, 255, 255, 0.9);
   font-family: var(--font-sans);
 }
 
 /* Glassmorphism custom classes */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  box-shadow: 0 8px 32px 0 rgba(29, 29, 31, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
 }
 
 .glass-panel-dark {
