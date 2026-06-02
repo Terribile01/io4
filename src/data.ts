@@ -130,3 +130,41 @@ export const TECHNICAL_SHEETS: TechnicalSheet[] = [
     icon: "BarChart2"
   }
 ];
+
+export interface BioData {
+  name: string;
+  role: string;
+  badge: string;
+  shortDescription: string;
+  longDescription: string;
+  highlights: string[];
+  image: string;
+  whatsapp: string;
+}
+
+export const BIO_DATA: BioData = {
+  name: "Maria Teresa Rogani",
+  role: "Web Designer & Lead Generation Specialist",
+  badge: "Freelance al tuo fianco",
+  shortDescription: "Sono una libera professionista che aiuta le piccole e medie imprese a farsi strada nel mondo digitale. Mi occupo di creare siti web che funzionano davvero e di portare nuovi clienti attraverso strategie di marketing mirate.",
+  longDescription: "A differenza delle grandi agenzie, con me avrai un rapporto diretto e trasparente. Il mio obiettivo è farti ottenere risultati concreti, senza tecnicismi inutili, lavorando insieme per far crescere la tua attività. Mi occupo di sviluppo custom, design UX/UI e gestione di campagne pubblicitarie per massimizzare il ritorno sull'investimento.",
+  highlights: [
+    "Rapporto Diretto",
+    "Zero Costi Nascosti",
+    "Risultati Concreti"
+  ],
+  image: "/images/maria%20teresa%20rogani.jpg",
+  whatsapp: "390000000000"
+};
+
+export interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  date: string;
+  category: string;
+  tags: string[];
+  excerpt: string;
+  image: string;
+  author: string;
+}
