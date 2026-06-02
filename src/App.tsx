@@ -4,12 +4,14 @@ import {
   Menu, X, Phone, Layers, Smartphone, Star, Check, ArrowRight,
   Send, Database, ArrowUpRight, BarChart2, ShieldCheck, Mail, Pin, HelpCircle,
   Clock, CheckCircle, Flame, Server, Laptop, ChevronRight,
-  Instagram, Facebook, Linkedin
+  Instagram, Facebook, Linkedin, ChevronDown
 } from "lucide-react";
 import ROICalculator from "./components/ROICalculator";
 import AIPlanner from "./components/AIPlanner";
 import AIChat from "./components/AIChat";
+import TechnicalSheetModal from "./components/TechnicalSheetModal";
 import { LeadSubmission } from "./types";
+import { TECHNICAL_SHEETS, TechnicalSheet } from "./data";
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 
 export default function App() {
@@ -40,6 +42,18 @@ export default function App() {
   const [goals, setGoals] = useState<string[]>(["Creare un nuovo Sito Web da zero"]);
   const [budget, setBudget] = useState("Professional (€1.500 - €3.500)");
   const [formSubmitted, setFormSubmitted] = useState(false);
+
+  // Technical Sheets Modal state
+  const [selectedSheet, setSelectedSheet] = useState<TechnicalSheet | null>(null);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  const openSheet = (sheetId: string) => {
+    const sheet = TECHNICAL_SHEETS.find(s => s.id === sheetId);
+    if (sheet) {
+      setSelectedSheet(sheet);
+      setIsSheetOpen(true);
+    }
+  };
 
   const handleSubmitContact = (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,18 +145,37 @@ export default function App() {
             
             {/* Desktop Links */}
             <div className="hidden lg:flex items-center gap-7">
-              <a 
-                href="#servizi" 
-                className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
-              >
-                Servizi
-              </a>
               <button
                 onClick={() => setChiSonoModalOpen(true)}
                 className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors cursor-pointer"
               >
                 Chi Sono
               </button>
+
+              {/* Servizi Dropdown */}
+              <div className="relative group/dropdown">
+                <button
+                  className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors flex items-center gap-1 cursor-pointer py-4"
+                >
+                  Servizi <ChevronDown className="w-3 h-3 transition-transform group-hover/dropdown:rotate-180" />
+                </button>
+
+                <div className="absolute top-full left-0 w-64 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover/dropdown:opacity-100 group-hover/dropdown:translate-y-0 group-hover/dropdown:pointer-events-auto transition-all duration-200 z-[110]">
+                  <div className="bg-accent-purple/20 backdrop-blur-2xl border border-white/10 p-2 shadow-2xl flex flex-col gap-1">
+                    {TECHNICAL_SHEETS.map((sheet) => (
+                      <button
+                        key={sheet.id}
+                        onClick={() => openSheet(sheet.id)}
+                        className="text-left px-4 py-3 text-[10px] uppercase tracking-widest font-bold text-white/70 hover:text-white hover:bg-white/5 transition-all flex items-center justify-between group/item cursor-pointer"
+                      >
+                        {sheet.title}
+                        <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all text-accent-orange" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
               <a 
                 href="#comparativa" 
                 className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
@@ -187,15 +220,24 @@ export default function App() {
             className="fixed inset-x-4 top-[84px] bg-accent-purple/20 backdrop-blur-2xl text-white rounded-none p-6 z-[100] border-2 border-white/20 shadow-2xl flex flex-col gap-4 lg:hidden"
             style={{ pointerEvents: 'auto' }}
           >
-            <a 
-              onClick={() => {
-                setMobileMenuOpen(false);
-              }}
-              href="#servizi" 
-              className="text-xs uppercase font-bold tracking-widest text-white/80 py-2 border-b border-white/5"
-            >
-              I Miei Servizi
-            </a>
+            <div className="border-b border-white/5 py-2">
+              <span className="text-[10px] uppercase font-bold tracking-widest text-white/30 mb-2 block">I Miei Servizi</span>
+              <div className="flex flex-col gap-2 pl-2">
+                {TECHNICAL_SHEETS.map((sheet) => (
+                  <button
+                    key={sheet.id}
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      openSheet(sheet.id);
+                    }}
+                    className="text-xs uppercase font-bold tracking-widest text-white/70 hover:text-white text-left py-1 flex items-center justify-between group cursor-pointer"
+                  >
+                    {sheet.title}
+                    <ChevronRight className="w-3.5 h-3.5 text-accent-orange" />
+                  </button>
+                ))}
+              </div>
+            </div>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
@@ -274,14 +316,20 @@ export default function App() {
               transition={{ delay: 0.3 }}
               className="flex flex-wrap gap-2.5 justify-center items-center mt-8"
             >
-              {["WordPress, Wix & Squarespace", "Codice React su Misura", "Lead Generation Strategica", "Campagne ADS (Meta & Google)"].map((tag, idx) => (
-                <span
+              {[
+                { label: "WordPress, Wix & Squarespace", id: "wp-wix-sq" },
+                { label: "Codice React su Misura", id: "react-custom" },
+                { label: "Lead Generation Strategica", id: "lead-gen" },
+                { label: "Campagne ADS (Meta & Google)", id: "ads-mgmt" }
+              ].map((tag, idx) => (
+                <button
                   key={idx}
-                  className="text-[10px] font-bold bg-white/5 backdrop-blur-sm text-white px-3 py-1.5 border border-white/10 rounded-none shadow-sm flex items-center gap-1.5 hover:border-accent-orange/40 transition-colors"
+                  onClick={() => openSheet(tag.id)}
+                  className="text-[10px] font-bold bg-white/5 backdrop-blur-sm text-white px-3 py-1.5 border border-white/10 rounded-none shadow-sm flex items-center gap-1.5 hover:border-accent-orange/40 transition-all hover:scale-105 cursor-pointer active:scale-95"
                 >
                   <Check className="w-3 h-3 text-accent-pink" />
-                  {tag}
-                </span>
+                  {tag.label}
+                </button>
               ))}
             </motion.div>
 
@@ -886,6 +934,13 @@ export default function App() {
 
       {/* AI CHAT FLOATING INTERFACE */}
       <AIChat />
+
+      {/* TECHNICAL SHEET MODAL */}
+      <TechnicalSheetModal
+        isOpen={isSheetOpen}
+        onClose={() => setIsSheetOpen(false)}
+        sheet={selectedSheet}
+      />
 
       {/* PRIVACY POLICY MODAL (GDPR) */}
       <AnimatePresence>
