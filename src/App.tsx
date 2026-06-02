@@ -86,8 +86,18 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-bg-ivory text-charcoal flex flex-col font-sans relative overflow-x-hidden antialiased select-none">
+    <div className="min-h-screen bg-[#0a0015] text-white/90 flex flex-col font-sans relative overflow-x-hidden antialiased select-none">
       
+      {/* GLOBAL BACKGROUND WITH DARK PURPLE OVERLAY */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <img
+          src="/images/immagine%205.jpg"
+          alt="Background"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-[#0a0015]/85 backdrop-blur-[2px]"></div>
+      </div>
+
       {/* 1. FLOATING NAVIGATION BAR (GLASSMORPHIC CHIC RECTANGULAR) */}
       <nav className="fixed top-5 left-0 right-0 z-[100] flex items-center justify-center px-4 w-full pointer-events-none">
         <div className="pointer-events-auto w-full max-w-5xl flex items-center justify-between bg-charcoal/95 backdrop-blur-md rounded-none px-5 py-2.5 shadow-xl border border-white/10 h-14">
@@ -225,23 +235,23 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <main className="flex-1 w-full">
+      <main className="flex-1 w-full relative z-10">
           <>
             {/* 2. HERO LANDING SECTION */}
-        <section className="bg-bg-ivory pt-24 md:pt-36 pb-20 md:pb-32" id="hero">
+        <section className="bg-transparent pt-24 md:pt-36 pb-20 md:pb-32" id="hero">
           <div className="max-w-4xl mx-auto px-4 md:px-8 flex flex-col items-center text-center relative">
             {/* Active Work Tag */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-charcoal text-white rounded-none px-4 py-1.5 text-[9px] uppercase font-bold tracking-widest flex items-center gap-2 mb-6 shadow-md"
+              className="bg-white/10 backdrop-blur-md text-white rounded-none px-4 py-1.5 text-[9px] uppercase font-bold tracking-widest flex items-center gap-2 mb-6 shadow-md border border-white/10"
             >
               <span className="w-1.5 h-1.5 bg-green-400 rounded-full live-beacon"></span>
               Maria Teresa Rogani • Freelance Web Designer &amp; Lead Generation
             </motion.div>
 
             <h1
-              className="font-display text-4xl md:text-6xl font-extrabold tracking-tighter text-charcoal leading-[1.05]"
+              className="font-display text-4xl md:text-6xl font-extrabold tracking-tighter text-white leading-[1.05]"
             >
               Siti Web che vendono: Design e Strategia
             </h1>
@@ -251,7 +261,7 @@ export default function App() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-sm md:text-base text-muted-grey mt-6 max-w-2xl leading-relaxed font-sans font-light"
+              className="text-sm md:text-base text-white/70 mt-6 max-w-2xl leading-relaxed font-sans font-light"
             >
               Sono Maria Teresa, freelance specializzata nella creazione di siti web moderni e sistemi per generare nuovi contatti. Ti aiuto a far crescere il tuo business con soluzioni dirette, efficaci e facili da gestire.
             </motion.p>
@@ -266,7 +276,7 @@ export default function App() {
               {["WordPress, Wix & Squarespace", "Codice React su Misura", "Lead Generation Strategica", "Campagne ADS (Meta & Google)"].map((tag, idx) => (
                 <span
                   key={idx}
-                  className="text-[10px] font-bold bg-white text-charcoal px-3 py-1.5 border border-line-ivory rounded-none shadow-sm flex items-center gap-1.5 hover:border-accent-orange/40 transition-colors"
+                  className="text-[10px] font-bold bg-white/5 backdrop-blur-sm text-white px-3 py-1.5 border border-white/10 rounded-none shadow-sm flex items-center gap-1.5 hover:border-accent-orange/40 transition-colors"
                 >
                   <Check className="w-3 h-3 text-accent-pink" />
                   {tag}
@@ -289,7 +299,7 @@ export default function App() {
               </a>
               <a
                 href="#servizi"
-                className="bg-transparent border border-charcoal/30 text-charcoal hover:bg-charcoal hover:text-white transition-all font-bold px-8 py-4 rounded-none flex items-center justify-center uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
+                className="bg-transparent border border-white/30 text-white hover:bg-white hover:text-charcoal transition-all font-bold px-8 py-4 rounded-none flex items-center justify-center uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
               >
                 Cosa Posso Fare Per Te
               </a>
@@ -340,34 +350,34 @@ export default function App() {
         </section>
 
         {/* 3. CORE VALUE PROPOSITIONS SERVICES */}
-        <section className="bg-bg-soft-blue py-20 md:py-32" id="servizi">
+        <section className="bg-white/5 backdrop-blur-sm py-20 md:py-32" id="servizi">
           <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-12">
             <div className="text-center max-w-xl mx-auto space-y-2">
               <span className="text-[10px] font-bold uppercase tracking-widest text-accent-pink bg-accent-pink/10 px-3.5 py-1 rounded-none">
                 Servizi Freelance
               </span>
-              <h2 className="font-display text-2xl md:text-3xl font-bold mt-2">
+              <h2 className="font-display text-2xl md:text-3xl font-bold mt-2 text-white">
                 Soluzioni Semplici per Crescere Online
               </h2>
-              <p className="text-xs text-muted-grey">
+              <p className="text-xs text-white/60">
                 Ti aiuto a costruire una presenza digitale forte che attira nuovi clienti ogni giorno.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               {/* Box 1: Web Design Sartoriale */}
-              <div className="glass-panel rounded-3xl p-6 border border-line-ivory flex flex-col justify-between hover:shadow-xl transition-all">
+              <div className="glass-panel rounded-3xl p-6 border border-white/10 flex flex-col justify-between hover:shadow-xl transition-all group">
                 <div className="space-y-4">
-                  <div className="w-10 h-10 rounded-2xl bg-accent-blue/10 flex items-center justify-center text-accent-blue mb-4">
+                  <div className="w-10 h-10 rounded-2xl bg-accent-blue/20 flex items-center justify-center text-accent-blue mb-4">
                     <Laptop className="w-5 h-5" />
                   </div>
-                  <h3 className="font-display text-lg font-bold">Sito Web Professionale</h3>
-                  <p className="text-xs text-muted-grey leading-relaxed">
+                  <h3 className="font-display text-lg font-bold text-white">Sito Web Professionale</h3>
+                  <p className="text-xs text-white/60 leading-relaxed">
                     Realizzo il tuo sito web su misura, veloce e ottimizzato per i motori di ricerca. Che tu preferisca WordPress per gestirlo in autonomia o una soluzione su misura in codice per prestazioni massime, ho la soluzione giusta.
                   </p>
                 </div>
-                <div className="pt-6 border-t border-line-ivory/50 mt-6 flex justify-between items-center text-xs">
-                  <span className="font-medium text-charcoal font-mono">Web Design</span>
+                <div className="pt-6 border-t border-white/10 mt-6 flex justify-between items-center text-xs">
+                  <span className="font-medium text-white/80 font-mono">Web Design</span>
                   <a href="#comparativa" className="text-accent-blue hover:underline flex items-center gap-1">
                     Scopri di più <ArrowRight className="w-3.5 h-3.5" />
                   </a>
@@ -375,18 +385,18 @@ export default function App() {
               </div>
 
               {/* Box 2: Lead Generation Specialist */}
-              <div className="glass-panel rounded-3xl p-6 border border-line-ivory flex flex-col justify-between hover:shadow-xl transition-all">
+              <div className="glass-panel rounded-3xl p-6 border border-white/10 flex flex-col justify-between hover:shadow-xl transition-all group">
                 <div className="space-y-4">
-                  <div className="w-10 h-10 rounded-2xl bg-accent-pink/10 flex items-center justify-center text-accent-pink mb-4">
+                  <div className="w-10 h-10 rounded-2xl bg-accent-pink/20 flex items-center justify-center text-accent-pink mb-4">
                     <Flame className="w-5 h-5" />
                   </div>
-                  <h3 className="font-display text-lg font-bold">Trovare Nuovi Clienti</h3>
-                  <p className="text-xs text-muted-grey leading-relaxed">
+                  <h3 className="font-display text-lg font-bold text-white">Trovare Nuovi Clienti</h3>
+                  <p className="text-xs text-white/60 leading-relaxed">
                     Non solo un bel sito, ma uno strumento che lavora per te. Creo sistemi per raccogliere contatti di persone interessate ai tuoi servizi e automatizzo il processo per farti risparmiare tempo prezioso.
                   </p>
                 </div>
-                <div className="pt-6 border-t border-line-ivory/50 mt-6 flex justify-between items-center text-xs">
-                  <span className="font-medium text-charcoal font-mono">Lead Gen</span>
+                <div className="pt-6 border-t border-white/10 mt-6 flex justify-between items-center text-xs">
+                  <span className="font-medium text-white/80 font-mono">Lead Gen</span>
                   <a href="#calcolatore" className="text-accent-pink hover:underline flex items-center gap-1">
                     Prova il simulatore <ArrowRight className="w-3.5 h-3.5" />
                   </a>
@@ -394,18 +404,18 @@ export default function App() {
               </div>
 
               {/* Box 3: Social & Ads Management */}
-              <div className="glass-panel rounded-3xl p-6 border border-line-ivory flex flex-col justify-between hover:shadow-xl transition-all">
+              <div className="glass-panel rounded-3xl p-6 border border-white/10 flex flex-col justify-between hover:shadow-xl transition-all group">
                 <div className="space-y-4">
-                  <div className="w-10 h-10 rounded-2xl bg-accent-orange/10 flex items-center justify-center text-accent-orange mb-4">
+                  <div className="w-10 h-10 rounded-2xl bg-accent-orange/20 flex items-center justify-center text-accent-orange mb-4">
                     <BarChart2 className="w-5 h-5" />
                   </div>
-                  <h3 className="font-display text-lg font-bold font-semibold text-charcoal">Pubblicità Google e Meta</h3>
-                  <p className="text-xs text-muted-grey leading-relaxed">
+                  <h3 className="font-display text-lg font-bold font-semibold text-white">Pubblicità Google e Meta</h3>
+                  <p className="text-xs text-white/60 leading-relaxed">
                     Porto traffico qualificato sul tuo sito attraverso campagne pubblicitarie mirate su Google, Facebook e Instagram. Massimizziamo insieme il tuo budget per ottenere il miglior risultato possibile.
                   </p>
                 </div>
-                <div className="pt-6 border-t border-line-ivory/50 mt-6 flex justify-between items-center text-xs">
-                  <span className="font-medium text-charcoal font-mono">Marketing</span>
+                <div className="pt-6 border-t border-white/10 mt-6 flex justify-between items-center text-xs">
+                  <span className="font-medium text-white/80 font-mono">Marketing</span>
                   <a href="#contatti" className="text-accent-orange hover:underline flex items-center gap-1">
                     Chiedi info <ArrowRight className="w-3.5 h-3.5" />
                   </a>
@@ -416,32 +426,32 @@ export default function App() {
         </section>
 
         {/* 4. COMPARISON CHART SECTION (CLASSIC VS DESIGN CODE) */}
-        <section className="bg-bg-ivory py-20 md:py-32" id="comparativa">
+        <section className="bg-transparent py-20 md:py-32" id="comparativa">
           <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div className="space-y-6">
               <span className="text-[10px] font-bold uppercase tracking-widest text-accent-blue bg-accent-blue/10 px-3 py-1 rounded-full">
                 La Tecnologia Giusta
               </span>
-              <h2 className="font-display text-3xl font-extrabold tracking-tight text-charcoal leading-tight">
+              <h2 className="font-display text-3xl font-extrabold tracking-tight text-white leading-tight">
                 WordPress o Codice Su Misura?
               </h2>
-              <p className="text-sm text-muted-grey leading-relaxed">
+              <p className="text-sm text-white/70 leading-relaxed">
                 Non esiste una soluzione universale. Se hai bisogno di un sito semplice da aggiornare da solo, <strong>WordPress</strong> è la scelta migliore. Se invece cerchi il massimo della velocità e un design unico, un sito in <strong>codice puro</strong> ti darà quel vantaggio competitivo necessario oggi.
               </p>
               <div className="space-y-4 text-xs font-semibold">
                 <div className="flex gap-3 items-start">
-                  <div className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-5 h-5 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center shrink-0 mt-0.5">
                     <Check className="w-3 h-3" />
                   </div>
-                  <p className="text-charcoal/90">
+                  <p className="text-white/90">
                     WordPress: Ideale per blog, piccoli siti e per chi vuole gestire i testi in autonomia.
                   </p>
                 </div>
                 <div className="flex gap-3 items-start">
-                  <div className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-5 h-5 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center shrink-0 mt-0.5">
                     <Check className="w-3 h-3" />
                   </div>
-                  <p className="text-charcoal/90">
+                  <p className="text-white/90">
                     Codice Custom: Il top per velocità e sicurezza. Google lo ama perché è leggerissimo.
                   </p>
                 </div>
@@ -451,16 +461,16 @@ export default function App() {
             {/* Visual Contrast Panel */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {/* Card Metodo Classico */}
-              <div className="bg-white border border-line-ivory rounded-2xl p-6 shadow-sm space-y-4 relative overflow-hidden group hover:border-[#BF5AF2]/35 transition-all">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-[#BF5AF2]/5 rounded-bl-3xl pointer-events-none transition-all group-hover:scale-130"></div>
-                <span className="text-[9px] font-bold tracking-widest uppercase text-[#BF5AF2] bg-[#BF5AF2]/10 px-2 py-0.5 rounded">
+              <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-sm space-y-4 relative overflow-hidden group hover:border-[#BF5AF2]/35 transition-all">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-[#BF5AF2]/10 rounded-bl-3xl pointer-events-none transition-all group-hover:scale-130"></div>
+                <span className="text-[9px] font-bold tracking-widest uppercase text-[#BF5AF2] bg-[#BF5AF2]/20 px-2 py-0.5 rounded">
                   FACILE E VELOCE
                 </span>
-                <h4 className="font-display text-base font-bold text-charcoal">WordPress &amp; Co.</h4>
-                <p className="text-[11px] text-muted-grey leading-relaxed">
+                <h4 className="font-display text-base font-bold text-white">WordPress &amp; Co.</h4>
+                <p className="text-[11px] text-white/60 leading-relaxed">
                   Perfetto per chi vuole un sito professionale in tempi brevi.
                 </p>
-                <div className="space-y-2 text-[10px] text-charcoal pt-3 border-t border-line-ivory/50">
+                <div className="space-y-2 text-[10px] text-white/70 pt-3 border-t border-white/10">
                   <div className="flex justify-between font-mono"><span>Gestione:</span><strong>Autonoma al 100%</strong></div>
                   <div className="flex justify-between font-mono"><span>Consegna:</span><strong>1-2 settimane</strong></div>
                   <div className="flex justify-between font-mono"><span>Costo:</span><strong>Contenuto</strong></div>
@@ -469,9 +479,9 @@ export default function App() {
               </div>
 
               {/* Card Pure Code Level */}
-              <div className="bg-charcoal text-white rounded-2xl p-6 shadow-md space-y-4 relative overflow-hidden group hover:shadow-lg transition-all">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-accent-orange/10 rounded-bl-3xl pointer-events-none transition-all group-hover:scale-130"></div>
-                <span className="text-[9px] font-bold tracking-widest uppercase text-accent-orange bg-accent-orange/10 px-2.5 py-0.5 rounded">
+              <div className="bg-white/10 backdrop-blur-xl text-white rounded-2xl p-6 shadow-md space-y-4 relative overflow-hidden group hover:shadow-lg transition-all border border-white/20">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-accent-orange/20 rounded-bl-3xl pointer-events-none transition-all group-hover:scale-130"></div>
+                <span className="text-[9px] font-bold tracking-widest uppercase text-accent-orange bg-accent-orange/20 px-2.5 py-0.5 rounded">
                   MASSIME PRESTAZIONI
                 </span>
                 <h4 className="font-display text-base font-bold text-white flex items-center gap-1">
@@ -480,7 +490,7 @@ export default function App() {
                 <p className="text-[11px] text-white/70 leading-relaxed">
                   Creato riga per riga per chi vuole solo il meglio.
                 </p>
-                <div className="space-y-2 text-[10px] text-white/80 pt-3 border-t border-white/10">
+                <div className="space-y-2 text-[10px] text-white/80 pt-3 border-t border-white/20">
                   <div className="flex justify-between font-mono"><span>Velocità:</span><strong className="text-green-400">Istantanea</strong></div>
                   <div className="flex justify-between font-mono"><span>SEO:</span><strong className="text-green-400">Superiore</strong></div>
                   <div className="flex justify-between font-mono"><span>Design:</span><strong>Senza Limiti</strong></div>
@@ -492,16 +502,16 @@ export default function App() {
         </section>
 
         {/* 5. INTERACTIVE WIDGET 1: THE ROI CONVERSION CALCULATOR */}
-        <section className="bg-bg-soft-orange py-20 md:py-32 scroll-mt-24" id="calcolatore">
+        <section className="bg-white/5 backdrop-blur-sm py-20 md:py-32 scroll-mt-24" id="calcolatore">
           <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-8">
             <div className="text-center max-w-xl mx-auto space-y-2">
               <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
                 Strumento di Calcolo
               </span>
-              <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-charcoal">
+              <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-white">
                 Quanto puoi guadagnare con la pubblicità?
               </h2>
-              <p className="text-xs text-muted-grey">
+              <p className="text-xs text-white/60">
                 Usa questo simulatore per capire quanto può rendere il tuo investimento in pubblicità. Un sito che funziona meglio ti permette di ottenere più clienti a parità di spesa.
               </p>
             </div>
@@ -511,16 +521,16 @@ export default function App() {
         </section>
 
         {/* 6. INTERACTIVE WIDGET 2: THE AI PLANNER (GEMINI INTEGRATION) */}
-        <section className="bg-bg-soft-purple py-20 md:py-32 scroll-mt-24" id="ai-planner">
+        <section className="bg-transparent py-20 md:py-32 scroll-mt-24" id="ai-planner">
           <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-12">
             <div className="text-center max-w-xl mx-auto space-y-2">
               <span className="text-[10px] font-bold uppercase tracking-widest text-[#BF5AF2] bg-[#BF5AF2]/10 px-3.5 py-1 rounded-full flex items-center justify-center gap-1 mx-auto w-max">
                 Assistente Strategico <Sparkles className="w-3.5 h-3.5" />
               </span>
-              <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-charcoal">
+              <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-white">
                 Ricevi un'Idea di Strategia Subito
               </h2>
-              <p className="text-xs text-muted-grey">
+              <p className="text-xs text-white/60">
                 Rispondi a qualche domanda sulla tua attività e riceverai immediatamente alcuni suggerimenti su come migliorare la tua presenza online per trovare più contatti.
               </p>
             </div>
@@ -530,21 +540,21 @@ export default function App() {
         </section>
 
         {/* 11. LEAD INTAKE CONTACT FORM WORKFLOW */}
-        <section className="bg-bg-soft-pink py-20 md:py-32 scroll-mt-24" id="contatti">
+        <section className="bg-white/5 backdrop-blur-sm py-20 md:py-32 scroll-mt-24" id="contatti">
           <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-12">
             <div className="text-center max-w-xl mx-auto space-y-2">
               <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
                 Inizia Ora
               </span>
-              <h2 className="font-display text-2xl md:text-3xl font-extrabold text-charcoal">
+              <h2 className="font-display text-2xl md:text-3xl font-extrabold text-white">
                 Raccontami il Tuo Progetto
               </h2>
-              <p className="text-xs text-muted-grey">
+              <p className="text-xs text-white/60">
                 Compila il modulo qui sotto. Riceverò i tuoi dati e ti ricontatterò per fissare una breve chiamata gratuita.
               </p>
             </div>
 
-            <div className="glass-panel rounded-none p-6 md:p-8 border border-line-ivory max-w-2xl mx-auto shadow-md relative overflow-hidden">
+            <div className="glass-panel rounded-none p-6 md:p-8 border border-white/10 max-w-2xl mx-auto shadow-md relative overflow-hidden">
             <AnimatePresence mode="wait">
               {formSubmitted ? (
                 <motion.div 
@@ -570,23 +580,23 @@ export default function App() {
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5 animate-none">
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal">Nome dell'Attività <span className="text-accent-pink">*</span></label>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white">Nome dell'Attività <span className="text-accent-pink">*</span></label>
                       <input 
                         type="text" 
                         required
                         value={businessName}
                         onChange={(e) => setBusinessName(e.target.value)}
                         placeholder="Es. Officina del Gusto Verona"
-                        className="w-full px-3 py-2 bg-white border border-line-ivory rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-none text-xs focus:outline-none focus:border-accent-blue text-white"
                       />
                     </div>
                     
                     <div className="space-y-1.5">
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal">Nicchia / Settore</label>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white">Nicchia / Settore</label>
                       <select 
                         value={niche}
                         onChange={(e) => setNiche(e.target.value)}
-                        className="w-full px-3 py-2 bg-white border border-line-ivory rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-none text-xs focus:outline-none focus:border-accent-blue text-white"
                       >
                         <option value="Salute, Wellness &amp; Bellezza">Salute, Wellness &amp; Bellezza</option>
                         <option value="Ristorazione e Food">Ristorazione &amp; Food</option>
@@ -599,48 +609,48 @@ export default function App() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5 animate-none">
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal">Il Tuo Nome <span className="text-accent-pink">*</span></label>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white">Il Tuo Nome <span className="text-accent-pink">*</span></label>
                       <input 
                         type="text" 
                         required
                         value={clientName}
                         onChange={(e) => setClientName(e.target.value)}
                         placeholder="Es. Matteo Bianchi"
-                        className="w-full px-3 py-2 bg-white border border-line-ivory rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-none text-xs focus:outline-none focus:border-accent-blue text-white"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal">La Tua E-mail <span className="text-accent-pink">*</span></label>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white">La Tua E-mail <span className="text-accent-pink">*</span></label>
                       <input 
                         type="email" 
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Es. m.bianchi@email.it"
-                        className="w-full px-3 py-2 bg-white border border-line-ivory rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-none text-xs focus:outline-none focus:border-accent-blue text-white"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal">Numero Telefonico</label>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white">Numero Telefonico</label>
                       <input 
                         type="tel" 
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="Consigliato, Es: +39 340 9876543"
-                        className="w-full px-3 py-2 bg-white border border-line-ivory rounded-none text-xs focus:outline-none focus:border-accent-blue font-mono"
+                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-none text-xs focus:outline-none focus:border-accent-blue font-mono text-white"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal">Budget Stimato</label>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white">Budget Stimato</label>
                       <select 
                         value={budget}
                         onChange={(e) => setBudget(e.target.value)}
-                        className="w-full px-3 py-2 bg-white border border-line-ivory rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-none text-xs focus:outline-none focus:border-accent-blue text-white"
                       >
                         <option value="Starter (€500 - €1.500)">Starter (€500 - €1.500) - Ottimizzazione Standard</option>
                         <option value="Professional (€1.500 - €3.500)">Professional (€1.500 - €3.500) - Sito + Tracciamenti</option>
@@ -667,7 +677,7 @@ export default function App() {
       </main>
 
       {/* 12. HIGH END GRAPHICAL SLATE FOOTER */}
-      <footer className="bg-charcoal text-white pt-16 pb-10 px-6 sm:px-10 rounded-none border-t border-white/10 relative z-20 mt-16 w-full shrink-0">
+      <footer className="bg-white/5 backdrop-blur-md text-white pt-16 pb-10 px-6 sm:px-10 rounded-none border-t border-white/10 relative z-20 mt-16 w-full shrink-0">
         <div className="max-w-5xl mx-auto space-y-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {/* Logo Column */}
