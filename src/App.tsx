@@ -14,7 +14,7 @@ import AIPlanner from "./components/AIPlanner";
 import AIChat from "./components/AIChat";
 import TechnicalSheetModal from "./components/TechnicalSheetModal";
 import { LeadSubmission } from "./types";
-import { TECHNICAL_SHEETS, TechnicalSheet, BIO_DATA, BlogPost } from "./data";
+import { TECHNICAL_SHEETS, TechnicalSheet, BIO_DATA, BlogPost, SITE_CONFIG } from "./data";
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 
 export default function App() {
@@ -208,11 +208,11 @@ export default function App() {
       {/* GLOBAL BACKGROUND WITH DARK PURPLE OVERLAY */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <img
-          src="/images/immagine%205.jpg"
+          src={SITE_CONFIG.backgroundImage}
           alt="Background"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-[#0a0015]/85 backdrop-blur-[2px]"></div>
+        <div className={`absolute inset-0 ${SITE_CONFIG.backgroundOverlay} backdrop-blur-[2px]`}></div>
       </div>
 
       {/* 1. FLOATING NAVIGATION BAR (GLASSMORPHIC CHIC RECTANGULAR) */}
@@ -228,7 +228,7 @@ export default function App() {
             >
               <div className="h-8 md:h-10 flex items-center shrink-0 overflow-hidden">
                 <img
-                  src="/images/def.logo%20facilissimo%20web%20.jpg"
+                  src={SITE_CONFIG.logoImage}
                   alt="Facilissimo Web"
                   className="h-full w-auto object-contain transition-transform group-hover:scale-105"
                   onError={(e) => {
@@ -241,7 +241,7 @@ export default function App() {
                 </div>
               </div>
               <span className="font-display font-bold text-sm uppercase tracking-widest text-[#FFF] transition-colors">
-                FACILISSIMO <span className="text-accent-orange">WEB</span>
+                {SITE_CONFIG.brandName} <span className="text-accent-orange">{SITE_CONFIG.brandAccent}</span>
               </span>
             </a>
             
@@ -960,7 +960,7 @@ export default function App() {
             <div className="space-y-6 text-left flex flex-col items-start">
               <div className="w-[250px] h-auto overflow-hidden">
                 <img
-                  src="/images/def.logo%20facilissimo%20web%20.jpg"
+                  src={SITE_CONFIG.logoImage}
                   alt="Facilissimo Web"
                   className="w-full h-auto object-contain"
                   onError={(e) => {
@@ -973,7 +973,7 @@ export default function App() {
                 </div>
               </div>
               <div className="space-y-2">
-                <h4 className="font-display font-black text-xs uppercase tracking-widest text-white">FACILISSIMO WEB</h4>
+                <h4 className="font-display font-black text-xs uppercase tracking-widest text-white">{SITE_CONFIG.brandName} {SITE_CONFIG.brandAccent}</h4>
                 <p className="text-xs text-[#BDBAB2] leading-relaxed font-sans font-light max-w-xs">
                   Metodo d'eccellenza per la digitalizzazione delle imprese locali in tutta Italia. Sviluppo custom-code, design, visibilità e monetizzazione.
                 </p>
@@ -1050,7 +1050,7 @@ export default function App() {
                       <Facebook className="w-3.5 h-3.5" />
                     </a>
                     <a
-                      href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(window.location.origin)}&media=${encodeURIComponent(window.location.origin + "/images/def.logo%20facilissimo%20web%20.jpg")}&description=${encodeURIComponent("Facilissimo Web - Design e Strategia per Siti Web che vendono")}`}
+                      href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(window.location.origin)}&media=${encodeURIComponent(window.location.origin + SITE_CONFIG.logoImage)}&description=${encodeURIComponent(SITE_CONFIG.socialDescription)}`}
                       target="_blank" rel="noopener noreferrer"
                       className="w-8 h-8 rounded-full bg-[#E60023] flex items-center justify-center text-white shadow hover:scale-110 transition-all"
                       title="Pinterest"
@@ -1066,7 +1066,7 @@ export default function App() {
                       <Linkedin className="w-3.5 h-3.5" />
                     </a>
                     <a
-                      href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.origin)}&text=${encodeURIComponent("Facilissimo Web - Design e Strategia per Siti Web che vendono")}`}
+                      href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.origin)}&text=${encodeURIComponent(SITE_CONFIG.socialDescription)}`}
                       target="_blank" rel="noopener noreferrer"
                       className="w-8 h-8 rounded-full bg-black flex items-center justify-center text-white shadow hover:scale-110 transition-all border border-white/20"
                       title="X"
@@ -1074,7 +1074,7 @@ export default function App() {
                       <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                     </a>
                     <a
-                      href={`https://wa.me/?text=${encodeURIComponent("Facilissimo Web - Design e Strategia per Siti Web che vendono: " + window.location.origin)}`}
+                      href={`https://wa.me/?text=${encodeURIComponent(SITE_CONFIG.socialDescription + ": " + window.location.origin)}`}
                       target="_blank" rel="noopener noreferrer"
                       className="w-8 h-8 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow hover:scale-110 transition-all"
                       title="WhatsApp"
@@ -1082,7 +1082,7 @@ export default function App() {
                       <MessageSquare className="w-3.5 h-3.5" />
                     </a>
                     <a
-                      href={`https://t.me/share/url?url=${encodeURIComponent(window.location.origin)}&text=${encodeURIComponent("Facilissimo Web - Design e Strategia per Siti Web che vendono")}`}
+                      href={`https://t.me/share/url?url=${encodeURIComponent(window.location.origin)}&text=${encodeURIComponent(SITE_CONFIG.socialDescription)}`}
                       target="_blank" rel="noopener noreferrer"
                       className="w-8 h-8 rounded-full bg-[#0088cc] flex items-center justify-center text-white shadow hover:scale-110 transition-all"
                       title="Telegram"
