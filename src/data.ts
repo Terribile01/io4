@@ -168,3 +168,25 @@ export interface BlogPost {
   image: string;
   author: string;
 }
+
+/**
+ * CONFIGURAZIONE VISUALE GLOBALE
+ * Modifica questi parametri per cambiare le immagini del sito
+ */
+export const SITE_CONFIG = {
+  // Immagine di sfondo del sito (deve trovarsi in public/images/)
+  backgroundImage: "/images/immagine%205.jpg",
+
+  // Logo principale (deve trovarsi in public/images/)
+  logoImage: "/images/def.logo%20facilissimo%20web%20.jpg",
+
+  // Overlay di sfondo (colore e opacità)
+  backgroundOverlay: "bg-[#0a0015]/85",
+
+  // Titolo della Navbar
+  brandName: "FACILISSIMO",
+  brandAccent: "WEB",
+
+  // Social Links per Pinterest / Sharing
+  socialDescription: "Facilissimo Web - Design e Strategia per Siti Web che vendono"
+};
