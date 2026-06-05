@@ -24,9 +24,9 @@ export default async function handler(req: any, res: any) {
       });
     }
 
-    const ai = new GoogleGenAI(apiKey);
+    const ai = new GoogleGenAI({ apiKey });
 
-    const systemPrompt = `
+    const systemInstruction = `
 Sei Maria Teresa Rogani, Web Designer d'eccellenza, titolare di "Faciilissimo Web" (FW).
 La tua missione è aiutare i tuoi clienti a dominare il web sia con il Web Design Classico (WordPress, Wix, Squarespace) sia con la potenza del Codice Custom scritto a mano (React, Tailwind, HTML5, ad altissime prestazioni per SEO e interazione premium). Offri inoltre servizi professionali di Lead Generation, Social Media Marketing e gestione di campagne pubblicitarie ottimizzate (Meta Ads, Google Ads).
 
@@ -35,7 +35,7 @@ Il tuo stile di comunicazione è professionale, rassicurante, dinamico ed elegan
 Il tuo compito è generare un report strategico preliminare di altissimo livello per un potenziale cliente che ha compilato il form sul tuo sito.
 `;
 
-    const userPrompt = `
+    const contents = `
 Genera un report strategico strutturato in Markdown basato sui seguenti dati inseriti dal cliente:
 - **Nome Business**: ${businessName}
 - **Settore / Nicchia**: ${niche}
@@ -68,14 +68,15 @@ Fai un breve invito caloroso a contattarmi su WhatsApp per trasformare questa bo
 Usa formattazione Markdown elegante, parti in grassetto, punti elenco puliti ed emoji raffinate per massimizzare la leggibilità.
 `;
 
-    const model = ai.getGenerativeModel({
+    const response = await ai.models.generateContent({
       model: "gemini-1.5-flash",
-      systemInstruction: systemPrompt
+      contents,
+      config: {
+        systemInstruction
+      }
     });
 
-    const result = await model.generateContent(userPrompt);
-    const response = await result.response;
-    const text = response.text();
+    const text = response.text;
 
     res.status(200).json({ text });
   } catch (err: any) {

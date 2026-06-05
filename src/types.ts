@@ -1,5 +1,5 @@
 /**
- * Types and Interfaces for Facilissimo Web Portfolio
+ * Types and Interfaces for Faciilissimo Web Portfolio
  */
 
 export interface LeadSubmission {
