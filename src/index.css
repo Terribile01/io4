@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -15,27 +16,22 @@
   --color-accent-orange: #FF9F0A;
   --color-line-ivory: #E5E2E1;
   --color-glass-card-bg: rgba(255, 253, 248, 0.75);
-
-  --color-bg-soft-blue: #F0F7FF;
-  --color-bg-soft-pink: #FFF5F7;
-  --color-bg-soft-orange: #FFF9F0;
-  --color-bg-soft-purple: #F9F5FF;
 }
 
 /* Custom global layout scrollbars and styling */
 html {
   scroll-behavior: smooth;
-  background-color: #0a0015;
-  color: rgba(255, 255, 255, 0.9);
+  background-color: var(--color-bg-ivory);
+  color: var(--color-charcoal);
   font-family: var(--font-sans);
 }
 
 /* Glassmorphism custom classes */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 8px 32px 0 rgba(29, 29, 31, 0.04);
 }
 
 .glass-panel-dark {
