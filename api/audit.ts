@@ -73,10 +73,10 @@ Usa formattazione Markdown elegante, parti in grassetto, punti elenco puliti ed 
 
     const response = await ai.models.generateContent({
       model: "gemini-1.5-flash",
-      contents,
-      config: {
-        systemInstruction
-      }
+      contents: [
+        { role: 'system', parts: [{ text: systemInstruction }] },
+        { role: 'user', parts: [{ text: contents }] }
+      ]
     });
 
     const text = response.text;
