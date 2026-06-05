@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
   const [privacyModalOpen, setPrivacyModalOpen] = useState(false);
   const [cookiesAccepted, setCookiesAccepted] = useState(() => {
     try {
@@ -34,7 +35,7 @@ export default function App() {
     e.preventDefault();
     if (!businessName || !clientName || !phone) return;
 
-    const message = `Ciao Maria Teresa! Ti contatto dal sito Faciilissimo Web.
+    const message = `Ciao Maria Teresa! Ti contatto dal sito Facilissimo Web.
 Ecco i dettagli della mia richiesta:
 - *Nome*: ${clientName}
 - *Attività*: ${businessName}
@@ -88,21 +89,27 @@ Ecco i dettagli della mia richiesta:
                 <span className="text-white font-black font-display text-sm tracking-widest">FW</span>
               </div>
               <span className="font-display font-bold text-xs uppercase tracking-widest text-white group-hover:text-accent-orange transition-colors">
-                Faciilissimo
+                FACILISSIMO WEB
               </span>
             </a>
             
             {/* Desktop Links */}
             <div className="hidden md:flex items-center gap-7">
+              <button
+                onClick={() => setAboutOpen(true)}
+                className="text-[10px] font-bold uppercase tracking-widest text-white/90 hover:text-white transition-colors cursor-pointer"
+              >
+                CHI SONO
+              </button>
               <a
                 href="#servizi"
-                className="text-[10px] font-bold uppercase tracking-widest text-white/60 hover:text-white transition-colors"
+                className="text-[10px] font-bold uppercase tracking-widest text-white/90 hover:text-white transition-colors"
               >
                 Servizi
               </a>
               <a 
                 href="#comparativa" 
-                className="text-[10px] font-bold uppercase tracking-widest text-white/60 hover:text-white transition-colors"
+                className="text-[10px] font-bold uppercase tracking-widest text-white/90 hover:text-white transition-colors"
               >
                 Codice vs WP
               </a>
@@ -118,7 +125,7 @@ Ecco i dettagli della mia richiesta:
           <div className="flex items-center gap-3">
             <a 
               href="#contatti" 
-              className="hidden md:flex bg-[#0A0A0B]/70 text-white/95 hover:bg-[#0A0A0B]/90 transition-all text-[9px] h-9 font-bold px-4 rounded-none items-center justify-center uppercase tracking-wider shrink-0 shadow"
+              className="hidden md:flex bg-[#0A0A0B]/50 text-white/95 hover:bg-[#0A0A0B]/90 transition-all text-[9px] h-9 font-bold px-4 rounded-none items-center justify-center uppercase tracking-wider shrink-0 shadow"
             >
               Parliamo del tuo Progetto
             </a>
@@ -126,7 +133,7 @@ Ecco i dettagli della mia richiesta:
             {/* Mobile Menu Toggle */}
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden text-white/60 hover:text-white p-1 cursor-pointer pointer-events-auto"
+              className="md:hidden text-white/90 hover:text-white p-1 cursor-pointer pointer-events-auto"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -144,12 +151,21 @@ Ecco i dettagli della mia richiesta:
             className="fixed inset-x-4 top-[84px] bg-[#121214] text-white rounded-none p-6 z-[100] border-2 border-white/20 shadow-2xl flex flex-col gap-4 md:hidden"
             style={{ pointerEvents: 'auto' }}
           >
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setAboutOpen(true);
+              }}
+              className="text-left text-xs uppercase font-bold tracking-widest text-white/95 py-2 border-b border-white/5"
+            >
+              Chi Sono
+            </button>
             <a
               onClick={() => {
                 setMobileMenuOpen(false);
               }}
               href="#servizi"
-              className="text-xs uppercase font-bold tracking-widest text-white/80 py-2 border-b border-white/5"
+              className="text-xs uppercase font-bold tracking-widest text-white/95 py-2 border-b border-white/5"
             >
               I Miei Servizi
             </a>
@@ -158,7 +174,7 @@ Ecco i dettagli della mia richiesta:
                 setMobileMenuOpen(false);
               }}
               href="#comparativa" 
-              className="text-xs uppercase font-bold tracking-widest text-white/80 py-2 border-b border-white/5"
+              className="text-xs uppercase font-bold tracking-widest text-white/95 py-2 border-b border-white/5"
             >
               Classico vs Codice Custom
             </a>
@@ -176,11 +192,95 @@ Ecco i dettagli della mia richiesta:
                 setMobileMenuOpen(false);
               }}
               href="#contatti" 
-              className="text-xs uppercase font-bold tracking-widest text-white/95 bg-[#0A0A0B]/70 py-3 px-4 rounded-none hover:bg-[#0A0A0B]/90 transition-all text-center block mt-2 shadow font-semibold"
+              className="text-xs uppercase font-bold tracking-widest text-white/95 bg-[#0A0A0B]/50 py-3 px-4 rounded-none hover:bg-[#0A0A0B]/90 transition-all text-center block mt-2 shadow font-semibold"
             >
               Parliamo del tuo Progetto
             </a>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* CHI SONO SIDE DRAWER */}
+      <AnimatePresence>
+        {aboutOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setAboutOpen(false)}
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200]"
+            />
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-[#0A0A0B] z-[210] shadow-2xl border-l border-white/10 overflow-y-auto"
+            >
+              <div className="p-8 space-y-8">
+                <div className="flex justify-between items-center">
+                  <h2 className="font-display text-2xl font-black uppercase tracking-tighter">Chi Sono</h2>
+                  <button
+                    onClick={() => setAboutOpen(false)}
+                    className="p-2 hover:bg-white/5 rounded-full transition-colors text-white/90 hover:text-white"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="w-full aspect-square rounded-2xl overflow-hidden border border-white/10">
+                    <img
+                      src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop"
+                      alt="Maria Teresa Rogani"
+                      className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                    />
+                  </div>
+
+                  <div className="space-y-4">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#00C7BE] bg-[#00C7BE]/10 px-3 py-1">
+                      Freelance al tuo fianco
+                    </span>
+                    <h3 className="font-display text-2xl font-bold">Maria Teresa Rogani</h3>
+                    <p className="text-sm text-white/90 leading-relaxed font-light">
+                      Sono una libera professionista che aiuta le piccole e medie imprese a farsi strada nel mondo digitale. Mi occupo di creare siti web che funzionano davvero e di portare nuovi clienti attraverso strategie di marketing mirate.
+                    </p>
+                    <p className="text-sm text-white/95 leading-relaxed font-light">
+                      A differenza delle grandi agenzie, con me avrai un rapporto diretto e trasparente. Il mio obiettivo è farti ottenere risultati concreti, senza tecnicismi inutili, lavorando insieme per far crescere la tua attività.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-3 pt-4">
+                    <div className="flex items-center gap-3 p-4 bg-white/5 border border-white/10 rounded-xl">
+                      <Check className="w-5 h-5 text-green-500" />
+                      <span className="text-xs font-bold uppercase tracking-wider">Rapporto Diretto</span>
+                    </div>
+                    <div className="flex items-center gap-3 p-4 bg-white/5 border border-white/10 rounded-xl">
+                      <Check className="w-5 h-5 text-green-500" />
+                      <span className="text-xs font-bold uppercase tracking-wider">Zero Costi Nascosti</span>
+                    </div>
+                    <div className="flex items-center gap-3 p-4 bg-white/5 border border-white/10 rounded-xl">
+                      <Check className="w-5 h-5 text-green-500" />
+                      <span className="text-xs font-bold uppercase tracking-wider">Risultati Concreti</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-8">
+                    <button
+                      onClick={() => {
+                        setAboutOpen(false);
+                        window.location.hash = "#contatti";
+                      }}
+                      className="w-full grad-electric text-white font-bold py-4 rounded-none uppercase tracking-widest text-xs"
+                    >
+                      Lavoriamo Insieme
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
 
@@ -192,7 +292,7 @@ Ecco i dettagli della mia richiesta:
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white/10 text-white rounded-none px-4 py-1.5 text-[9px] uppercase font-bold tracking-widest flex items-center gap-2 mb-6 shadow-md"
+            className="bg-white/5 text-white rounded-none px-4 py-1.5 text-[9px] uppercase font-bold tracking-widest flex items-center gap-2 mb-6 shadow-md"
           >
             <span className="w-1.5 h-1.5 bg-green-400 rounded-full live-beacon"></span>
             Maria Teresa Rogani • Freelance Web Designer &amp; Lead Generation
@@ -209,7 +309,7 @@ Ecco i dettagli della mia richiesta:
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-sm md:text-base text-white/70 mt-6 max-w-2xl leading-relaxed font-sans font-light"
+            className="text-sm md:text-base text-white/95 mt-6 max-w-2xl leading-relaxed font-sans font-light"
           >
             Sono Maria Teresa, freelance specializzata nella creazione di siti web moderni e sistemi per generare nuovi contatti. Ti aiuto a far crescere il tuo business con soluzioni dirette, efficaci e facili da gestire.
           </motion.p>
@@ -224,7 +324,7 @@ Ecco i dettagli della mia richiesta:
             {["WordPress, Wix & Squarespace", "Codice React su Misura", "Lead Generation Strategica", "Campagne ADS (Meta & Google)"].map((tag, idx) => (
               <span
                 key={idx}
-                className="text-[10px] font-bold bg-[#0A0A0B]/70 text-white/95 px-3 py-1.5 border border-white/10 rounded-none shadow-sm flex items-center gap-1.5 hover:border-accent-orange/40 transition-colors"
+                className="text-[10px] font-bold bg-[#0A0A0B]/50 text-white/95 px-3 py-1.5 border border-white/10 rounded-none shadow-sm flex items-center gap-1.5 hover:border-accent-orange/40 transition-colors"
               >
                 <Check className="w-3 h-3 text-accent-pink" />
                 {tag}
@@ -263,7 +363,7 @@ Ecco i dettagli della mia richiesta:
             <h2 className="font-display text-2xl md:text-3xl font-bold mt-2">
               Soluzioni Semplici per Crescere Online
             </h2>
-            <p className="text-xs text-white/70">
+            <p className="text-xs text-white/95">
               Ti aiuto a costruire una presenza digitale forte che attira nuovi clienti ogni giorno.
             </p>
           </div>
@@ -276,7 +376,7 @@ Ecco i dettagli della mia richiesta:
                   <Laptop className="w-5 h-5" />
                 </div>
                 <h3 className="font-display text-lg font-bold">Sito Web Professionale</h3>
-                <p className="text-xs text-white/70 leading-relaxed">
+                <p className="text-xs text-white/95 leading-relaxed">
                   Realizzo il tuo sito web su misura, veloce e ottimizzato per i motori di ricerca. Che tu preferisca WordPress per gestirlo in autonomia o una soluzione su misura in codice per prestazioni massime, ho la soluzione giusta.
                 </p>
               </div>
@@ -295,7 +395,7 @@ Ecco i dettagli della mia richiesta:
                   <Flame className="w-5 h-5" />
                 </div>
                 <h3 className="font-display text-lg font-bold">Trovare Nuovi Clienti</h3>
-                <p className="text-xs text-white/70 leading-relaxed">
+                <p className="text-xs text-white/95 leading-relaxed">
                   Non solo un bel sito, ma uno strumento che lavora per te. Creo sistemi per raccogliere contatti di persone interessate ai tuoi servizi e automatizzo il processo per farti risparmiare tempo prezioso.
                 </p>
               </div>
@@ -314,7 +414,7 @@ Ecco i dettagli della mia richiesta:
                   <BarChart2 className="w-5 h-5" />
                 </div>
                 <h3 className="font-display text-lg font-bold font-semibold text-white/95">Pubblicità Google e Meta</h3>
-                <p className="text-xs text-white/70 leading-relaxed">
+                <p className="text-xs text-white/95 leading-relaxed">
                   Porto traffico qualificato sul tuo sito attraverso campagne pubblicitarie mirate su Google, Facebook e Instagram. Massimizziamo insieme il tuo budget per ottenere il miglior risultato possibile.
                 </p>
               </div>
@@ -338,7 +438,7 @@ Ecco i dettagli della mia richiesta:
               <h2 className="font-display text-3xl font-extrabold tracking-tight text-white/95 leading-tight">
                 WordPress o Codice Su Misura?
               </h2>
-              <p className="text-sm text-white/70 leading-relaxed">
+              <p className="text-sm text-white/95 leading-relaxed">
                 Non esiste una soluzione universale. Se hai bisogno di un sito semplice da aggiornare da solo, <strong>WordPress</strong> è la scelta migliore. Se invece cerchi il massimo della velocità e un design unico, un sito in <strong>codice puro</strong> ti darà quel vantaggio competitivo necessario oggi.
               </p>
               <div className="space-y-4 text-xs font-semibold">
@@ -364,13 +464,13 @@ Ecco i dettagli della mia richiesta:
             {/* Visual Contrast Panel */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {/* Card Metodo Classico */}
-              <div className="bg-[#0A0A0B]/70 border border-white/10 rounded-2xl p-6 shadow-sm space-y-4 relative overflow-hidden group hover:border-[#BF5AF2]/35 transition-all">
+              <div className="bg-[#0A0A0B]/50 border border-white/10 rounded-2xl p-6 shadow-sm space-y-4 relative overflow-hidden group hover:border-[#BF5AF2]/35 transition-all">
                 <div className="absolute top-0 right-0 w-16 h-16 bg-[#BF5AF2]/5 rounded-bl-3xl pointer-events-none transition-all group-hover:scale-130"></div>
                 <span className="text-[9px] font-bold tracking-widest uppercase text-[#BF5AF2] bg-[#BF5AF2]/10 px-2 py-0.5 rounded">
                   FACILE E VELOCE
                 </span>
                 <h4 className="font-display text-base font-bold text-white/95">WordPress &amp; Co.</h4>
-                <p className="text-[11px] text-white/70 leading-relaxed">
+                <p className="text-[11px] text-white/95 leading-relaxed">
                   Perfetto per chi vuole un sito professionale in tempi brevi.
                 </p>
                 <div className="space-y-2 text-[10px] text-white/95 pt-3 border-t border-white/10/50">
@@ -390,10 +490,10 @@ Ecco i dettagli della mia richiesta:
                 <h4 className="font-display text-base font-bold text-white flex items-center gap-1">
                   Codice Puro <Code className="w-4 h-4 text-accent-orange" />
                 </h4>
-                <p className="text-[11px] text-white/70 leading-relaxed">
+                <p className="text-[11px] text-white/95 leading-relaxed">
                   Creato riga per riga per chi vuole solo il meglio.
                 </p>
-                <div className="space-y-2 text-[10px] text-white/80 pt-3 border-t border-white/10">
+                <div className="space-y-2 text-[10px] text-white/95 pt-3 border-t border-white/10">
                   <div className="flex justify-between font-mono"><span>Velocità:</span><strong className="text-green-400">Istantanea</strong></div>
                   <div className="flex justify-between font-mono"><span>SEO:</span><strong className="text-green-400">Superiore</strong></div>
                   <div className="flex justify-between font-mono"><span>Design:</span><strong>Senza Limiti</strong></div>
@@ -413,7 +513,7 @@ Ecco i dettagli della mia richiesta:
             <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-white/95">
               Quanto puoi guadagnare con la pubblicità?
             </h2>
-            <p className="text-xs text-white/70">
+            <p className="text-xs text-white/95">
               Usa questo simulatore per capire quanto può rendere il tuo investimento in pubblicità. Un sito che funziona meglio ti permette di ottenere più clienti a parità di spesa.
             </p>
           </div>
@@ -430,7 +530,7 @@ Ecco i dettagli della mia richiesta:
             <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-white/95">
               Ricevi un'Idea di Strategia Subito
             </h2>
-            <p className="text-xs text-white/70">
+            <p className="text-xs text-white/95">
               Rispondi a qualche domanda sulla tua attività e riceverai immediatamente alcuni suggerimenti su come migliorare la tua presenza online per trovare più contatti.
             </p>
           </div>
@@ -440,43 +540,6 @@ Ecco i dettagli della mia richiesta:
 
 
 
-        {/* 10. ABOUT MARIE TERESA ROGANI BIOS */}
-        <section className="glass-panel rounded-3xl p-6 md:p-10 border border-white/10/80 flex flex-col lg:flex-row gap-8 items-center" id="chi-sono">
-          <div className="w-44 h-44 md:w-56 md:h-56 rounded-full overflow-hidden shrink-0 shadow-lg border-4 border-white">
-            <img
-              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop"
-              alt="Maria Teresa Rogani"
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300"
-            />
-          </div>
-          <div className="space-y-4 text-left flex-1 min-w-0">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#00C7BE] bg-[#00C7BE]/10 px-3 py-1 rounded-full">
-              Freelance al tuo fianco
-            </span>
-            <h3 className="font-display text-2xl md:text-3xl font-extrabold text-white/95">
-              Chi Sono: Maria Teresa Rogani
-            </h3>
-            <p className="text-xs md:text-sm text-white/95/80 leading-relaxed font-sans font-light">
-              Sono una libera professionista che aiuta le piccole e medie imprese a farsi strada nel mondo digitale. Mi occupo di creare siti web che funzionano davvero e di portare nuovi clienti attraverso strategie di marketing mirate.
-            </p>
-            <p className="text-xs md:text-sm text-white/70 leading-relaxed font-sans font-light">
-              A differenza delle grandi agenzie, con me avrai un rapporto diretto e trasparente. Il mio obiettivo è farti ottenere risultati concreti, senza tecnicismi inutili, lavorando insieme per far crescere la tua attività.
-            </p>
-
-            <div className="flex flex-wrap gap-4 pt-2">
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-white/95">
-                <Check className="w-4 h-4 text-green-500 font-bold" /> Rapporto Diretto
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-white/95">
-                <Check className="w-4 h-4 text-green-500 font-bold" /> Zero Costi Nascosti
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-white/95">
-                <Check className="w-4 h-4 text-green-500 font-bold" /> Risultati Concreti
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* 11. LEAD INTAKE CONTACT FORM WORKFLOW */}
         <section className="space-y-12 scroll-mt-24 pb-16" id="contatti">
@@ -487,7 +550,7 @@ Ecco i dettagli della mia richiesta:
             <h2 className="font-display text-2xl md:text-3xl font-extrabold text-white/95">
               Raccontami il Tuo Progetto
             </h2>
-            <p className="text-xs text-white/70">
+            <p className="text-xs text-white/95">
               Compila il modulo qui sotto. Riceverò i tuoi dati e ti ricontatterò per fissare una breve chiamata gratuita.
             </p>
           </div>
@@ -506,7 +569,7 @@ Ecco i dettagli della mia richiesta:
                   </div>
                   <div>
                     <h4 className="font-display text-lg font-bold">Messaggio Inviato!</h4>
-                    <p className="text-xs text-white/70 mt-1 max-w-sm mx-auto">
+                    <p className="text-xs text-white/95 mt-1 max-w-sm mx-auto">
                       Grazie per avermi contattato. Ti risponderò al più presto per discutere del tuo progetto!
                     </p>
                   </div>
@@ -525,7 +588,7 @@ Ecco i dettagli della mia richiesta:
                         value={businessName}
                         onChange={(e) => setBusinessName(e.target.value)}
                         placeholder="Es. Officina del Gusto Verona"
-                        className="w-full px-3 py-2 bg-[#0A0A0B]/70 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                        className="w-full px-3 py-2 bg-[#0A0A0B]/50 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue"
                       />
                     </div>
                     
@@ -534,7 +597,7 @@ Ecco i dettagli della mia richiesta:
                       <select 
                         value={niche}
                         onChange={(e) => setNiche(e.target.value)}
-                        className="w-full px-3 py-2 bg-[#0A0A0B]/70 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                        className="w-full px-3 py-2 bg-[#0A0A0B]/50 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue"
                       >
                         <option value="Salute, Wellness &amp; Bellezza">Salute, Wellness &amp; Bellezza</option>
                         <option value="Ristorazione e Food">Ristorazione &amp; Food</option>
@@ -554,7 +617,7 @@ Ecco i dettagli della mia richiesta:
                         value={clientName}
                         onChange={(e) => setClientName(e.target.value)}
                         placeholder="Es. Matteo Bianchi"
-                        className="w-full px-3 py-2 bg-[#0A0A0B]/70 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                        className="w-full px-3 py-2 bg-[#0A0A0B]/50 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue"
                       />
                     </div>
 
@@ -566,7 +629,7 @@ Ecco i dettagli della mia richiesta:
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="Es: +39 340 9876543"
-                        className="w-full px-3 py-2 bg-[#0A0A0B]/70 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue font-mono"
+                        className="w-full px-3 py-2 bg-[#0A0A0B]/50 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue font-mono"
                       />
                     </div>
                   </div>
@@ -578,7 +641,7 @@ Ecco i dettagli della mia richiesta:
                       <select 
                         value={budget}
                         onChange={(e) => setBudget(e.target.value)}
-                        className="w-full px-3 py-2 bg-[#0A0A0B]/70 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                        className="w-full px-3 py-2 bg-[#0A0A0B]/50 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue"
                       >
                         <option value="Starter (€500 - €1.500)">Starter (€500 - €1.500) - Ottimizzazione Standard</option>
                         <option value="Professional (€1.500 - €3.500)">Professional (€1.500 - €3.500) - Sito + Tracciamenti</option>
@@ -609,11 +672,11 @@ Ecco i dettagli della mia richiesta:
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {/* Logo Column */}
             <div className="space-y-4 text-left">
-              <div className="w-10 h-10 rounded-none border border-white/20 bg-white/10 flex items-center justify-center font-mono">
+              <div className="w-10 h-10 rounded-none border border-white/20 bg-white/5 flex items-center justify-center font-mono">
                 <span className="text-white font-black font-display text-base tracking-widest">FW</span>
               </div>
-              <h4 className="font-display font-black text-xs uppercase tracking-widest text-white">Faciilissimo Web</h4>
-              <p className="text-xs text-white/60 leading-relaxed font-sans font-light">
+              <h4 className="font-display font-black text-xs uppercase tracking-widest text-white">FACILISSIMO WEB</h4>
+              <p className="text-xs text-white/90 leading-relaxed font-sans font-light">
                 Metodo d'eccellenza per la digitalizzazione delle imprese locali in tutta Italia. Sviluppo custom-code, design, visibilità e monetizzazione.
               </p>
             </div>
@@ -621,7 +684,7 @@ Ecco i dettagli della mia richiesta:
             {/* Services Links column */}
             <div className="space-y-4 text-left">
               <h5 className="text-[10px] uppercase tracking-widest font-bold text-accent-orange">Servizi Principali</h5>
-              <ul className="text-xs text-white/60 space-y-2.5">
+              <ul className="text-xs text-white/90 space-y-2.5">
                 <li><a href="#comparativa" className="hover:text-white transition-colors">Siti in Vero Codice (React)</a></li>
                 <li><a href="#comparativa" className="hover:text-white transition-colors">Web Design Classico (WP/Wix)</a></li>
                 <li><a href="#servizi" className="hover:text-white transition-colors">Campagne Pubblicitarie ADS</a></li>
@@ -632,7 +695,7 @@ Ecco i dettagli della mia richiesta:
             {/* Direct contact column */}
             <div className="space-y-4 text-left">
               <h5 className="text-[10px] uppercase tracking-widest font-bold text-accent-pink">Consulenza Istantanea</h5>
-              <p className="text-xs text-white/60 leading-relaxed">
+              <p className="text-xs text-white/90 leading-relaxed">
                 Tutte le consulenze partono da una mini-call conoscitiva gratuita di 15 minuti su zoom o whatsapp.
               </p>
               <div className="flex gap-4">
@@ -640,14 +703,14 @@ Ecco i dettagli della mia richiesta:
                   href="https://wa.me/393793603321"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-white/60 hover:text-white transition-colors"
+                  className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/5 text-white/90 hover:text-white transition-colors"
                   title="Contatta via WhatsApp"
                 >
                   <MessageSquare className="w-4 h-4" />
                 </a>
                 <a 
                   href="#hero" 
-                  className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-white/60 hover:text-white transition-colors"
+                  className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/5 text-white/90 hover:text-white transition-colors"
                   title="Torna all'inizio"
                 >
                   <Compass className="w-4 h-4" />
@@ -657,7 +720,7 @@ Ecco i dettagli della mia richiesta:
           </div>
 
           <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-[#8C8880] font-mono">
-            <p>© 2026 Faciilissimo Web / FW di Maria Teresa Rogani. Tutti i diritti riservati.</p>
+            <p>© 2026 FACILISSIMO WEB / FW di Maria Teresa Rogani. Tutti i diritti riservati.</p>
             <div className="flex gap-4">
               <a href="#contatti" className="hover:text-white">P.IVA: 01234567890</a>
               <span>•</span>
@@ -687,7 +750,7 @@ Ecco i dettagli della mia richiesta:
           >
             <div className="text-left max-w-3xl space-y-1">
               <h5 className="text-[10px] uppercase font-bold text-accent-orange tracking-widest font-mono">Informativa sui Cookie &amp; Tracciamenti</h5>
-              <p className="text-[11px] text-white/60 leading-relaxed">
+              <p className="text-[11px] text-white/90 leading-relaxed">
                 Questo sito utilizza esclusivamente cookie tecnici di sessione per garantire il corretto funzionamento dei simulatori interattivi (es. CRM e AI Planner). Questi cookie non profilano le tue abitudini e scadono automaticamente al termine della navigazione.
               </p>
             </div>
@@ -698,7 +761,7 @@ Ecco i dettagli della mia richiesta:
                 } catch {}
                 setCookiesAccepted(true);
               }}
-              className="bg-[#0A0A0B]/70 text-white/95 hover:bg-[#0A0A0B]/90 transition-all text-[10px] font-bold px-5 py-2 rounded-none uppercase tracking-widest shrink-0 shadow cursor-pointer w-full sm:w-auto text-center"
+              className="bg-[#0A0A0B]/50 text-white/95 hover:bg-[#0A0A0B]/90 transition-all text-[10px] font-bold px-5 py-2 rounded-none uppercase tracking-widest shrink-0 shadow cursor-pointer w-full sm:w-auto text-center"
             >
               Accetto Cookie di Sessione
             </button>
@@ -714,21 +777,21 @@ Ecco i dettagli della mia richiesta:
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-[#0A0A0B]/70 max-w-md w-full border border-white/10 p-6 md:p-8 space-y-4 rounded-none shadow-2xl overflow-y-auto max-h-[85vh] text-left"
+              className="bg-[#0A0A0B]/50 max-w-md w-full border border-white/10 p-6 md:p-8 space-y-4 rounded-none shadow-2xl overflow-y-auto max-h-[85vh] text-left"
             >
               <div className="flex justify-between items-center border-b border-white/10 pb-3">
                 <h4 className="font-display font-bold text-lg text-white/95">Privacy Policy &amp; GDPR</h4>
                 <button 
                   onClick={() => setPrivacyModalOpen(false)}
-                  className="text-white/70 hover:text-white/95 p-1 cursor-pointer font-bold font-mono text-xs"
+                  className="text-white/95 hover:text-white/95 p-1 cursor-pointer font-bold font-mono text-xs"
                 >
                   CHIUDI [X]
                 </button>
               </div>
-              <div className="space-y-3 text-[11px] text-white/70 leading-relaxed">
+              <div className="space-y-3 text-[11px] text-white/95 leading-relaxed">
                 <p>
                   <strong>1. TITOLARE DEL TRATTAMENTO:</strong><br />
-                  Il titolare del trattamento è Maria Teresa Rogani per Faciilissimo Web / FW di Maria Teresa Rogani.
+                  Il titolare del trattamento è Maria Teresa Rogani per FACILISSIMO WEB / FW di Maria Teresa Rogani.
                 </p>
                 <p>
                   <strong>2. DATI RACCOLTI:</strong><br />

@@ -87,7 +87,7 @@ export default function AIPlanner() {
           </div>
           <div className="max-w-xl mx-auto">
             <h3 className="font-display text-2xl md:text-3xl font-bold">Ricevi una Strategia di Crescita</h3>
-            <p className="text-sm text-white/60 mt-2 leading-relaxed">
+            <p className="text-sm text-white/90 mt-2 leading-relaxed">
               Vuoi far crescere la tua attività online? Rispondi a 3 semplici domande e inviami subito i tuoi obiettivi per ricevere un'idea di strategia personalizzata e un preventivo.
             </p>
           </div>
@@ -106,7 +106,7 @@ export default function AIPlanner() {
       {step === 1 && (
         <div className="space-y-6">
           <div className="flex justify-between items-center pb-4 border-b border-white/10/50">
-            <span className="text-xs font-mono text-white/60 font-bold">FASE 1 DI 3: IL TUO BUSINESS</span>
+            <span className="text-xs font-mono text-white/90 font-bold">FASE 1 DI 3: IL TUO BUSINESS</span>
             <span className="text-xs bg-accent-blue/10 text-accent-blue font-bold px-2.5 py-0.5 rounded-none">Anagrafica</span>
           </div>
 
@@ -120,7 +120,7 @@ export default function AIPlanner() {
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
                 placeholder="Es. Atelier Spose Milano, Studio Dentistico Rossini"
-                className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-accent-blue"
+                className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-accent-blue"
               />
             </div>
 
@@ -131,7 +131,7 @@ export default function AIPlanner() {
               <select
                 value={niche}
                 onChange={(e) => setNiche(e.target.value)}
-                className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-accent-blue"
+                className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-accent-blue"
               >
                 <option value="">Seleziona un settore</option>
                 <option value="Ristorazione e Food">Ristorazione &amp; Food</option>
@@ -150,7 +150,7 @@ export default function AIPlanner() {
           <div className="flex justify-between items-center pt-4 border-t border-white/10/50">
             <button
               onClick={handlePrev}
-              className="flex items-center gap-1.5 text-xs font-bold uppercase text-white/60 hover:text-white/95"
+              className="flex items-center gap-1.5 text-xs font-bold uppercase text-white/90 hover:text-white/95"
             >
               <ArrowLeft className="w-4 h-4" /> Indietro
             </button>
@@ -168,7 +168,7 @@ export default function AIPlanner() {
       {step === 2 && (
         <div className="space-y-6">
           <div className="flex justify-between items-center pb-4 border-b border-white/10/50">
-            <span className="text-xs font-mono text-white/60 font-bold">FASE 2 DI 3: OBIETTIVI DIGITALI</span>
+            <span className="text-xs font-mono text-white/90 font-bold">FASE 2 DI 3: OBIETTIVI DIGITALI</span>
             <span className="text-xs bg-accent-purple/10 text-accent-purple font-bold px-2.5 py-0.5 rounded-none">Scelta Canali</span>
           </div>
 
@@ -191,7 +191,7 @@ export default function AIPlanner() {
                   className={`p-4 rounded-xl border cursor-pointer select-none transition-all flex items-start gap-3 ${
                     goals.includes(item)
                       ? "border-accent-purple bg-accent-purple/5 shadow-sm"
-                      : "border-white/10 hover:border-accent-purple/35 hover:bg-black/30"
+                      : "border-white/10 hover:border-accent-purple/35 hover:bg-black/50"
                   }`}
                 >
                   <div className={`w-4 h-4 rounded mt-0.5 flex items-center justify-center border ${
@@ -210,7 +210,7 @@ export default function AIPlanner() {
           <div className="flex justify-between items-center pt-4 border-t border-white/10/50">
             <button
               onClick={handlePrev}
-              className="flex items-center gap-1.5 text-xs font-bold uppercase text-white/60 hover:text-white/95"
+              className="flex items-center gap-1.5 text-xs font-bold uppercase text-white/90 hover:text-white/95"
             >
               <ArrowLeft className="w-4 h-4" /> Indietro
             </button>
@@ -228,7 +228,7 @@ export default function AIPlanner() {
       {step === 3 && (
         <div className="space-y-6">
           <div className="flex justify-between items-center pb-4 border-b border-white/10/50">
-            <span className="text-xs font-mono text-white/60 font-bold">FASE 3 DI 3: TECNOLOGIA & CONTATTO</span>
+            <span className="text-xs font-mono text-white/90 font-bold">FASE 3 DI 3: TECNOLOGIA & CONTATTO</span>
             <span className="text-xs bg-accent-orange/10 text-accent-orange font-bold px-2.5 py-0.5 rounded-none">Finalizza</span>
           </div>
 
@@ -241,7 +241,7 @@ export default function AIPlanner() {
                 <select
                   value={webType}
                   onChange={(e) => setWebType(e.target.value)}
-                  className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-lg text-xs focus:outline-none focus:border-accent-blue"
+                  className="w-full px-3 py-2 bg-black/50 border border-white/10 rounded-lg text-xs focus:outline-none focus:border-accent-blue"
                 >
                   <option value="Da valutare insieme">Consigliami tu</option>
                   <option value="Codice Custom (React / HTML5)">Puro Codice Custom (React / SEO d'Elite)</option>
@@ -257,7 +257,7 @@ export default function AIPlanner() {
                 <select
                   value={budget}
                   onChange={(e) => setBudget(e.target.value)}
-                  className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-lg text-xs focus:outline-none focus:border-accent-blue"
+                  className="w-full px-3 py-2 bg-black/50 border border-white/10 rounded-lg text-xs focus:outline-none focus:border-accent-blue"
                 >
                   <option value="Starter (€500 - €1.500)">Starter (€500 - €1.500)</option>
                   <option value="Professional (€1.500 - €3.500)">Professional (€1.500 - €3.500)</option>
@@ -276,7 +276,7 @@ export default function AIPlanner() {
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
                   placeholder="Es. Maria Rossi"
-                  className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-lg text-xs focus:outline-none focus:border-accent-blue font-medium"
+                  className="w-full px-3 py-2 bg-black/50 border border-white/10 rounded-lg text-xs focus:outline-none focus:border-accent-blue font-medium"
                 />
               </div>
 
@@ -289,7 +289,7 @@ export default function AIPlanner() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="Es. +39 333 1234567"
-                  className="w-full px-3 py-2 bg-black/30 border border-white/10 rounded-lg text-xs focus:outline-none focus:border-accent-blue font-medium"
+                  className="w-full px-3 py-2 bg-black/50 border border-white/10 rounded-lg text-xs focus:outline-none focus:border-accent-blue font-medium"
                 />
               </div>
             </div>
@@ -298,7 +298,7 @@ export default function AIPlanner() {
           <div className="flex justify-between items-center pt-4 border-t border-white/10/50">
             <button
               onClick={handlePrev}
-              className="flex items-center gap-1.5 text-xs font-bold uppercase text-white/60 hover:text-white/95"
+              className="flex items-center gap-1.5 text-xs font-bold uppercase text-white/90 hover:text-white/95"
             >
               <ArrowLeft className="w-4 h-4" /> Indietro
             </button>
@@ -322,22 +322,22 @@ export default function AIPlanner() {
             <h3 className="font-display text-2xl font-bold mt-1 text-white/95">Ecco il riepilogo del tuo progetto</h3>
           </div>
 
-          <div className="bg-black/30 rounded-none p-6 border border-white/10 shadow-inner space-y-4">
+          <div className="bg-black/50 rounded-none p-6 border border-white/10 shadow-inner space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
-                <p className="text-xs font-bold text-white/60 uppercase tracking-widest">Business</p>
+                <p className="text-xs font-bold text-white/90 uppercase tracking-widest">Business</p>
                 <p className="font-medium text-white/95">{businessName} ({niche})</p>
               </div>
               <div>
-                <p className="text-xs font-bold text-white/60 uppercase tracking-widest">Obiettivi</p>
+                <p className="text-xs font-bold text-white/90 uppercase tracking-widest">Obiettivi</p>
                 <p className="font-medium text-white/95">{goals.join(", ")}</p>
               </div>
               <div>
-                <p className="text-xs font-bold text-white/60 uppercase tracking-widest">Tecnologia</p>
+                <p className="text-xs font-bold text-white/90 uppercase tracking-widest">Tecnologia</p>
                 <p className="font-medium text-white/95">{webType}</p>
               </div>
               <div>
-                <p className="text-xs font-bold text-white/60 uppercase tracking-widest">Budget Stimato</p>
+                <p className="text-xs font-bold text-white/90 uppercase tracking-widest">Budget Stimato</p>
                 <p className="font-medium text-white/95">{budget}</p>
               </div>
             </div>
@@ -356,13 +356,13 @@ export default function AIPlanner() {
                 PARLIAMONE SU WHATSAPP
               </div>
               <h4 className="font-display text-lg font-bold">Ricevi la tua strategia</h4>
-              <p className="text-xs text-white/60">
+              <p className="text-xs text-white/90">
                 Clicca il pulsante qui sotto per inviarmi questi dettagli. Ti risponderò subito con una proposta concreta.
               </p>
             </div>
             <button
               onClick={handleWhatsApp}
-              className="bg-black/30 text-white/95 hover:bg-black/30-soft transition-all font-bold px-5 py-3 rounded-none flex items-center justify-center gap-2 text-xs uppercase tracking-widest shadow-md cursor-pointer"
+              className="bg-black/50 text-white/95 hover:bg-black/50-soft transition-all font-bold px-5 py-3 rounded-none flex items-center justify-center gap-2 text-xs uppercase tracking-widest shadow-md cursor-pointer"
             >
               <MessageSquare className="w-4 h-4 text-accent-blue" />
               Invia su WhatsApp
@@ -372,7 +372,7 @@ export default function AIPlanner() {
           <div className="text-center">
             <button
               onClick={restartPlanner}
-              className="text-xs text-white/60 hover:text-white/95 flex items-center gap-1 mx-auto"
+              className="text-xs text-white/90 hover:text-white/95 flex items-center gap-1 mx-auto"
             >
               <RotateCcw className="w-3 h-3" /> Ricomincia da capo
             </button>
