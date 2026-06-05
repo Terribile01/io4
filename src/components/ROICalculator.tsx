@@ -43,13 +43,13 @@ export default function ROICalculator() {
           <h3 className="font-display text-2xl font-bold text-white/95">
             Calcola il Tuo Potenziale
           </h3>
-          <p className="text-xs text-white/60 mt-1">
+          <p className="text-xs text-white/90 mt-1">
             Scopri come un sito web che funziona può aumentare i tuoi guadagni.
           </p>
         </div>
         <button
           onClick={handleReset}
-          className="flex items-center gap-1.5 text-xs text-white/60 hover:text-white/95 transition-colors px-3 py-1.5 rounded-none border border-white/10/50 bg-black/30/50"
+          className="flex items-center gap-1.5 text-xs text-white/90 hover:text-white/95 transition-colors px-3 py-1.5 rounded-none border border-white/10/50 bg-black/50/50"
         >
           <RefreshCw className="w-3 h-3" /> Ripristina default
         </button>
@@ -64,7 +64,7 @@ export default function ROICalculator() {
               <label className="font-medium text-white/95 flex items-center gap-1.5">
                 Quanto vorresti investire ogni mese in pubblicità?
               </label>
-              <span className="font-mono font-bold text-white/95 bg-black/30 px-2.5 py-1 rounded-md shadow-sm border border-white/10/30">
+              <span className="font-mono font-bold text-white/95 bg-black/50 px-2.5 py-1 rounded-md shadow-sm border border-white/10/30">
                 € {budget.toLocaleString("it-IT")}
               </span>
             </div>
@@ -77,7 +77,7 @@ export default function ROICalculator() {
               onChange={(e) => setBudget(Number(e.target.value))}
               className="w-full h-1.5 bg-line-ivory rounded-lg appearance-none cursor-pointer accent-accent-blue"
             />
-            <div className="flex justify-between text-[10px] text-white/60 font-mono">
+            <div className="flex justify-between text-[10px] text-white/90 font-mono">
               <span>€ 200</span>
               <span>€ 5.000</span>
               <span>€ 10.000</span>
@@ -90,7 +90,7 @@ export default function ROICalculator() {
               <label className="font-medium text-white/95 flex items-center gap-1.5">
                 Costo per ogni click (CPC)
               </label>
-              <span className="font-mono font-bold text-white/95 bg-black/30 px-2.5 py-1 rounded-md shadow-sm border border-white/10/30">
+              <span className="font-mono font-bold text-white/95 bg-black/50 px-2.5 py-1 rounded-md shadow-sm border border-white/10/30">
                 € {cpc.toFixed(2)}
               </span>
             </div>
@@ -103,7 +103,7 @@ export default function ROICalculator() {
               onChange={(e) => setCpc(Number(e.target.value))}
               className="w-full h-1.5 bg-line-ivory rounded-lg appearance-none cursor-pointer accent-accent-blue"
             />
-            <div className="flex justify-between text-[10px] text-white/60 font-mono">
+            <div className="flex justify-between text-[10px] text-white/90 font-mono">
               <span>€ 0.15 (E-commerce)</span>
               <span>€ 1.50 (Servizi locali)</span>
               <span>€ 4.00 (B2B competitivo)</span>
@@ -119,7 +119,7 @@ export default function ROICalculator() {
                   {convRate < 1.0 ? "Bassa" : convRate < 2.5 ? "Normale" : "Alta"}
                 </span>
               </label>
-              <span className="font-mono font-bold text-white/95 bg-black/30 px-2.5 py-1 rounded-md shadow-sm border border-white/10/30">
+              <span className="font-mono font-bold text-white/95 bg-black/50 px-2.5 py-1 rounded-md shadow-sm border border-white/10/30">
                 {convRate}%
               </span>
             </div>
@@ -132,7 +132,7 @@ export default function ROICalculator() {
               onChange={(e) => setConvRate(Number(e.target.value))}
               className="w-full h-1.5 bg-line-ivory rounded-lg appearance-none cursor-pointer accent-accent-pink"
             />
-            <div className="flex justify-between text-[10px] text-white/60 font-mono">
+            <div className="flex justify-between text-[10px] text-white/90 font-mono">
               <span>0.3% (Sito lento)</span>
               <span>2.5% (Sito ottimizzato)</span>
               <span>10.0% (Landing d'Elite)</span>
@@ -145,7 +145,7 @@ export default function ROICalculator() {
               <label className="font-medium text-white/95 flex items-center gap-1.5">
                 Quanti contatti diventano clienti?
               </label>
-              <span className="font-mono font-bold text-white/95 bg-black/30 px-2.5 py-1 rounded-md shadow-sm border border-white/10/30">
+              <span className="font-mono font-bold text-white/95 bg-black/50 px-2.5 py-1 rounded-md shadow-sm border border-white/10/30">
                 {closeRate}%
               </span>
             </div>
@@ -158,7 +158,7 @@ export default function ROICalculator() {
               onChange={(e) => setCloseRate(Number(e.target.value))}
               className="w-full h-1.5 bg-line-ivory rounded-lg appearance-none cursor-pointer accent-accent-orange"
             />
-            <div className="flex justify-between text-[10px] text-white/60 font-mono">
+            <div className="flex justify-between text-[10px] text-white/90 font-mono">
               <span>2% (E-commerce puro)</span>
               <span>15% (Consulenza)</span>
               <span>60% (Fiducia alta)</span>
@@ -171,7 +171,7 @@ export default function ROICalculator() {
               <label className="font-medium text-white/95 flex items-center gap-1.5">
                 Quanto vale in media un tuo cliente?
               </label>
-              <span className="font-mono font-bold text-white/95 bg-black/30 px-2.5 py-1 rounded-md shadow-sm border border-white/10/30">
+              <span className="font-mono font-bold text-white/95 bg-black/50 px-2.5 py-1 rounded-md shadow-sm border border-white/10/30">
                 € {customerValue.toLocaleString("it-IT")}
               </span>
             </div>
@@ -184,7 +184,7 @@ export default function ROICalculator() {
               onChange={(e) => setCustomerValue(Number(e.target.value))}
               className="w-full h-1.5 bg-line-ivory rounded-lg appearance-none cursor-pointer accent-accent-orange"
             />
-            <div className="flex justify-between text-[10px] text-white/60 font-mono">
+            <div className="flex justify-between text-[10px] text-white/90 font-mono">
               <span>€ 50 (Shop)</span>
               <span>€ 1.000 (Sito/Campagne)</span>
               <span>€ 5.000 (Consulenza Premium)</span>
@@ -205,22 +205,22 @@ export default function ROICalculator() {
 
             <div className="grid grid-cols-2 gap-4 border-b border-white/10 pb-4">
               <div>
-                <p className="text-[10px] text-white/60 uppercase">Click Mensili</p>
+                <p className="text-[10px] text-white/90 uppercase">Click Mensili</p>
                 <p className="font-display text-lg font-bold font-mono text-white mt-1">{estimatedClicks}</p>
               </div>
               <div>
-                <p className="text-[10px] text-white/60 uppercase">Contatti (Lead)</p>
+                <p className="text-[10px] text-white/90 uppercase">Contatti (Lead)</p>
                 <p className="font-display text-lg font-bold font-mono text-accent-blue mt-1">~{estimatedLeads}</p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4 border-b border-white/10 pb-4">
               <div>
-                <p className="text-[10px] text-white/60 uppercase">Nuovi Clienti Chiusi</p>
+                <p className="text-[10px] text-white/90 uppercase">Nuovi Clienti Chiusi</p>
                 <p className="font-display text-lg font-bold font-mono text-accent-orange mt-1">~{estimatedCustomers}</p>
               </div>
               <div>
-                <p className="text-[10px] text-white/60 uppercase">Valore ROI Stimato</p>
+                <p className="text-[10px] text-white/90 uppercase">Valore ROI Stimato</p>
                 <p className="font-display text-lg font-bold font-mono text-white mt-1">
                   <span className={roi >= 100 ? "text-green-400" : "text-white"}>{roi}%</span>
                 </p>
@@ -228,19 +228,19 @@ export default function ROICalculator() {
             </div>
 
             <div className="pt-2">
-              <p className="text-[10px] text-white/60 uppercase">Possibile Incasso Mensile</p>
+              <p className="text-[10px] text-white/90 uppercase">Possibile Incasso Mensile</p>
               <div className="flex items-baseline gap-2 mt-1">
                 <p className="font-display text-3xl font-black font-mono text-white">
                   € {estimatedRevenue.toLocaleString("it-IT")}
                 </p>
-                <span className="text-xs text-white/60">stimati</span>
+                <span className="text-xs text-white/90">stimati</span>
               </div>
             </div>
           </div>
 
           {/* Interactive Lesson Card */}
           <div className="grad-sunset text-white rounded-2xl p-6 shadow-md relative overflow-hidden flex flex-col justify-between h-full min-h-[160px]">
-            <div className="absolute top-[-30px] right-[-30px] w-24 h-24 bg-black/30/10 rounded-full blur-xl pointer-events-none"></div>
+            <div className="absolute top-[-30px] right-[-30px] w-24 h-24 bg-black/50/10 rounded-full blur-xl pointer-events-none"></div>
             <div>
               <div className="flex items-center gap-1.5 text-xs font-bold uppercase mb-2">
                 <Sparkles className="w-3.5 h-3.5" />
@@ -253,7 +253,7 @@ export default function ROICalculator() {
             </div>
             {extraRevenue > 0 && (
               <div className="mt-4 pt-4 border-t border-white/20 flex gap-2 items-center">
-                <div className="bg-black/30/20 p-1.5 rounded-lg">
+                <div className="bg-black/50/20 p-1.5 rounded-lg">
                   <TrendingUp className="w-4 h-4 text-white" />
                 </div>
                 <div>
@@ -267,7 +267,7 @@ export default function ROICalculator() {
       </div>
 
       <div className="mt-6 flex flex-col sm:flex-row gap-4 items-center justify-between p-4 bg-black/50 rounded-none border border-white/10/60 text-xs">
-        <span className="text-white/60 text-left">
+        <span className="text-white/90 text-left">
           * Nota: questi calcoli sono stime basate su medie di mercato. I risultati reali dipendono dal tuo settore e dalla tua zona.
         </span>
         <a 
