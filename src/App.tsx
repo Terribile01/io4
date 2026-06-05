@@ -1,18 +1,45 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { 
   Sparkles, Code, Globe, MessageSquare, TrendingUp, Compass, 
   Menu, X, Phone, Layers, Smartphone, Star, Check, ArrowRight,
   Send, Database, ArrowUpRight, BarChart2, ShieldCheck, Mail, Pin, HelpCircle,
-  Clock, CheckCircle, Flame, Server, Laptop, ChevronRight
+  Clock, CheckCircle, Flame, Server, Laptop, ChevronRight,
+  Instagram, Facebook, Linkedin, ChevronDown, Search, Calendar, Tag, ChevronLeft,
+  Share2, Play, Pause, Square, Twitter, Send as SendIcon, Link as LinkIcon
 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import ROICalculator from "./components/ROICalculator";
 import AIPlanner from "./components/AIPlanner";
+import AIChat from "./components/AIChat";
+import TechnicalSheetModal from "./components/TechnicalSheetModal";
 import { LeadSubmission } from "./types";
-import { motion, AnimatePresence } from "motion/react";
+import { TECHNICAL_SHEETS, TechnicalSheet, BIO_DATA, BlogPost, SITE_CONFIG } from "./data";
+import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 
 export default function App() {
+  const bannerRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: bannerRef,
+    offset: ["start end", "end start"]
+  });
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [privacyModalOpen, setPrivacyModalOpen] = useState(false);
+  const [chiSonoModalOpen, setChiSonoModalOpen] = useState(false);
+
+  // Blog State
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+  const [postContent, setPostContent] = useState("");
+  const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const blogScrollRef = useRef<HTMLDivElement>(null);
   const [cookiesAccepted, setCookiesAccepted] = useState(() => {
     try {
       return sessionStorage.getItem("fw_cookies_accepted") === "true";
@@ -29,6 +56,105 @@ export default function App() {
   const [goals, setGoals] = useState<string[]>(["Creare un nuovo Sito Web da zero"]);
   const [budget, setBudget] = useState("Professional (€1.500 - €3.500)");
   const [formSubmitted, setFormSubmitted] = useState(false);
+
+  // Technical Sheets Modal state
+  const [selectedSheet, setSelectedSheet] = useState<TechnicalSheet | null>(null);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  useEffect(() => {
+    fetch("/blog/posts.json")
+      .then(res => res.json())
+      .then(data => setBlogPosts(data))
+      .catch(err => console.error("Error loading blog posts:", err));
+  }, []);
+
+  const openPost = async (post: BlogPost) => {
+    try {
+      const response = await fetch(`/blog/${post.slug}.md`);
+      const text = await response.text();
+      setPostContent(text);
+      setSelectedPost(post);
+      setIsBlogModalOpen(true);
+      // Reset speech
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      setIsPaused(false);
+    } catch (err) {
+      console.error("Error loading post content:", err);
+    }
+  };
+
+  const toggleSpeech = () => {
+    if (isSpeaking) {
+      window.speechSynthesis.pause();
+      setIsPaused(true);
+      setIsSpeaking(false);
+    } else if (isPaused) {
+      window.speechSynthesis.resume();
+      setIsPaused(false);
+      setIsSpeaking(true);
+    } else {
+      window.speechSynthesis.cancel();
+      const textToRead = `${selectedPost?.title}. ${postContent.replace(/[#*`]/g, '')}`;
+      const utterance = new SpeechSynthesisUtterance(textToRead);
+      utterance.lang = 'it-IT';
+      utterance.onend = () => {
+        setIsSpeaking(false);
+        setIsPaused(false);
+      };
+      utteranceRef.current = utterance;
+      window.speechSynthesis.speak(utterance);
+      setIsSpeaking(true);
+    }
+  };
+
+  const stopSpeech = () => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+    setIsPaused(false);
+  };
+
+  const getReadingTime = (content: string) => {
+    const words = content.trim().split(/\s+/).length;
+    return Math.ceil(words / 200);
+  };
+
+  const getShareSnippet = (post: BlogPost, content: string) => {
+    const cleanContent = content.replace(/[#*`]/g, '').trim();
+    const words = cleanContent.split(/\s+/).slice(0, 15).join(" ");
+    return `${words}...`;
+  };
+
+  const copyPostLink = (slug: string) => {
+    const url = `${window.location.origin}/#blog?post=${slug}`;
+    navigator.clipboard.writeText(url);
+    setLinkCopied(true);
+    setTimeout(() => setLinkCopied(false), 2000);
+  };
+
+  const filteredPosts = blogPosts.filter(post =>
+    post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    post.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  const scrollBlog = (direction: 'left' | 'right') => {
+    if (blogScrollRef.current) {
+      const scrollAmount = 350;
+      blogScrollRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const openSheet = (sheetId: string) => {
+    const sheet = TECHNICAL_SHEETS.find(s => s.id === sheetId);
+    if (sheet) {
+      setSelectedSheet(sheet);
+      setIsSheetOpen(true);
+    }
+  };
 
   const handleSubmitContact = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,35 +185,81 @@ Ecco i dettagli della mia richiesta:
   };
 
   return (
-    <div className="min-h-screen bg-bg-ivory text-charcoal flex flex-col font-sans relative overflow-x-hidden antialiased select-none">
+    <div className="min-h-screen bg-[#0a0015] text-white/90 flex flex-col font-sans relative overflow-x-hidden antialiased select-none">
       
+      {/* GLOBAL BACKGROUND WITH DARK PURPLE OVERLAY */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <img
+          src={SITE_CONFIG.backgroundImage}
+          alt="Background"
+          className="w-full h-full object-cover"
+        />
+        <div className={`absolute inset-0 ${SITE_CONFIG.backgroundOverlay} backdrop-blur-[2px]`}></div>
+      </div>
+
       {/* 1. FLOATING NAVIGATION BAR (GLASSMORPHIC CHIC RECTANGULAR) */}
       <nav className="fixed top-5 left-0 right-0 z-[100] flex items-center justify-center px-4 w-full pointer-events-none">
-        <div className="pointer-events-auto w-full max-w-5xl flex items-center justify-between bg-charcoal/95 backdrop-blur-md rounded-none px-5 py-2.5 shadow-xl border border-white/10 h-14">
+        <div className="pointer-events-auto w-full max-w-5xl flex items-center justify-between bg-accent-purple/10 backdrop-blur-xl rounded-none px-5 py-2.5 shadow-xl border border-white/10 h-14">
           <div className="flex items-center gap-8 pl-1">
             <a 
               href="#hero" 
               onClick={() => {
                 window.scrollTo(0, 0);
               }}
-              className="flex items-center gap-2 group cursor-pointer"
+              className="flex items-center gap-3 group cursor-pointer"
             >
-              <div className="w-8 h-8 rounded-none border border-bg-ivory/50 bg-white/15 flex items-center justify-center shrink-0 font-mono">
-                <span className="text-bg-ivory font-black font-display text-sm tracking-widest">FW</span>
+              <div className="h-8 md:h-10 flex items-center shrink-0 overflow-hidden">
+                <img
+                  src={SITE_CONFIG.logoImage}
+                  alt="Facilissimo Web"
+                  className="h-full w-auto object-contain transition-transform group-hover:scale-105"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                    (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                  }}
+                />
+                <div className="hidden h-8 w-8 rounded-none border border-bg-ivory/50 bg-white/15 flex items-center justify-center font-mono">
+                  <span className="text-bg-ivory font-black font-display text-xs tracking-widest">FW</span>
+                </div>
               </div>
-              <span className="font-display font-bold text-xs uppercase tracking-widest text-[#FFF] group-hover:text-accent-orange transition-colors">
-                Faciilissimo
+              <span className="font-display font-bold text-sm uppercase tracking-widest text-[#FFF] transition-colors">
+                {SITE_CONFIG.brandName} <span className="text-accent-orange">{SITE_CONFIG.brandAccent}</span>
               </span>
             </a>
             
             {/* Desktop Links */}
-            <div className="hidden md:flex items-center gap-7">
-              <a 
-                href="#servizi" 
-                className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
+            <div className="hidden lg:flex items-center gap-7">
+              <button
+                onClick={() => setChiSonoModalOpen(true)}
+                className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors cursor-pointer"
               >
-                Servizi
-              </a>
+                Chi Sono
+              </button>
+
+              {/* Servizi Dropdown */}
+              <div className="relative group/dropdown">
+                <button
+                  className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors flex items-center gap-1 cursor-pointer py-4"
+                >
+                  Servizi <ChevronDown className="w-3 h-3 transition-transform group-hover/dropdown:rotate-180" />
+                </button>
+
+                <div className="absolute top-full left-0 w-64 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover/dropdown:opacity-100 group-hover/dropdown:translate-y-0 group-hover/dropdown:pointer-events-auto transition-all duration-200 z-[110]">
+                  <div className="bg-accent-purple/20 backdrop-blur-2xl border border-white/10 p-2 shadow-2xl flex flex-col gap-1">
+                    {TECHNICAL_SHEETS.map((sheet) => (
+                      <button
+                        key={sheet.id}
+                        onClick={() => openSheet(sheet.id)}
+                        className="text-left px-4 py-3 text-[10px] uppercase tracking-widest font-bold text-white/70 hover:text-white hover:bg-white/5 transition-all flex items-center justify-between group/item cursor-pointer"
+                      >
+                        {sheet.title}
+                        <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all text-accent-orange" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
               <a 
                 href="#comparativa" 
                 className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
@@ -100,13 +272,19 @@ Ecco i dettagli della mia richiesta:
               >
                 AI Planner <Sparkles className="w-3 h-3 text-accent-orange" />
               </a>
+              <a
+                href="#blog"
+                className="text-[10px] font-bold uppercase tracking-widest text-[#BDBAB2] hover:text-white transition-colors"
+              >
+                Blog
+              </a>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             <a 
               href="#contatti" 
-              className="hidden md:flex bg-white text-charcoal hover:bg-bg-ivory transition-all text-[9px] h-9 font-bold px-4 rounded-none items-center justify-center uppercase tracking-wider shrink-0 shadow"
+              className="hidden lg:flex bg-white text-charcoal hover:bg-bg-ivory transition-all text-[9px] h-9 font-bold px-4 rounded-none items-center justify-center uppercase tracking-wider shrink-0 shadow"
             >
               Parliamo del tuo Progetto
             </a>
@@ -114,7 +292,7 @@ Ecco i dettagli della mia richiesta:
             {/* Mobile Menu Toggle */}
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden text-[#BDBAB2] hover:text-white p-1 cursor-pointer pointer-events-auto"
+              className="lg:hidden text-[#BDBAB2] hover:text-white p-1 cursor-pointer pointer-events-auto"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -129,18 +307,37 @@ Ecco i dettagli della mia richiesta:
             initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
-            className="fixed inset-x-4 top-[84px] bg-charcoal text-white rounded-none p-6 z-[100] border-2 border-white/20 shadow-2xl flex flex-col gap-4 md:hidden"
+            className="fixed inset-x-4 top-[84px] bg-accent-purple/20 backdrop-blur-2xl text-white rounded-none p-6 z-[100] border-2 border-white/20 shadow-2xl flex flex-col gap-4 lg:hidden"
             style={{ pointerEvents: 'auto' }}
           >
-            <a 
+            <button
               onClick={() => {
                 setMobileMenuOpen(false);
+                setChiSonoModalOpen(true);
               }}
-              href="#servizi" 
-              className="text-xs uppercase font-bold tracking-widest text-white/80 py-2 border-b border-white/5"
+              className="text-xs uppercase font-bold tracking-widest text-white/80 py-4 border-b border-white/5 text-left cursor-pointer"
             >
-              I Miei Servizi
-            </a>
+              Chi Sono
+            </button>
+
+            <div className="border-b border-white/5 py-2">
+              <span className="text-[10px] uppercase font-bold tracking-widest text-white/30 mb-2 block">I Miei Servizi</span>
+              <div className="flex flex-col gap-2 pl-2">
+                {TECHNICAL_SHEETS.map((sheet) => (
+                  <button
+                    key={sheet.id}
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      openSheet(sheet.id);
+                    }}
+                    className="text-xs uppercase font-bold tracking-widest text-white/70 hover:text-white text-left py-1 flex items-center justify-between group cursor-pointer"
+                  >
+                    {sheet.title}
+                    <ChevronRight className="w-3.5 h-3.5 text-accent-orange" />
+                  </button>
+                ))}
+              </div>
+            </div>
             <a 
               onClick={() => {
                 setMobileMenuOpen(false);
@@ -159,6 +356,15 @@ Ecco i dettagli della mia richiesta:
             >
               Strategia AI Istantanea <Sparkles className="w-3.5 h-3.5" />
             </a>
+            <a
+              onClick={() => {
+                setMobileMenuOpen(false);
+              }}
+              href="#blog"
+              className="text-xs uppercase font-bold tracking-widest text-white/80 py-4 border-b border-white/5"
+            >
+              Blog
+            </a>
             <a 
               onClick={() => {
                 setMobileMenuOpen(false);
@@ -172,177 +378,230 @@ Ecco i dettagli della mia richiesta:
         )}
       </AnimatePresence>
 
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-8 space-y-24 md:space-y-40 mt-12">
+      <main className="flex-1 w-full relative z-10">
           <>
             {/* 2. HERO LANDING SECTION */}
-        <section className="pt-24 md:pt-36 flex flex-col items-center text-center relative max-w-4xl mx-auto pb-10" id="hero">
-          {/* Active Work Tag */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-charcoal text-white rounded-none px-4 py-1.5 text-[9px] uppercase font-bold tracking-widest flex items-center gap-2 mb-6 shadow-md"
-          >
-            <span className="w-1.5 h-1.5 bg-green-400 rounded-full live-beacon"></span>
-            Maria Teresa Rogani • Freelance Web Designer &amp; Lead Generation
-          </motion.div>
+        <section className="bg-transparent pt-24 md:pt-36 pb-20 md:pb-32" id="hero">
+          <div className="max-w-4xl mx-auto px-4 md:px-8 flex flex-col items-center text-center relative">
+            {/* Active Work Tag */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-white/10 backdrop-blur-md text-white rounded-none px-4 py-1.5 text-[9px] uppercase font-bold tracking-widest flex items-center gap-2 mb-6 shadow-md border border-white/10"
+            >
+              <span className="w-1.5 h-1.5 bg-green-400 rounded-full live-beacon"></span>
+              {BIO_DATA.name} • {BIO_DATA.role}
+            </motion.div>
 
-          <h1
-            className="font-display text-4xl md:text-6xl font-extrabold tracking-tighter text-charcoal leading-[1.05]"
-          >
-            Siti Web che vendono: Design e Strategia
-          </h1>
-          <div className="w-24 h-2 grad-sunset mx-auto mt-4 rounded-full"></div>
+            <h1
+              className="font-display text-4xl md:text-6xl font-extrabold tracking-tighter text-white leading-[1.05]"
+            >
+              Siti Web che vendono: Design e Strategia
+            </h1>
+            <div className="w-24 h-2 grad-sunset mx-auto mt-4 rounded-full"></div>
 
-          <motion.p 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-sm md:text-base text-muted-grey mt-6 max-w-2xl leading-relaxed font-sans font-light"
-          >
-            Sono Maria Teresa, freelance specializzata nella creazione di siti web moderni e sistemi per generare nuovi contatti. Ti aiuto a far crescere il tuo business con soluzioni dirette, efficaci e facili da gestire.
-          </motion.p>
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-sm md:text-base text-white/70 mt-6 max-w-2xl leading-relaxed font-sans font-light"
+            >
+              {BIO_DATA.shortDescription}
+            </motion.p>
 
-          {/* Quick Pillar Badge Strip */}
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex flex-wrap gap-2.5 justify-center items-center mt-8"
-          >
-            {["WordPress, Wix & Squarespace", "Codice React su Misura", "Lead Generation Strategica", "Campagne ADS (Meta & Google)"].map((tag, idx) => (
-              <span 
-                key={idx} 
-                className="text-[10px] font-bold bg-white text-charcoal px-3 py-1.5 border border-line-ivory rounded-none shadow-sm flex items-center gap-1.5 hover:border-accent-orange/40 transition-colors"
+            {/* Quick Pillar Badge Strip */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-wrap gap-2.5 justify-center items-center mt-8"
+            >
+              {[
+                { label: "WordPress, Wix & Squarespace", id: "wp-wix-sq" },
+                { label: "Codice React su Misura", id: "react-custom" },
+                { label: "Lead Generation Strategica", id: "lead-gen" },
+                { label: "Campagne ADS (Meta & Google)", id: "ads-mgmt" }
+              ].map((tag, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => openSheet(tag.id)}
+                  className="text-[10px] font-bold bg-white/5 backdrop-blur-sm text-white px-3 py-1.5 border border-white/10 rounded-none shadow-sm flex items-center gap-1.5 hover:border-accent-orange/40 transition-all hover:scale-105 cursor-pointer active:scale-95"
+                >
+                  <Check className="w-3 h-3 text-accent-pink" />
+                  {tag.label}
+                </button>
+              ))}
+            </motion.div>
+
+            {/* Call to Actions */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="flex flex-col sm:flex-row gap-3.5 justify-center items-center mt-10 w-full max-w-2xl"
+            >
+              <a
+                href="#contatti"
+                className="grad-electric hover:shadow-xl hover:scale-[1.03] transition-all text-white font-bold px-8 py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
               >
-                <Check className="w-3 h-3 text-accent-pink" />
-                {tag}
-              </span>
-            ))}
+                Inizia Ora - Parlami del tuo Progetto <ArrowRight className="w-4 h-4" />
+              </a>
+              <a
+                href="#servizi"
+                className="bg-transparent border border-white/30 text-white hover:bg-white hover:text-charcoal transition-all font-bold px-8 py-4 rounded-none flex items-center justify-center uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
+              >
+                Cosa Posso Fare Per Te
+              </a>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* 2.5 PARALLAX MARQUEE BANNER SECTION */}
+        <section
+          ref={bannerRef}
+          className="relative h-[500px] w-full overflow-hidden flex items-center justify-center bg-charcoal"
+        >
+          {/* Parallax Background */}
+          <motion.div
+            style={{ y: backgroundY }}
+            className="absolute -top-[10%] left-0 z-0 h-[120%] w-full"
+          >
+            <img
+              src="/images/fondo%20per%20home%20.png"
+              alt="Banner Background"
+              className="w-full h-full object-cover"
+            />
+            {/* Overlay for better text contrast */}
+            <div className="absolute inset-0 bg-black/40"></div>
           </motion.div>
 
-          {/* Call to Actions */}
-          <motion.div 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-3.5 justify-center items-center mt-10 w-full max-w-2xl"
-          >
-            <a 
-              href="#contatti"
-              className="grad-electric hover:shadow-xl hover:scale-[1.03] transition-all text-white font-bold px-8 py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
+          {/* Infinite Marquee Content */}
+          <div className="relative z-10 w-full overflow-hidden">
+            <motion.div
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{
+                repeat: Infinity,
+                duration: 8,
+                ease: "linear"
+              }}
+              className="flex whitespace-nowrap items-center"
             >
-              Inizia Ora - Parlami del tuo Progetto <ArrowRight className="w-4 h-4" />
-            </a>
-            <a 
-              href="#servizi" 
-              className="bg-transparent border border-charcoal/30 text-charcoal hover:bg-charcoal hover:text-white transition-all font-bold px-8 py-4 rounded-none flex items-center justify-center uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
-            >
-              Cosa Posso Fare Per Te
-            </a>
-          </motion.div>
+              {/* Double the content to create seamless loop */}
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="flex items-center gap-12 md:gap-20 px-6 md:px-10">
+                  <span className="text-6xl md:text-[120px] font-black text-white uppercase tracking-tighter font-mono leading-none">
+                    FACILISSIMO WEB
+                  </span>
+                </div>
+              ))}
+            </motion.div>
+          </div>
         </section>
 
         {/* 3. CORE VALUE PROPOSITIONS SERVICES */}
-        <section className="space-y-12" id="servizi">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-accent-pink bg-accent-pink/10 px-3.5 py-1 rounded-none">
-              Servizi Freelance
-            </span>
-            <h2 className="font-display text-2xl md:text-3xl font-bold mt-2">
-              Soluzioni Semplici per Crescere Online
-            </h2>
-            <p className="text-xs text-muted-grey">
-              Ti aiuto a costruire una presenza digitale forte che attira nuovi clienti ogni giorno.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {/* Box 1: Web Design Sartoriale */}
-            <div className="glass-panel rounded-3xl p-6 border border-line-ivory flex flex-col justify-between hover:shadow-xl transition-all">
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-2xl bg-accent-blue/10 flex items-center justify-center text-accent-blue mb-4">
-                  <Laptop className="w-5 h-5" />
-                </div>
-                <h3 className="font-display text-lg font-bold">Sito Web Professionale</h3>
-                <p className="text-xs text-muted-grey leading-relaxed">
-                  Realizzo il tuo sito web su misura, veloce e ottimizzato per i motori di ricerca. Che tu preferisca WordPress per gestirlo in autonomia o una soluzione su misura in codice per prestazioni massime, ho la soluzione giusta.
-                </p>
-              </div>
-              <div className="pt-6 border-t border-line-ivory/50 mt-6 flex justify-between items-center text-xs">
-                <span className="font-medium text-charcoal font-mono">Web Design</span>
-                <a href="#comparativa" className="text-accent-blue hover:underline flex items-center gap-1">
-                  Scopri di più <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
+        <section className="bg-white/5 backdrop-blur-sm py-20 md:py-32" id="servizi">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-12">
+            <div className="text-center max-w-xl mx-auto space-y-2">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-accent-pink bg-accent-pink/10 px-3.5 py-1 rounded-none">
+                Servizi Freelance
+              </span>
+              <h2 className="font-display text-2xl md:text-3xl font-bold mt-2 text-white">
+                Soluzioni Semplici per Crescere Online
+              </h2>
+              <p className="text-xs text-white/60">
+                Ti aiuto a costruire una presenza digitale forte che attira nuovi clienti ogni giorno.
+              </p>
             </div>
 
-            {/* Box 2: Lead Generation Specialist */}
-            <div className="glass-panel rounded-3xl p-6 border border-line-ivory flex flex-col justify-between hover:shadow-xl transition-all">
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-2xl bg-accent-pink/10 flex items-center justify-center text-accent-pink mb-4">
-                  <Flame className="w-5 h-5" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+              {/* Box 1: Web Design Sartoriale */}
+              <div className="glass-panel rounded-3xl p-6 border border-white/10 flex flex-col justify-between hover:shadow-xl transition-all group">
+                <div className="space-y-4">
+                  <div className="w-10 h-10 rounded-2xl bg-accent-blue/20 flex items-center justify-center text-accent-blue mb-4">
+                    <Laptop className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-display text-lg font-bold text-white">Sito Web Professionale</h3>
+                  <p className="text-xs text-white/60 leading-relaxed">
+                    Realizzo il tuo sito web su misura, veloce e ottimizzato per i motori di ricerca. Che tu preferisca WordPress per gestirlo in autonomia o una soluzione su misura in codice per prestazioni massime, ho la soluzione giusta.
+                  </p>
                 </div>
-                <h3 className="font-display text-lg font-bold">Trovare Nuovi Clienti</h3>
-                <p className="text-xs text-muted-grey leading-relaxed">
-                  Non solo un bel sito, ma uno strumento che lavora per te. Creo sistemi per raccogliere contatti di persone interessate ai tuoi servizi e automatizzo il processo per farti risparmiare tempo prezioso.
-                </p>
+                <div className="pt-6 border-t border-white/10 mt-6 flex justify-between items-center text-xs">
+                  <span className="font-medium text-white/80 font-mono">Web Design</span>
+                  <a href="#comparativa" className="text-accent-blue hover:underline flex items-center gap-1">
+                    Scopri di più <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
-              <div className="pt-6 border-t border-line-ivory/50 mt-6 flex justify-between items-center text-xs">
-                <span className="font-medium text-charcoal font-mono">Lead Gen</span>
-                <a href="#calcolatore" className="text-accent-pink hover:underline flex items-center gap-1">
-                  Prova il simulatore <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
 
-            {/* Box 3: Social & Ads Management */}
-            <div className="glass-panel rounded-3xl p-6 border border-line-ivory flex flex-col justify-between hover:shadow-xl transition-all">
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-2xl bg-accent-orange/10 flex items-center justify-center text-accent-orange mb-4">
-                  <BarChart2 className="w-5 h-5" />
+              {/* Box 2: Lead Generation Specialist */}
+              <div className="glass-panel rounded-3xl p-6 border border-white/10 flex flex-col justify-between hover:shadow-xl transition-all group">
+                <div className="space-y-4">
+                  <div className="w-10 h-10 rounded-2xl bg-accent-pink/20 flex items-center justify-center text-accent-pink mb-4">
+                    <Flame className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-display text-lg font-bold text-white">Trovare Nuovi Clienti</h3>
+                  <p className="text-xs text-white/60 leading-relaxed">
+                    Non solo un bel sito, ma uno strumento che lavora per te. Creo sistemi per raccogliere contatti di persone interessate ai tuoi servizi e automatizzo il processo per farti risparmiare tempo prezioso.
+                  </p>
                 </div>
-                <h3 className="font-display text-lg font-bold font-semibold text-charcoal">Pubblicità Google e Meta</h3>
-                <p className="text-xs text-muted-grey leading-relaxed">
-                  Porto traffico qualificato sul tuo sito attraverso campagne pubblicitarie mirate su Google, Facebook e Instagram. Massimizziamo insieme il tuo budget per ottenere il miglior risultato possibile.
-                </p>
+                <div className="pt-6 border-t border-white/10 mt-6 flex justify-between items-center text-xs">
+                  <span className="font-medium text-white/80 font-mono">Lead Gen</span>
+                  <a href="#calcolatore" className="text-accent-pink hover:underline flex items-center gap-1">
+                    Prova il simulatore <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
-              <div className="pt-6 border-t border-line-ivory/50 mt-6 flex justify-between items-center text-xs">
-                <span className="font-medium text-charcoal font-mono">Marketing</span>
-                <a href="#contatti" className="text-accent-orange hover:underline flex items-center gap-1">
-                  Chiedi info <ArrowRight className="w-3.5 h-3.5" />
-                </a>
+
+              {/* Box 3: Social & Ads Management */}
+              <div className="glass-panel rounded-3xl p-6 border border-white/10 flex flex-col justify-between hover:shadow-xl transition-all group">
+                <div className="space-y-4">
+                  <div className="w-10 h-10 rounded-2xl bg-accent-orange/20 flex items-center justify-center text-accent-orange mb-4">
+                    <BarChart2 className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-display text-lg font-bold font-semibold text-white">Pubblicità Google e Meta</h3>
+                  <p className="text-xs text-white/60 leading-relaxed">
+                    Porto traffico qualificato sul tuo sito attraverso campagne pubblicitarie mirate su Google, Facebook e Instagram. Massimizziamo insieme il tuo budget per ottenere il miglior risultato possibile.
+                  </p>
+                </div>
+                <div className="pt-6 border-t border-white/10 mt-6 flex justify-between items-center text-xs">
+                  <span className="font-medium text-white/80 font-mono">Marketing</span>
+                  <a href="#contatti" className="text-accent-orange hover:underline flex items-center gap-1">
+                    Chiedi info <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
+
         {/* 4. COMPARISON CHART SECTION (CLASSIC VS DESIGN CODE) */}
-        <section className="space-y-12" id="comparativa">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        <section className="bg-transparent py-20 md:py-32" id="comparativa">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div className="space-y-6">
               <span className="text-[10px] font-bold uppercase tracking-widest text-accent-blue bg-accent-blue/10 px-3 py-1 rounded-full">
                 La Tecnologia Giusta
               </span>
-              <h2 className="font-display text-3xl font-extrabold tracking-tight text-charcoal leading-tight">
+              <h2 className="font-display text-3xl font-extrabold tracking-tight text-white leading-tight">
                 WordPress o Codice Su Misura?
               </h2>
-              <p className="text-sm text-muted-grey leading-relaxed">
+              <p className="text-sm text-white/70 leading-relaxed">
                 Non esiste una soluzione universale. Se hai bisogno di un sito semplice da aggiornare da solo, <strong>WordPress</strong> è la scelta migliore. Se invece cerchi il massimo della velocità e un design unico, un sito in <strong>codice puro</strong> ti darà quel vantaggio competitivo necessario oggi.
               </p>
               <div className="space-y-4 text-xs font-semibold">
                 <div className="flex gap-3 items-start">
-                  <div className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-5 h-5 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center shrink-0 mt-0.5">
                     <Check className="w-3 h-3" />
                   </div>
-                  <p className="text-charcoal/90">
+                  <p className="text-white/90">
                     WordPress: Ideale per blog, piccoli siti e per chi vuole gestire i testi in autonomia.
                   </p>
                 </div>
                 <div className="flex gap-3 items-start">
-                  <div className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-5 h-5 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center shrink-0 mt-0.5">
                     <Check className="w-3 h-3" />
                   </div>
-                  <p className="text-charcoal/90">
+                  <p className="text-white/90">
                     Codice Custom: Il top per velocità e sicurezza. Google lo ama perché è leggerissimo.
                   </p>
                 </div>
@@ -352,16 +611,16 @@ Ecco i dettagli della mia richiesta:
             {/* Visual Contrast Panel */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {/* Card Metodo Classico */}
-              <div className="bg-white border border-line-ivory rounded-2xl p-6 shadow-sm space-y-4 relative overflow-hidden group hover:border-[#BF5AF2]/35 transition-all">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-[#BF5AF2]/5 rounded-bl-3xl pointer-events-none transition-all group-hover:scale-130"></div>
-                <span className="text-[9px] font-bold tracking-widest uppercase text-[#BF5AF2] bg-[#BF5AF2]/10 px-2 py-0.5 rounded">
+              <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-sm space-y-4 relative overflow-hidden group hover:border-[#BF5AF2]/35 transition-all">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-[#BF5AF2]/10 rounded-bl-3xl pointer-events-none transition-all group-hover:scale-130"></div>
+                <span className="text-[9px] font-bold tracking-widest uppercase text-[#BF5AF2] bg-[#BF5AF2]/20 px-2 py-0.5 rounded">
                   FACILE E VELOCE
                 </span>
-                <h4 className="font-display text-base font-bold text-charcoal">WordPress &amp; Co.</h4>
-                <p className="text-[11px] text-muted-grey leading-relaxed">
+                <h4 className="font-display text-base font-bold text-white">WordPress &amp; Co.</h4>
+                <p className="text-[11px] text-white/60 leading-relaxed">
                   Perfetto per chi vuole un sito professionale in tempi brevi.
                 </p>
-                <div className="space-y-2 text-[10px] text-charcoal pt-3 border-t border-line-ivory/50">
+                <div className="space-y-2 text-[10px] text-white/70 pt-3 border-t border-white/10">
                   <div className="flex justify-between font-mono"><span>Gestione:</span><strong>Autonoma al 100%</strong></div>
                   <div className="flex justify-between font-mono"><span>Consegna:</span><strong>1-2 settimane</strong></div>
                   <div className="flex justify-between font-mono"><span>Costo:</span><strong>Contenuto</strong></div>
@@ -370,9 +629,9 @@ Ecco i dettagli della mia richiesta:
               </div>
 
               {/* Card Pure Code Level */}
-              <div className="bg-charcoal text-white rounded-2xl p-6 shadow-md space-y-4 relative overflow-hidden group hover:shadow-lg transition-all">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-accent-orange/10 rounded-bl-3xl pointer-events-none transition-all group-hover:scale-130"></div>
-                <span className="text-[9px] font-bold tracking-widest uppercase text-accent-orange bg-accent-orange/10 px-2.5 py-0.5 rounded">
+              <div className="bg-white/10 backdrop-blur-xl text-white rounded-2xl p-6 shadow-md space-y-4 relative overflow-hidden group hover:shadow-lg transition-all border border-white/20">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-accent-orange/20 rounded-bl-3xl pointer-events-none transition-all group-hover:scale-130"></div>
+                <span className="text-[9px] font-bold tracking-widest uppercase text-accent-orange bg-accent-orange/20 px-2.5 py-0.5 rounded">
                   MASSIME PRESTAZIONI
                 </span>
                 <h4 className="font-display text-base font-bold text-white flex items-center gap-1">
@@ -381,7 +640,7 @@ Ecco i dettagli della mia richiesta:
                 <p className="text-[11px] text-white/70 leading-relaxed">
                   Creato riga per riga per chi vuole solo il meglio.
                 </p>
-                <div className="space-y-2 text-[10px] text-white/80 pt-3 border-t border-white/10">
+                <div className="space-y-2 text-[10px] text-white/80 pt-3 border-t border-white/20">
                   <div className="flex justify-between font-mono"><span>Velocità:</span><strong className="text-green-400">Istantanea</strong></div>
                   <div className="flex justify-between font-mono"><span>SEO:</span><strong className="text-green-400">Superiore</strong></div>
                   <div className="flex justify-between font-mono"><span>Design:</span><strong>Senza Limiti</strong></div>
@@ -393,94 +652,59 @@ Ecco i dettagli della mia richiesta:
         </section>
 
         {/* 5. INTERACTIVE WIDGET 1: THE ROI CONVERSION CALCULATOR */}
-        <section className="space-y-8 scroll-mt-24" id="calcolatore">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
-              Strumento di Calcolo
-            </span>
-            <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-charcoal">
-              Quanto puoi guadagnare con la pubblicità?
-            </h2>
-            <p className="text-xs text-muted-grey">
-              Usa questo simulatore per capire quanto può rendere il tuo investimento in pubblicità. Un sito che funziona meglio ti permette di ottenere più clienti a parità di spesa.
-            </p>
-          </div>
+        <section className="bg-white/5 backdrop-blur-sm py-20 md:py-32 scroll-mt-24" id="calcolatore">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-8">
+            <div className="text-center max-w-xl mx-auto space-y-2">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
+                Strumento di Calcolo
+              </span>
+              <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-white">
+                Quanto puoi guadagnare con la pubblicità?
+              </h2>
+              <p className="text-xs text-white/60">
+                Usa questo simulatore per capire quanto può rendere il tuo investimento in pubblicità. Un sito che funziona meglio ti permette di ottenere più clienti a parità di spesa.
+              </p>
+            </div>
 
-          <ROICalculator />
+            <ROICalculator />
+          </div>
         </section>
 
         {/* 6. INTERACTIVE WIDGET 2: THE AI PLANNER (GEMINI INTEGRATION) */}
-        <section className="space-y-12 scroll-mt-24" id="ai-planner">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#BF5AF2] bg-[#BF5AF2]/10 px-3.5 py-1 rounded-full flex items-center justify-center gap-1 mx-auto w-max">
-              Assistente Strategico <Sparkles className="w-3.5 h-3.5" />
-            </span>
-            <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-charcoal">
-              Ricevi un'Idea di Strategia Subito
-            </h2>
-            <p className="text-xs text-muted-grey">
-              Rispondi a qualche domanda sulla tua attività e riceverai immediatamente alcuni suggerimenti su come migliorare la tua presenza online per trovare più contatti.
-            </p>
-          </div>
-
-          <AIPlanner />
-        </section>
-
-
-
-        {/* 10. ABOUT MARIE TERESA ROGANI BIOS */}
-        <section className="glass-panel rounded-3xl p-6 md:p-10 border border-line-ivory/80 flex flex-col lg:flex-row gap-8 items-center" id="chi-sono">
-          <div className="w-44 h-44 md:w-56 md:h-56 rounded-full overflow-hidden shrink-0 shadow-lg border-4 border-white">
-            <img 
-              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop" 
-              alt="Maria Teresa Rogani" 
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300"
-            />
-          </div>
-          <div className="space-y-4 text-left flex-1 min-w-0">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-[#00C7BE] bg-[#00C7BE]/10 px-3 py-1 rounded-full">
-              Freelance al tuo fianco
-            </span>
-            <h3 className="font-display text-2xl md:text-3xl font-extrabold text-charcoal">
-              Chi Sono: Maria Teresa Rogani
-            </h3>
-            <p className="text-xs md:text-sm text-charcoal/80 leading-relaxed font-sans font-light">
-              Sono una libera professionista che aiuta le piccole e medie imprese a farsi strada nel mondo digitale. Mi occupo di creare siti web che funzionano davvero e di portare nuovi clienti attraverso strategie di marketing mirate.
-            </p>
-            <p className="text-xs md:text-sm text-muted-grey leading-relaxed font-sans font-light">
-              A differenza delle grandi agenzie, con me avrai un rapporto diretto e trasparente. Il mio obiettivo è farti ottenere risultati concreti, senza tecnicismi inutili, lavorando insieme per far crescere la tua attività.
-            </p>
-            
-            <div className="flex flex-wrap gap-4 pt-2">
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
-                <Check className="w-4 h-4 text-green-500 font-bold" /> Rapporto Diretto
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
-                <Check className="w-4 h-4 text-green-500 font-bold" /> Zero Costi Nascosti
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
-                <Check className="w-4 h-4 text-green-500 font-bold" /> Risultati Concreti
-              </div>
+        <section className="bg-transparent py-20 md:py-32 scroll-mt-24" id="ai-planner">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-12">
+            <div className="text-center max-w-xl mx-auto space-y-2">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[#BF5AF2] bg-[#BF5AF2]/10 px-3.5 py-1 rounded-full flex items-center justify-center gap-1 mx-auto w-max">
+                Assistente Strategico <Sparkles className="w-3.5 h-3.5" />
+              </span>
+              <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-white">
+                Ricevi un'Idea di Strategia Subito
+              </h2>
+              <p className="text-xs text-white/60">
+                Rispondi a qualche domanda sulla tua attività e riceverai immediatamente alcuni suggerimenti su come migliorare la tua presenza online per trovare più contatti.
+              </p>
             </div>
+
+            <AIPlanner />
           </div>
         </section>
 
         {/* 11. LEAD INTAKE CONTACT FORM WORKFLOW */}
-        <section className="space-y-12 scroll-mt-24 pb-16" id="contatti">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
-              Inizia Ora
-            </span>
-            <h2 className="font-display text-2xl md:text-3xl font-extrabold text-charcoal">
-              Raccontami il Tuo Progetto
-            </h2>
-            <p className="text-xs text-muted-grey">
-              Compila il modulo qui sotto. Riceverò i tuoi dati e ti ricontatterò per fissare una breve chiamata gratuita.
-            </p>
-          </div>
+        <section className="bg-white/5 backdrop-blur-sm py-20 md:py-32 scroll-mt-24" id="contatti">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-12">
+            <div className="text-center max-w-xl mx-auto space-y-2">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
+                Inizia Ora
+              </span>
+              <h2 className="font-display text-2xl md:text-3xl font-extrabold text-white">
+                Raccontami il Tuo Progetto
+              </h2>
+              <p className="text-xs text-white/60">
+                Compila il modulo qui sotto. Riceverò i tuoi dati e ti ricontatterò per fissare una breve chiamata gratuita.
+              </p>
+            </div>
 
-          <div className="glass-panel rounded-none p-6 md:p-8 border border-line-ivory max-w-2xl mx-auto shadow-md relative overflow-hidden">
+            <div className="glass-panel rounded-none p-6 md:p-8 border border-white/10 max-w-2xl mx-auto shadow-md relative overflow-hidden">
             <AnimatePresence mode="wait">
               {formSubmitted ? (
                 <motion.div 
@@ -506,23 +730,23 @@ Ecco i dettagli della mia richiesta:
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5 animate-none">
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal">Nome dell'Attività <span className="text-accent-pink">*</span></label>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white">Nome dell'Attività <span className="text-accent-pink">*</span></label>
                       <input 
                         type="text" 
                         required
                         value={businessName}
                         onChange={(e) => setBusinessName(e.target.value)}
                         placeholder="Es. Officina del Gusto Verona"
-                        className="w-full px-3 py-2 bg-white border border-line-ivory rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-none text-xs focus:outline-none focus:border-accent-blue text-white"
                       />
                     </div>
                     
                     <div className="space-y-1.5">
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal">Nicchia / Settore</label>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white">Nicchia / Settore</label>
                       <select 
                         value={niche}
                         onChange={(e) => setNiche(e.target.value)}
-                        className="w-full px-3 py-2 bg-white border border-line-ivory rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-none text-xs focus:outline-none focus:border-accent-blue text-white"
                       >
                         <option value="Salute, Wellness &amp; Bellezza">Salute, Wellness &amp; Bellezza</option>
                         <option value="Ristorazione e Food">Ristorazione &amp; Food</option>
@@ -535,26 +759,40 @@ Ecco i dettagli della mia richiesta:
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5 animate-none">
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal">Il Tuo Nome <span className="text-accent-pink">*</span></label>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white">Il Tuo Nome <span className="text-accent-pink">*</span></label>
                       <input 
                         type="text" 
                         required
                         value={clientName}
                         onChange={(e) => setClientName(e.target.value)}
                         placeholder="Es. Matteo Bianchi"
-                        className="w-full px-3 py-2 bg-white border border-line-ivory rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-none text-xs focus:outline-none focus:border-accent-blue text-white"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal">Numero Telefonico <span className="text-accent-pink">*</span></label>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white">La Tua E-mail <span className="text-accent-pink">*</span></label>
+                      <input 
+                        type="email" 
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Es. m.bianchi@email.it"
+                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-none text-xs focus:outline-none focus:border-accent-blue text-white"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white">Numero Telefonico</label>
                       <input 
                         type="tel" 
                         required
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        placeholder="Es: +39 340 9876543"
-                        className="w-full px-3 py-2 bg-white border border-line-ivory rounded-none text-xs focus:outline-none focus:border-accent-blue font-mono"
+                        placeholder="Consigliato, Es: +39 340 9876543"
+                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-none text-xs focus:outline-none focus:border-accent-blue font-mono text-white"
                       />
                     </div>
                   </div>
@@ -562,11 +800,11 @@ Ecco i dettagli della mia richiesta:
                   <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
 
                     <div className="space-y-1.5">
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal">Budget Stimato</label>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white">Budget Stimato</label>
                       <select 
                         value={budget}
                         onChange={(e) => setBudget(e.target.value)}
-                        className="w-full px-3 py-2 bg-white border border-line-ivory rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                        className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-none text-xs focus:outline-none focus:border-accent-blue text-white"
                       >
                         <option value="Starter (€500 - €1.500)">Starter (€500 - €1.500) - Ottimizzazione Standard</option>
                         <option value="Professional (€1.500 - €3.500)">Professional (€1.500 - €3.500) - Sito + Tracciamenti</option>
@@ -586,24 +824,146 @@ Ecco i dettagli della mia richiesta:
                 </motion.form>
               )}
             </AnimatePresence>
+            </div>
+          </div>
+        </section>
+
+        {/* 11.5 BLOG SECTION - ONE PAGE STYLE */}
+        <section className="bg-transparent py-20 md:py-32 scroll-mt-24 border-t border-white/5" id="blog">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-12">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <div className="space-y-2 text-left">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-accent-blue bg-accent-blue/10 px-3.5 py-1 rounded-none">
+                  Approfondimenti & News
+                </span>
+                <h2 className="font-display text-2xl md:text-3xl font-extrabold text-white">
+                  Il Blog di Facilissimo Web
+                </h2>
+                <p className="text-xs text-white/60 max-w-md">
+                  Consigli, strategie e novità dal mondo del web design e della lead generation per far crescere il tuo business.
+                </p>
+              </div>
+
+              {/* Search Bar */}
+              <div className="relative w-full md:w-64">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+                <input
+                  type="text"
+                  placeholder="Cerca articoli..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue text-white"
+                />
+              </div>
+            </div>
+
+            {/* Horizontal Scroll Area */}
+            <div className="relative group">
+              <button
+                onClick={() => scrollBlog('left')}
+                className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-white/20 cursor-pointer"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => scrollBlog('right')}
+                className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-white/20 cursor-pointer"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+
+              <div
+                ref={blogScrollRef}
+                className="flex gap-6 overflow-x-auto pb-8 scrollbar-hide snap-x snap-mandatory px-2"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {filteredPosts.map((post) => (
+                  <motion.div
+                    key={post.id}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="min-w-[300px] md:min-w-[350px] snap-start glass-panel border border-white/10 overflow-hidden group/card cursor-pointer hover:border-accent-blue/30 transition-all"
+                    onClick={() => openPost(post)}
+                  >
+                    <div className="h-48 overflow-hidden relative">
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=600&auto=format&fit=crop";
+                        }}
+                      />
+                      <div className="absolute top-4 left-4">
+                        <span className="bg-accent-blue/80 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-widest px-2 py-1">
+                          {post.category}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-6 space-y-3">
+                      <div className="flex items-center gap-3 text-[10px] text-white/40 font-mono">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          {post.date}
+                        </div>
+                        <span>•</span>
+                        <div className="flex items-center gap-1">
+                          <Tag className="w-3 h-3" />
+                          {post.tags[0]}
+                        </div>
+                      </div>
+                      <h3 className="font-display text-lg font-bold text-white group-hover/card:text-accent-blue transition-colors line-clamp-2">
+                        {post.title}
+                      </h3>
+                      <p className="text-xs text-white/60 leading-relaxed line-clamp-3">
+                        {post.excerpt}
+                      </p>
+                      <div className="pt-4 flex items-center gap-2 text-xs font-bold text-accent-blue uppercase tracking-widest">
+                        Leggi tutto <ArrowRight className="w-3.5 h-3.5" />
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+
+                {filteredPosts.length === 0 && (
+                  <div className="w-full py-20 text-center text-white/40 text-sm italic">
+                    Nessun articolo trovato per la tua ricerca.
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </section>
           </>
       </main>
 
       {/* 12. HIGH END GRAPHICAL SLATE FOOTER */}
-      <footer className="bg-charcoal text-white pt-16 pb-10 px-6 sm:px-10 rounded-none border-t border-white/10 relative z-20 mt-16 w-full shrink-0">
+      <footer className="bg-white/5 backdrop-blur-md text-white pt-16 pb-10 px-6 sm:px-10 rounded-none border-t border-white/10 relative z-20 mt-16 w-full shrink-0">
         <div className="max-w-5xl mx-auto space-y-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {/* Logo Column */}
-            <div className="space-y-4 text-left">
-              <div className="w-10 h-10 rounded-none border border-white/20 bg-white/10 flex items-center justify-center font-mono">
-                <span className="text-white font-black font-display text-base tracking-widest">FW</span>
+            <div className="space-y-6 text-left flex flex-col items-start">
+              <div className="w-[250px] h-auto overflow-hidden">
+                <img
+                  src={SITE_CONFIG.logoImage}
+                  alt="Facilissimo Web"
+                  className="w-full h-auto object-contain"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                    (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                  }}
+                />
+                <div className="hidden w-[250px] h-[250px] rounded-none border border-white/20 bg-white/10 flex items-center justify-center font-mono">
+                  <span className="text-white font-black font-display text-5xl tracking-widest">FW</span>
+                </div>
               </div>
-              <h4 className="font-display font-black text-xs uppercase tracking-widest text-white">Faciilissimo Web</h4>
-              <p className="text-xs text-[#BDBAB2] leading-relaxed font-sans font-light">
-                Metodo d'eccellenza per la digitalizzazione delle imprese locali in tutta Italia. Sviluppo custom-code, design, visibilità e monetizzazione.
-              </p>
+              <div className="space-y-2">
+                <h4 className="font-display font-black text-xs uppercase tracking-widest text-white">{SITE_CONFIG.brandName} {SITE_CONFIG.brandAccent}</h4>
+                <p className="text-xs text-[#BDBAB2] leading-relaxed font-sans font-light max-w-xs">
+                  Metodo d'eccellenza per la digitalizzazione delle imprese locali in tutta Italia. Sviluppo custom-code, design, visibilità e monetizzazione.
+                </p>
+              </div>
             </div>
 
             {/* Services Links column */}
@@ -614,6 +974,7 @@ Ecco i dettagli della mia richiesta:
                 <li><a href="#comparativa" className="hover:text-white transition-colors">Web Design Classico (WP/Wix)</a></li>
                 <li><a href="#servizi" className="hover:text-white transition-colors">Campagne Pubblicitarie ADS</a></li>
                 <li><a href="#servizi" className="hover:text-white transition-colors">Sistemi di Lead Generation</a></li>
+                <li><a href="#blog" className="hover:text-white transition-colors">Blog & Risorse</a></li>
               </ul>
             </div>
 
@@ -645,7 +1006,7 @@ Ecco i dettagli della mia richiesta:
           </div>
 
           <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-[#8C8880] font-mono">
-            <p>© 2026 Faciilissimo Web / FW di Maria Teresa Rogani. Tutti i diritti riservati.</p>
+            <p>© 2026 Facilissimo Web / FW di Maria Teresa Rogani. Tutti i diritti riservati.</p>
             <div className="flex gap-4">
               <a href="#contatti" className="hover:text-white">P.IVA: 01234567890</a>
               <span>•</span>
@@ -671,26 +1032,304 @@ Ecco i dettagli della mia richiesta:
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-0 inset-x-0 bg-charcoal text-white border-t border-white/10 shadow-2xl p-4 sm:p-5 z-[200] flex flex-col sm:flex-row items-center justify-between gap-4"
+            className="fixed bottom-6 inset-x-6 z-[200] flex justify-center pointer-events-none"
           >
-            <div className="text-left max-w-3xl space-y-1">
-              <h5 className="text-[10px] uppercase font-bold text-accent-orange tracking-widest font-mono">Informativa sui Cookie &amp; Tracciamenti</h5>
-              <p className="text-[11px] text-[#BDBAB2] leading-relaxed">
-                Questo sito utilizza esclusivamente cookie tecnici di sessione per garantire il corretto funzionamento dei simulatori interattivi (es. CRM e AI Planner). Questi cookie non profilano le tue abitudini e scadono automaticamente al termine della navigazione.
-              </p>
+            <div className="pointer-events-auto max-w-4xl w-full bg-accent-purple/20 backdrop-blur-2xl border border-white/20 p-6 md:p-8 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-1 h-full bg-accent-orange"></div>
+              <div className="text-left space-y-3 relative z-10">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-none bg-accent-orange/20 flex items-center justify-center text-accent-orange">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                  <h5 className="text-xs uppercase font-bold text-white tracking-widest">Privacy & Session Control</h5>
+                </div>
+                <p className="text-[11px] text-white/70 leading-relaxed max-w-2xl">
+                  Per offrirti un'esperienza interattiva d'eccellenza con i nostri simulatori AI e CRM, utilizziamo esclusivamente <strong>cookie tecnici di sessione</strong>. Non profilano i tuoi dati e vengono eliminati automaticamente quando chiudi il browser. Navigando accetti il loro utilizzo per questa sessione.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0 relative z-10">
+                <button
+                  onClick={() => setPrivacyModalOpen(true)}
+                  className="text-[10px] font-bold text-white/50 hover:text-white uppercase tracking-widest transition-colors px-4 py-2"
+                >
+                  Leggi Policy
+                </button>
+                <button
+                  onClick={() => {
+                    try {
+                      sessionStorage.setItem("fw_cookies_accepted", "true");
+                    } catch {}
+                    setCookiesAccepted(true);
+                  }}
+                  className="grad-electric text-white hover:shadow-lg transition-all text-[10px] font-bold px-8 py-3 rounded-none uppercase tracking-widest shrink-0 cursor-pointer w-full sm:w-auto text-center border border-white/10"
+                >
+                  Accetto e Proseguo
+                </button>
+              </div>
             </div>
-            <button 
-              onClick={() => {
-                try {
-                  sessionStorage.setItem("fw_cookies_accepted", "true");
-                } catch {}
-                setCookiesAccepted(true);
-              }}
-              className="bg-white text-charcoal hover:bg-bg-ivory transition-all text-[10px] font-bold px-5 py-2 rounded-none uppercase tracking-widest shrink-0 shadow cursor-pointer w-full sm:w-auto text-center"
-            >
-              Accetto Cookie di Sessione
-            </button>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* CHI SONO MODAL */}
+      <AnimatePresence>
+        {chiSonoModalOpen && (
+          <div className="fixed inset-0 bg-black/75 z-[200] backdrop-blur-sm flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white max-w-4xl w-full border border-line-ivory p-6 md:p-10 rounded-none shadow-2xl overflow-y-auto max-h-[90vh] text-left relative"
+            >
+              <button
+                onClick={() => setChiSonoModalOpen(false)}
+                className="absolute top-4 right-4 text-muted-grey hover:text-charcoal p-1 cursor-pointer font-bold font-mono text-xs"
+              >
+                CHIUDI [X]
+              </button>
+
+              <div className="flex flex-col lg:flex-row gap-8 items-center">
+                <div className="w-44 h-44 md:w-56 md:h-56 rounded-full overflow-hidden shrink-0 shadow-xl border-4 border-white bg-bg-ivory relative">
+                  <img
+                    src={BIO_DATA.image}
+                    alt={BIO_DATA.name}
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop";
+                    }}
+                  />
+                </div>
+                <div className="space-y-4 text-left flex-1 min-w-0">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#00C7BE] bg-[#00C7BE]/10 px-3 py-1 rounded-full">
+                    {BIO_DATA.badge}
+                  </span>
+                  <h3 className="font-display text-2xl md:text-3xl font-extrabold text-charcoal">
+                    Chi Sono: {BIO_DATA.name}
+                  </h3>
+                  <p className="text-xs md:text-sm text-charcoal/80 leading-relaxed font-sans font-light">
+                    {BIO_DATA.shortDescription}
+                  </p>
+                  <p className="text-xs md:text-sm text-muted-grey leading-relaxed font-sans font-light">
+                    {BIO_DATA.longDescription}
+                  </p>
+
+                  <div className="flex flex-wrap gap-4 pt-2">
+                    {BIO_DATA.highlights.map((highlight, idx) => (
+                      <div key={idx} className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
+                        <Check className="w-4 h-4 text-green-500 font-bold" /> {highlight}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="pt-6">
+                    <a
+                      href={`https://wa.me/${BIO_DATA.whatsapp}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-[#25D366] text-white hover:bg-[#128C7E] transition-all font-bold px-6 py-3 rounded-none uppercase tracking-widest text-xs shadow-md"
+                    >
+                      <MessageSquare className="w-4 h-4" /> WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* AI CHAT FLOATING INTERFACE */}
+      <AIChat />
+
+      {/* TECHNICAL SHEET MODAL */}
+      <TechnicalSheetModal
+        isOpen={isSheetOpen}
+        onClose={() => setIsSheetOpen(false)}
+        sheet={selectedSheet}
+      />
+
+      {/* BLOG POST MODAL */}
+      <AnimatePresence>
+        {isBlogModalOpen && selectedPost && (
+          <div className="fixed inset-0 bg-black/90 z-[200] backdrop-blur-md flex items-center justify-center p-0 md:p-4">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 50 }}
+              className="bg-[#0a0015] w-full max-w-4xl h-full md:h-auto md:max-h-[90vh] border-x md:border border-white/10 overflow-hidden flex flex-col relative"
+            >
+              {/* Header */}
+              <div className="sticky top-0 z-30 bg-[#0a0015]/80 backdrop-blur-xl border-b border-white/10 p-4 md:p-6 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={() => setIsBlogModalOpen(false)}
+                    className="p-2 hover:bg-white/5 text-white transition-colors"
+                  >
+                    <ChevronLeft className="w-6 h-6" />
+                  </button>
+                  <div className="hidden sm:block">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-accent-blue">{selectedPost.category}</span>
+                    <h4 className="text-sm font-bold text-white line-clamp-1">{selectedPost.title}</h4>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIsBlogModalOpen(false)}
+                  className="text-[10px] font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors"
+                >
+                  Chiudi [ESC]
+                </button>
+              </div>
+
+              {/* Content Area */}
+              <div className="flex-1 overflow-y-auto p-6 md:p-12">
+                <div className="max-w-2xl mx-auto space-y-8">
+                  <header className="space-y-6">
+                    <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/5 pb-6">
+                      <div className="flex items-center gap-4 text-[10px] text-white/40 font-mono uppercase tracking-widest">
+                        <div className="flex items-center gap-1.5">
+                          <Calendar className="w-3 h-3" /> {selectedPost.date}
+                        </div>
+                        <span>•</span>
+                        <div className="flex items-center gap-1.5">
+                          <Clock className="w-3 h-3" /> {getReadingTime(postContent)} MIN LETTURA
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={toggleSpeech}
+                          className="flex items-center gap-2 px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] font-bold uppercase tracking-widest transition-all cursor-pointer"
+                        >
+                          {isSpeaking ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+                          {isSpeaking ? 'Pausa' : isPaused ? 'Riprendi' : 'Ascolta'}
+                        </button>
+                        {(isSpeaking || isPaused) && (
+                          <button
+                            onClick={stopSpeech}
+                            className="p-1.5 bg-white/5 hover:bg-white/10 border border-white/10 transition-all cursor-pointer"
+                            title="Stop"
+                          >
+                            <Square className="w-3 h-3 fill-white" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h1 className="font-display text-3xl md:text-4xl font-black text-white leading-tight">
+                        {selectedPost.title}
+                      </h1>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedPost.tags.map(tag => (
+                          <span key={tag} className="text-[10px] font-bold uppercase tracking-widest text-white/60 bg-white/5 px-2 py-1">#{tag}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </header>
+
+                  <div className="aspect-video w-full overflow-hidden">
+                    <img
+                      src={selectedPost.image}
+                      alt={selectedPost.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=600&auto=format&fit=crop";
+                      }}
+                    />
+                  </div>
+
+                  <article className="prose prose-invert prose-sm md:prose-base max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:text-white prose-p:text-white/70 prose-p:leading-relaxed prose-strong:text-white prose-a:text-accent-blue hover:prose-a:underline prose-img:rounded-none">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {postContent}
+                    </ReactMarkdown>
+                  </article>
+
+                  {/* Social Sharing Buttons */}
+                  <div className="pt-8 border-t border-white/10 mt-12">
+                    <div className="flex flex-col items-center gap-6">
+                      <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white/40">
+                        <Share2 className="w-3 h-3" /> Condividi questo articolo
+                      </div>
+                      <div className="flex flex-wrap justify-center gap-4">
+                        <a
+                          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin + "/#blog?post=" + selectedPost.slug)}`}
+                          target="_blank" rel="noopener noreferrer"
+                          className="w-12 h-12 rounded-full bg-[#1877F2] flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all"
+                          title="Facebook"
+                        >
+                          <Facebook className="w-5 h-5" />
+                        </a>
+                        <a
+                          href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(window.location.origin + "/#blog?post=" + selectedPost.slug)}&media=${encodeURIComponent(window.location.origin + selectedPost.image)}&description=${encodeURIComponent(selectedPost.title + " - " + getShareSnippet(selectedPost, postContent))}`}
+                          target="_blank" rel="noopener noreferrer"
+                          className="w-12 h-12 rounded-full bg-[#E60023] flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all"
+                          title="Pinterest"
+                        >
+                          <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.965 1.406-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/></svg>
+                        </a>
+                        <a
+                          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.origin + "/#blog?post=" + selectedPost.slug)}`}
+                          target="_blank" rel="noopener noreferrer"
+                          className="w-12 h-12 rounded-full bg-[#0A66C2] flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all"
+                          title="LinkedIn"
+                        >
+                          <Linkedin className="w-5 h-5" />
+                        </a>
+                        <a
+                          href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.origin + "/#blog?post=" + selectedPost.slug)}&text=${encodeURIComponent(selectedPost.title + " - " + getShareSnippet(selectedPost, postContent))}&hashtags=${encodeURIComponent(selectedPost.tags.join(","))}`}
+                          target="_blank" rel="noopener noreferrer"
+                          className="w-12 h-12 rounded-full bg-black flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all border border-white/20"
+                          title="X"
+                        >
+                          <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a
+                          href={`https://wa.me/?text=${encodeURIComponent(selectedPost.title + " - " + getShareSnippet(selectedPost, postContent) + " " + window.location.origin + "/#blog?post=" + selectedPost.slug)}`}
+                          target="_blank" rel="noopener noreferrer"
+                          className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all"
+                          title="WhatsApp"
+                        >
+                          <MessageSquare className="w-5 h-5" />
+                        </a>
+                        <a
+                          href={`https://t.me/share/url?url=${encodeURIComponent(window.location.origin + "/#blog?post=" + selectedPost.slug)}&text=${encodeURIComponent(selectedPost.title + " - " + getShareSnippet(selectedPost, postContent))}`}
+                          target="_blank" rel="noopener noreferrer"
+                          className="w-12 h-12 rounded-full bg-[#0088cc] flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all"
+                          title="Telegram"
+                        >
+                          <SendIcon className="w-5 h-5" />
+                        </a>
+                        <button
+                          onClick={() => copyPostLink(selectedPost.slug)}
+                          className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all cursor-pointer ${linkCopied ? 'bg-green-500 text-white' : 'bg-white/10 text-white/70 border border-white/20'}`}
+                          title="Copia Link"
+                        >
+                          {linkCopied ? <Check className="w-5 h-5" /> : <LinkIcon className="w-5 h-5" />}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <footer className="pt-12 border-t border-white/10 mt-6 text-center space-y-6">
+                    <div className="space-y-2">
+                      <p className="text-xs text-white/40 uppercase tracking-widest font-bold">Ti è piaciuto l'articolo?</p>
+                      <h4 className="text-lg font-bold text-white">Parliamo di come applicare queste strategie al tuo business</h4>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setIsBlogModalOpen(false);
+                        window.location.hash = "#contatti";
+                      }}
+                      className="grad-electric px-8 py-4 text-xs font-bold uppercase tracking-widest text-white hover:shadow-xl transition-all"
+                    >
+                      Prenota una consulenza gratuita
+                    </button>
+                  </footer>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
 
@@ -716,7 +1355,7 @@ Ecco i dettagli della mia richiesta:
               <div className="space-y-3 text-[11px] text-muted-grey leading-relaxed">
                 <p>
                   <strong>1. TITOLARE DEL TRATTAMENTO:</strong><br />
-                  Il titolare del trattamento è Maria Teresa Rogani per Faciilissimo Web / FW di Maria Teresa Rogani.
+                  Il titolare del trattamento è Maria Teresa Rogani per Facilissimo Web / FW di Maria Teresa Rogani.
                 </p>
                 <p>
                   <strong>2. DATI RACCOLTI:</strong><br />

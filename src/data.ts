@@ -42,3 +42,151 @@ export const PORTFOLIO_CASES: PortfolioCase[] = [
     description: "Configurazione e design su Squarespace per garantire il controllo e l'aggiornamento rapido dei corsi da parte del team interno, collegato a campagne di conversione mirate su Meta e funnel e-mail."
   }
 ];
+
+export interface TechnicalSheet {
+  id: string;
+  title: string;
+  description: string;
+  features: string[];
+  techSpecs: { label: string; value: string }[];
+  icon: string;
+}
+
+export const TECHNICAL_SHEETS: TechnicalSheet[] = [
+  {
+    id: "wp-wix-sq",
+    title: "WordPress, Wix & Squarespace",
+    description: "La soluzione ideale per chi cerca flessibilità, velocità di pubblicazione e totale autonomia nella gestione dei contenuti.",
+    features: [
+      "Interfaccia drag-and-drop intuitiva",
+      "Blog e News management integrato",
+      "E-commerce setup rapido",
+      "Plugin di terze parti per ogni esigenza",
+      "Training incluso per aggiornamenti autonomi"
+    ],
+    techSpecs: [
+      { label: "Piattaforme", value: "WP, Wix, Squarespace" },
+      { label: "Manutenzione", value: "Bassa/Media" },
+      { label: "Personalizzazione", value: "Alta (tramite plugin/temi)" },
+      { label: "Tempo di consegna", value: "1-2 settimane" }
+    ],
+    icon: "Globe"
+  },
+  {
+    id: "react-custom",
+    title: "Codice React su Misura",
+    description: "Sviluppo di siti web ad altissime prestazioni utilizzando le tecnologie più moderne per un'esperienza utente senza compromessi.",
+    features: [
+      "Velocità di caricamento istantanea (Core Web Vitals d'eccellenza)",
+      "SEO Tecnico superiore",
+      "Sicurezza totale (no plugin vulnerabili)",
+      "Design 100% unico senza limiti di template",
+      "Infrastruttura scalabile su cloud"
+    ],
+    techSpecs: [
+      { label: "Stack", value: "React, Next.js, Vite, Tailwind" },
+      { label: "Performance Score", value: "95-100/100 (LightHouse)" },
+      { label: "Sicurezza", value: "Massima (No database statico)" },
+      { label: "Tempo di consegna", value: "3-4 settimane" }
+    ],
+    icon: "Code"
+  },
+  {
+    id: "lead-gen",
+    title: "Lead Generation Strategica",
+    description: "Sistemi completi per trasformare i visitatori in contatti qualificati e opportunità di vendita concrete.",
+    features: [
+      "Landing Page ad alta conversione",
+      "Form di contatto intelligenti e qualificati",
+      "Integrazione CRM istantanea",
+      "Sistemi di tracciamento avanzati (Conversion API)",
+      "A/B Testing continuo"
+    ],
+    techSpecs: [
+      { label: "Focus", value: "Conversione / ROI" },
+      { label: "Strumenti", value: "GTM, Meta CAPI, Zapier" },
+      { label: "Tracciamento", value: "Server-Side" },
+      { label: "Goal", value: "Massimizzazione CPL" }
+    ],
+    icon: "TrendingUp"
+  },
+  {
+    id: "ads-mgmt",
+    title: "Campagne ADS (Meta & Google)",
+    description: "Gestione professionale della pubblicità a pagamento per portare traffico mirato e pronto all'acquisto sul tuo sito.",
+    features: [
+      "Analisi del target e dei competitor",
+      "Creazione di copy e visual accattivanti",
+      "Ottimizzazione quotidiana delle performance",
+      "Reportistica chiara e trasparente",
+      "Scalabilità del budget basata sui risultati"
+    ],
+    techSpecs: [
+      { label: "Piattaforme", value: "Meta Ads, Google Search/Display" },
+      { label: "Analisi", value: "GA4, Facebook Analytics" },
+      { label: "Retargeting", value: "Strategie Full-Funnel" },
+      { label: "Ottimizzazione", value: "Smart Bidding / Manuale" }
+    ],
+    icon: "BarChart2"
+  }
+];
+
+export interface BioData {
+  name: string;
+  role: string;
+  badge: string;
+  shortDescription: string;
+  longDescription: string;
+  highlights: string[];
+  image: string;
+  whatsapp: string;
+}
+
+export const BIO_DATA: BioData = {
+  name: "Maria Teresa Rogani",
+  role: "Web Designer & Lead Generation Specialist",
+  badge: "Freelance al tuo fianco",
+  shortDescription: "Sono una libera professionista che aiuta le piccole e medie imprese a farsi strada nel mondo digitale. Mi occupo di creare siti web che funzionano davvero e di portare nuovi clienti attraverso strategie di marketing mirate.",
+  longDescription: "A differenza delle grandi agenzie, con me avrai un rapporto diretto e trasparente. Il mio obiettivo è farti ottenere risultati concreti, senza tecnicismi inutili, lavorando insieme per far crescere la tua attività. Mi occupo di sviluppo custom, design UX/UI e gestione di campagne pubblicitarie per massimizzare il ritorno sull'investimento.",
+  highlights: [
+    "Rapporto Diretto",
+    "Zero Costi Nascosti",
+    "Risultati Concreti"
+  ],
+  image: "/images/maria%20teresa%20rogani.jpg",
+  whatsapp: "390000000000"
+};
+
+export interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  date: string;
+  category: string;
+  tags: string[];
+  excerpt: string;
+  image: string;
+  author: string;
+}
+
+/**
+ * CONFIGURAZIONE VISUALE GLOBALE
+ * Modifica questi parametri per cambiare le immagini del sito
+ */
+export const SITE_CONFIG = {
+  // Immagine di sfondo del sito (deve trovarsi in public/images/)
+  backgroundImage: "/images/immagine%205.jpg",
+
+  // Logo principale (deve trovarsi in public/images/)
+  logoImage: "/images/def.logo%20facilissimo%20web%20.jpg",
+
+  // Overlay di sfondo (colore e opacità)
+  backgroundOverlay: "bg-[#0a0015]/85",
+
+  // Titolo della Navbar
+  brandName: "FACILISSIMO",
+  brandAccent: "WEB",
+
+  // Social Links per Pinterest / Sharing
+  socialDescription: "Facilissimo Web - Design e Strategia per Siti Web che vendono"
+};
