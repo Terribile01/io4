@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Sparkles, ArrowRight, ArrowLeft, Send, Check, AlertCircle, FileText, Calendar, Clock, RotateCcw, MessageSquare } from "lucide-react";
+import { useState } from "react";
+import { Sparkles, ArrowRight, ArrowLeft, Send, Check, AlertCircle, RotateCcw, MessageSquare } from "lucide-react";
 
 export default function AIPlanner() {
   const [step, setStep] = useState(0); // 0 to 4
@@ -11,34 +11,7 @@ export default function AIPlanner() {
   const [currentWebsite, setCurrentWebsite] = useState("");
   const [clientName, setClientName] = useState("");
   const [phone, setPhone] = useState("");
-  
-  // Loading & generation status
-  const [loading, setLoading] = useState(false);
-  const [loadingText, setLoadingText] = useState("");
-  const [strategy, setStrategy] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  // Auto incremental tips on the loading screen to maximize engagement
-  const loadingPhrases = [
-    "Analizzando la tua attività...",
-    "Studiando i tuoi obiettivi...",
-    "Cercando la soluzione tecnica migliore...",
-    "Preparando i consigli per trovare più clienti...",
-    "Compilando la tua strategia personalizzata...",
-  ];
-
-  useEffect(() => {
-    let interval: any;
-    if (loading) {
-      let idx = 0;
-      setLoadingText(loadingPhrases[0]);
-      interval = setInterval(() => {
-        idx = (idx + 1) % loadingPhrases.length;
-        setLoadingText(loadingPhrases[idx]);
-      }, 3500);
-    }
-    return () => clearInterval(interval);
-  }, [loading]);
 
   const toggleGoal = (goal: string) => {
     if (goals.includes(goal)) {
@@ -54,7 +27,7 @@ export default function AIPlanner() {
       return;
     }
     if (step === 3 && (!clientName.trim() || !phone.trim())) {
-      setErrorMsg("Per favore, compila almeno Nome e Telefono per poter generare l'analisi.");
+      setErrorMsg("Per favore, compila almeno Nome e Telefono per procedere.");
       return;
     }
     setErrorMsg(null);
@@ -64,57 +37,6 @@ export default function AIPlanner() {
   const handlePrev = () => {
     setErrorMsg(null);
     setStep(prev => Math.max(0, prev - 1));
-  };
-
-  const handleGenerate = async () => {
-    if (!clientName.trim() || !phone.trim()) {
-      setErrorMsg("Compila Nome e Telefono prima di procedere.");
-      return;
-    }
-
-    setLoading(true);
-    setErrorMsg(null);
-    setStrategy(null);
-
-    try {
-      const response = await fetch("/api/audit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          businessName,
-          niche,
-          goals,
-          budget,
-          webType,
-          currentWebsite,
-          clientName,
-          phone
-        })
-      });
-
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.message || data.error || "Errore nella comunicazione con il server");
-        }
-        setStrategy(data.text);
-      } else {
-        // Fallback for non-JSON responses (like HTML errors from proxy/host)
-        const text = await response.text();
-        console.error("Unexpected response format:", text);
-        throw new Error("Il server ha risposto in un formato non valido. Riprova più tardi.");
-      }
-      setStep(4); // transition to result
-    } catch (err: any) {
-      console.error(err);
-      setErrorMsg(
-        err.message || 
-        "Impossibile collegarsi al motore AI. Assicurati che Maria Teresa abbia inserito la API Key nel pannello secrets."
-      );
-    } finally {
-      setLoading(false);
-    }
   };
 
   const restartPlanner = () => {
@@ -127,73 +49,21 @@ export default function AIPlanner() {
     setCurrentWebsite("");
     setClientName("");
     setPhone("");
-    setStrategy(null);
     setErrorMsg(null);
   };
 
-  // Safe client-side Markdown-like renderer for structural outputs
-  const parseBold = (text: string) => {
-    const parts = text.split(/\*\*(.*?)\*\*/g);
-    return parts.map((part, index) => {
-      if (index % 2 === 1) {
-        return (
-          <strong key={index} className="font-bold text-charcoal bg-accent-orange/10 px-1 rounded">
-            {part}
-          </strong>
-        );
-      }
-      return part;
-    });
-  };
+  const handleWhatsApp = () => {
+    const goalsText = goals.length > 0 ? goals.join(", ") : "Non specificati";
+    const message = `Ciao Maria Teresa! Sono ${clientName}. Ho configurato il mio progetto web:\n\n` +
+      `🏢 *Business*: ${businessName}\n` +
+      `📍 *Settore*: ${niche}\n` +
+      `🎯 *Obiettivi*: ${goalsText}\n` +
+      `💻 *Tecnologia*: ${webType}\n` +
+      `💰 *Budget*: ${budget}\n` +
+      `${currentWebsite ? `🌐 *Sito attuale*: ${currentWebsite}\n` : ""}\n` +
+      `Mi piacerebbe ricevere una tua proposta di strategia e collaborazione!`;
 
-  const renderStrategyMarkdown = (rawText: string) => {
-    const lines = rawText.split("\n");
-    return (
-      <div className="space-y-4 text-charcoal/90">
-        {lines.map((line, idx) => {
-          const trimmed = line.trim();
-          if (trimmed.startsWith("### ")) {
-            return (
-              <h4 key={idx} className="font-display text-lg font-bold text-charcoal pt-4 border-b border-line-ivory pb-2 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-accent-orange shrink-0" />
-                {trimmed.replace("### ", "")}
-              </h4>
-            );
-          }
-          if (trimmed.startsWith("## ")) {
-            return (
-              <h3 key={idx} className="font-display text-xl font-bold text-charcoal pt-6 pb-2 text-transparent bg-clip-text grad-electric">
-                {trimmed.replace("## ", "")}
-              </h3>
-            );
-          }
-          if (trimmed.startsWith("# ")) {
-            return (
-              <h2 key={idx} className="font-display text-2xl font-bold text-charcoal pt-8 mb-2">
-                {trimmed.replace("# ", "")}
-              </h2>
-            );
-          }
-          if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
-            const listText = trimmed.replace(/^[-*]\s+/, "");
-            return (
-              <div key={idx} className="flex gap-2 pl-3 items-start my-1 text-sm">
-                <span className="text-accent-pink shrink-0 mt-1.5 font-bold">•</span>
-                <span className="leading-relaxed">{parseBold(listText)}</span>
-              </div>
-            );
-          }
-          if (trimmed === "") {
-            return <div key={idx} className="h-1"></div>;
-          }
-          return (
-            <p key={idx} className="text-sm leading-relaxed my-2 text-charcoal/80">
-              {parseBold(trimmed)}
-            </p>
-          );
-        })}
-      </div>
-    );
+    window.open(`https://wa.me/393793603321?text=${encodeURIComponent(message)}`, "_blank");
   };
 
   return (
@@ -209,32 +79,16 @@ export default function AIPlanner() {
         </div>
       )}
 
-      {/* LOADING OVERLAY SCREEN */}
-      {loading && (
-        <div className="py-16 flex flex-col items-center text-center justify-center space-y-6">
-          <div className="relative">
-            <div className="w-16 h-16 rounded-full border-4 border-line-ivory border-t-accent-blue animate-spin"></div>
-            <Sparkles className="w-6 h-6 text-accent-orange absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-bounce" />
-          </div>
-          <div>
-            <h4 className="font-display text-lg font-bold">Sto preparando i tuoi consigli...</h4>
-            <div className="text-xs text-muted-grey mt-2 block h-6 font-medium animate-pulse text-accent-blue">
-              {loadingText}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* STEP 0: Landing / Accetta Sfida */}
-      {!loading && step === 0 && (
+      {/* STEP 0: Landing */}
+      {step === 0 && (
         <div className="text-center py-8 space-y-6">
           <div className="w-16 h-16 rounded-none bg-accent-blue/10 flex items-center justify-center mx-auto mb-2 border border-line-ivory">
             <Sparkles className="w-8 h-8 text-accent-blue" />
           </div>
           <div className="max-w-xl mx-auto">
-            <h3 className="font-display text-2xl md:text-3xl font-bold">Ricevi un Consiglio Strategico Gratis</h3>
+            <h3 className="font-display text-2xl md:text-3xl font-bold">Ricevi una Strategia di Crescita</h3>
             <p className="text-sm text-muted-grey mt-2 leading-relaxed">
-              Vuoi far crescere la tua attività online? Rispondi a 3 semplici domande e ricevi subito dei suggerimenti personalizzati e un'idea di spesa per il tuo progetto.
+              Vuoi far crescere la tua attività online? Rispondi a 3 semplici domande e inviami subito i tuoi obiettivi per ricevere un'idea di strategia personalizzata e un preventivo.
             </p>
           </div>
           <div className="flex justify-center">
@@ -242,14 +96,14 @@ export default function AIPlanner() {
               onClick={() => setStep(1)}
               className="grad-electric hover:shadow-lg text-white font-bold px-6 py-3 rounded-none flex items-center gap-2 select-none cursor-pointer text-xs uppercase tracking-widest transition-transform hover:scale-105"
             >
-              Crea la mia Strategia <ArrowRight className="w-4 h-4" />
+              Configura il mio Progetto <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>
       )}
 
       {/* STEP 1: Attività & Nicchia */}
-      {!loading && step === 1 && (
+      {step === 1 && (
         <div className="space-y-6">
           <div className="flex justify-between items-center pb-4 border-b border-line-ivory/50">
             <span className="text-xs font-mono text-muted-grey font-bold">FASE 1 DI 3: IL TUO BUSINESS</span>
@@ -310,8 +164,8 @@ export default function AIPlanner() {
         </div>
       )}
 
-      {/* STEP 2: Obiettivi del Business */}
-      {!loading && step === 2 && (
+      {/* STEP 2: Obiettivi */}
+      {step === 2 && (
         <div className="space-y-6">
           <div className="flex justify-between items-center pb-4 border-b border-line-ivory/50">
             <span className="text-xs font-mono text-muted-grey font-bold">FASE 2 DI 3: OBIETTIVI DIGITALI</span>
@@ -320,16 +174,16 @@ export default function AIPlanner() {
 
           <div className="space-y-4">
             <label className="block text-xs font-bold uppercase tracking-wider text-charcoal">
-              Quali sono i tuoi obiettivi principali di visibilità? <span className="text-muted-grey">(Seleziona tutto ciò che serve)</span>
+              Quali sono i tuoi obiettivi principali?
             </label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {[
                 "Creare un nuovo Sito Web da zero",
                 "Ridisegnare il mio Sito attuale (Restyling)",
-                "Ottenere più contatti e richiedenti preventivo (Lead Gen)",
-                "Migliorare la presenza sui canali Social",
-                "Gestire Campagne ADS (Meta / Google) per vendere subito",
-                "Posizionarmi su Google (Ottimizzazione SEO)",
+                "Ottenere più contatti (Lead Gen)",
+                "Migliorare la presenza sui Social",
+                "Gestire Campagne Ads (Meta / Google)",
+                "Posizionarmi su Google (SEO)",
               ].map((item, idx) => (
                 <div
                   key={idx}
@@ -370,8 +224,8 @@ export default function AIPlanner() {
         </div>
       )}
 
-      {/* STEP 3: Dati di Contatto & Invio */}
-      {!loading && step === 3 && (
+      {/* STEP 3: Tecnologia & Contatto */}
+      {step === 3 && (
         <div className="space-y-6">
           <div className="flex justify-between items-center pb-4 border-b border-line-ivory/50">
             <span className="text-xs font-mono text-muted-grey font-bold">FASE 3 DI 3: TECNOLOGIA & CONTATTO</span>
@@ -382,46 +236,33 @@ export default function AIPlanner() {
             <div className="space-y-4">
               <div className="space-y-1.5">
                 <label className="block text-xs font-bold uppercase tracking-wider text-charcoal">
-                  Preferenza Esecutiva del Sito
+                  Preferenza Esecutiva
                 </label>
                 <select
                   value={webType}
                   onChange={(e) => setWebType(e.target.value)}
                   className="w-full px-3 py-2 bg-white border border-line-ivory rounded-lg text-xs focus:outline-none focus:border-accent-blue"
                 >
-                  <option value="Da valutare insieme">Consigliami tu (Sceglieremo insieme)</option>
-                  <option value="Codice Custom (React / HTML5) per prestazioni incredibili">In Puro Codice Custom (React / CSS / SEO d'Elite)</option>
-                  <option value="WordPress per gestione autonoma e classica">WordPress (Ottimo ed autonomo)</option>
-                  <option value="Squarespace / Wix per progetti leggeri">Squarespace / Wix (Progetto rapido)</option>
+                  <option value="Da valutare insieme">Consigliami tu</option>
+                  <option value="Codice Custom (React / HTML5)">Puro Codice Custom (React / SEO d'Elite)</option>
+                  <option value="WordPress">WordPress (Ottimo ed autonomo)</option>
+                  <option value="Squarespace / Wix">Squarespace / Wix (Progetto rapido)</option>
                 </select>
               </div>
 
               <div className="space-y-1.5">
                 <label className="block text-xs font-bold uppercase tracking-wider text-charcoal">
-                  Budget indicativo stimato
+                  Budget indicativo
                 </label>
                 <select
                   value={budget}
                   onChange={(e) => setBudget(e.target.value)}
                   className="w-full px-3 py-2 bg-white border border-line-ivory rounded-lg text-xs focus:outline-none focus:border-accent-blue"
                 >
-                  <option value="Starter (€500 - €1.500)">Starter (€500 - €1.500) - Ottimizzazione Standard</option>
-                  <option value="Professional (€1.500 - €3.500)">Professional (€1.500 - €3.500) - Sito + Tracciamenti Ads</option>
-                  <option value="Scalabile (€3.500+)">Premium / Scalabile (€3.500+) - Macchina Acquisizione Completa</option>
+                  <option value="Starter (€500 - €1.500)">Starter (€500 - €1.500)</option>
+                  <option value="Professional (€1.500 - €3.500)">Professional (€1.500 - €3.500)</option>
+                  <option value="Scalabile (€3.500+)">Premium / Scalabile (€3.500+)</option>
                 </select>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="block text-xs font-bold uppercase tracking-wider text-charcoal">
-                  Sito Web Attuale (se esiste)
-                </label>
-                <input
-                  type="text"
-                  value={currentWebsite}
-                  onChange={(e) => setCurrentWebsite(e.target.value)}
-                  placeholder="Es: www.miobusiness.it"
-                  className="w-full px-3 py-2 bg-white border border-line-ivory rounded-lg text-xs focus:outline-none focus:border-accent-blue"
-                />
               </div>
             </div>
 
@@ -441,7 +282,7 @@ export default function AIPlanner() {
 
               <div className="space-y-1.5">
                 <label className="block text-xs font-bold uppercase tracking-wider text-charcoal font-semibold">
-                  Telefono cellulare <span className="text-accent-pink">*</span>
+                  Telefono <span className="text-accent-pink">*</span>
                 </label>
                 <input
                   type="tel"
@@ -454,10 +295,6 @@ export default function AIPlanner() {
             </div>
           </div>
 
-          <div className="bg-bg-ivory/60 p-4 rounded-xl border border-line-ivory/60 text-xs text-muted-grey leading-relaxed">
-            Continuando, acconsenti al trattamento dei dati personali forniti nel pieno rispetto del GDPR per la formulazione della proposta di web design e lead generation personalizzata.
-          </div>
-
           <div className="flex justify-between items-center pt-4 border-t border-line-ivory/50">
             <button
               onClick={handlePrev}
@@ -466,59 +303,78 @@ export default function AIPlanner() {
               <ArrowLeft className="w-4 h-4" /> Indietro
             </button>
             <button
-              onClick={handleGenerate}
+              onClick={handleNext}
               className="grad-sunset hover:shadow-lg text-white font-bold px-6 py-2.5 rounded-none flex items-center gap-1.5 text-xs uppercase tracking-widest cursor-pointer transition-transform hover:scale-102"
             >
-              Fatto, Calcola Strategia <Send className="w-4 h-4" />
+              Riepilogo Progetto <Send className="w-4 h-4" />
             </button>
           </div>
         </div>
       )}
 
-      {/* STEP 4: Strategy Result */}
-      {!loading && step === 4 && strategy && (
+      {/* STEP 4: Riepilogo & WhatsApp */}
+      {step === 4 && (
         <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-line-ivory">
-            <div>
-              <span className="text-xs uppercase font-mono bg-accent-orange/10 text-accent-orange font-bold px-3 py-1 rounded-none">
-                I Tuoi Consigli Personalizzati
-              </span>
-              <h3 className="font-display text-2xl font-bold mt-1 text-charcoal">Ecco come puoi crescere</h3>
+          <div className="text-center pb-4 border-b border-line-ivory">
+            <span className="text-xs uppercase font-mono bg-accent-orange/10 text-accent-orange font-bold px-3 py-1 rounded-none">
+              Quasi Fatto!
+            </span>
+            <h3 className="font-display text-2xl font-bold mt-1 text-charcoal">Ecco il riepilogo del tuo progetto</h3>
+          </div>
+
+          <div className="bg-white rounded-none p-6 border border-line-ivory shadow-inner space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="text-xs font-bold text-muted-grey uppercase tracking-widest">Business</p>
+                <p className="font-medium text-charcoal">{businessName} ({niche})</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-muted-grey uppercase tracking-widest">Obiettivi</p>
+                <p className="font-medium text-charcoal">{goals.join(", ")}</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-muted-grey uppercase tracking-widest">Tecnologia</p>
+                <p className="font-medium text-charcoal">{webType}</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-muted-grey uppercase tracking-widest">Budget Stimato</p>
+                <p className="font-medium text-charcoal">{budget}</p>
+              </div>
             </div>
-            <button
-              onClick={restartPlanner}
-              className="text-xs flex items-center gap-1 text-muted-grey hover:text-charcoal border border-line-ivory/80 px-2.5 py-1.5 rounded-none bg-white shadow-sm"
-            >
-              <RotateCcw className="w-3.5 h-3.5" /> Compila Nuovo
-            </button>
+
+            <div className="pt-4 border-t border-line-ivory/50">
+              <p className="text-sm italic text-charcoal/70">
+                "Ciao Maria Teresa, ho appena configurato i dettagli per il mio progetto. Inviami una proposta su come possiamo collaborare per raggiungere questi obiettivi!"
+              </p>
+            </div>
           </div>
 
-          {/* RENDERED BLUEPRINT */}
-          <div className="bg-white rounded-none p-6 md:p-8 border border-line-ivory shadow-inner max-h-[500px] overflow-y-auto cursor-auto select-text scrollbar-thin scrollbar-thumb-line-ivory">
-            {renderStrategyMarkdown(strategy)}
-          </div>
-
-          {/* CTA BOARD NEXT STEPS */}
           <div className="p-6 rounded-none bg-charcoal text-white flex flex-col md:flex-row justify-between items-stretch md:items-center gap-6">
             <div className="space-y-1">
               <div className="flex items-center gap-2 text-accent-orange font-bold text-xs uppercase tracking-widest">
                 <MessageSquare className="w-4 h-4" />
                 PARLIAMONE SU WHATSAPP
               </div>
-              <h4 className="font-display text-lg font-bold">Inviami la tua analisi</h4>
+              <h4 className="font-display text-lg font-bold">Ricevi la tua strategia</h4>
               <p className="text-xs text-muted-grey">
-                Inviami questi risultati su WhatsApp per discutere come applicarli alla tua attività. Senza impegno.
+                Clicca il pulsante qui sotto per inviarmi questi dettagli. Ti risponderò subito con una proposta concreta.
               </p>
             </div>
             <button
-              onClick={() => {
-                const message = `Ciao Maria Teresa! Ho generato un'analisi con il tuo AI Planner per "${businessName}".\n\nEcco i miei obiettivi: ${goals.join(", ")}\nBudget: ${budget}\n\nVorrei discuterne con te!`;
-                window.open(`https://wa.me/393793603321?text=${encodeURIComponent(message)}`, "_blank");
-              }}
-              className="bg-white text-charcoal hover:bg-white-soft transition-all font-bold px-5 py-3 rounded-none flex items-center justify-center gap-2 text-xs uppercase tracking-widest pointer-events-auto shadow-md cursor-pointer"
+              onClick={handleWhatsApp}
+              className="bg-white text-charcoal hover:bg-white-soft transition-all font-bold px-5 py-3 rounded-none flex items-center justify-center gap-2 text-xs uppercase tracking-widest shadow-md cursor-pointer"
             >
               <MessageSquare className="w-4 h-4 text-accent-blue" />
               Invia su WhatsApp
+            </button>
+          </div>
+
+          <div className="text-center">
+            <button
+              onClick={restartPlanner}
+              className="text-xs text-muted-grey hover:text-charcoal flex items-center gap-1 mx-auto"
+            >
+              <RotateCcw className="w-3 h-3" /> Ricomincia da capo
             </button>
           </div>
         </div>

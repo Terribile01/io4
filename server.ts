@@ -1,7 +1,6 @@
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
-import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -24,12 +23,6 @@ async function startServer() {
     next();
   });
 
-  // Import the audit handler for local development proxy
-  const auditHandler = (await import("./api/audit")).default;
-
-  // Secured Gemini API Proxy for the Lead Generation strategy builder
-  // We place this BEFORE Vite middleware to ensure it's not caught by SPA fallback
-  app.post("/api/audit", auditHandler);
 
   // API 404 handler - also before Vite to prevent HTML responses for missing API endpoints
   app.all("/api/*", (req, res) => {
