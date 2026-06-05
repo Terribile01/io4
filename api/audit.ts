@@ -26,7 +26,7 @@ export default async function handler(req: any, res: any) {
 
     const ai = new GoogleGenAI({
       apiKey,
-      apiVersion: 'v1'
+      apiVersion: 'v1beta'
     });
 
     const systemInstruction = `
