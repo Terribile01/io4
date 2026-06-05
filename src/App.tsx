@@ -153,12 +153,41 @@ Ecco i dettagli della mia richiesta:
               >
                 CHI SONO
               </button>
-              <a
-                href="#servizi"
-                className="text-[10px] font-bold uppercase tracking-widest text-white/90 hover:text-white transition-colors"
-              >
-                Servizi
-              </a>
+              <div className="relative group/servizi">
+                <a
+                  href="#servizi"
+                  className="text-[10px] font-bold uppercase tracking-widest text-white/90 hover:text-white transition-colors flex items-center gap-1"
+                >
+                  Servizi <ChevronRight className="w-2.5 h-2.5 rotate-90" />
+                </a>
+                {/* Dropdown Menu */}
+                <div className="absolute top-[calc(100%+10px)] left-0 w-48 bg-[#0A0A0B] border border-white/10 shadow-2xl opacity-0 invisible group-hover/servizi:opacity-100 group-hover/servizi:visible transition-all duration-200 py-3 z-[110]">
+                  <button
+                    onClick={() => setSelectedService("WordPress, Wix & Squarespace")}
+                    className="w-full text-left px-4 py-2 text-[9px] font-bold uppercase tracking-widest text-white/70 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                  >
+                    Web Design
+                  </button>
+                  <button
+                    onClick={() => setSelectedService("Codice React su Misura")}
+                    className="w-full text-left px-4 py-2 text-[9px] font-bold uppercase tracking-widest text-white/70 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                  >
+                    Sviluppo React
+                  </button>
+                  <button
+                    onClick={() => setSelectedService("Lead Generation Strategica")}
+                    className="w-full text-left px-4 py-2 text-[9px] font-bold uppercase tracking-widest text-white/70 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                  >
+                    Lead Generation
+                  </button>
+                  <button
+                    onClick={() => setSelectedService("Campagne ADS (Meta & Google)")}
+                    className="w-full text-left px-4 py-2 text-[9px] font-bold uppercase tracking-widest text-white/70 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                  >
+                    Marketing & Ads
+                  </button>
+                </div>
+              </div>
               <a 
                 href="#comparativa" 
                 className="text-[10px] font-bold uppercase tracking-widest text-white/90 hover:text-white transition-colors"
@@ -417,9 +446,9 @@ Ecco i dettagli della mia richiesta:
               Soluzioni Semplici per Crescere Online
             </h2>
 
-            {/* Navbar-derived subtitles */}
+            {/* Service-derived subtitles */}
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pt-2 border-t border-white/5">
-              {["CHI SONO", "SERVIZI", "CODICE VS WP", "AI PLANNER"].map((sub, i) => (
+              {["WEB DESIGN", "CUSTOM CODE", "LEAD GEN", "MARKETING"].map((sub, i) => (
                 <span key={i} className="text-[9px] font-black uppercase tracking-[0.2em] text-white/40">
                   {sub}
                 </span>
