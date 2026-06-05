@@ -24,7 +24,10 @@ export default async function handler(req: any, res: any) {
       });
     }
 
-    const ai = new GoogleGenAI({ apiKey });
+    const ai = new GoogleGenAI({
+      apiKey,
+      apiVersion: 'v1'
+    });
 
     const systemInstruction = `
 Sei Maria Teresa Rogani, Web Designer d'eccellenza, titolare di "Faciilissimo Web" (FW).
