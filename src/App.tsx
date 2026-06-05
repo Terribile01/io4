@@ -59,8 +59,20 @@ Ecco i dettagli della mia richiesta:
   };
 
   return (
-    <div className="min-h-screen bg-bg-ivory text-charcoal flex flex-col font-sans relative overflow-x-hidden antialiased select-none">
+    <div className="min-h-screen text-charcoal flex flex-col font-sans relative overflow-x-hidden antialiased select-none">
       
+      {/* Global Site Background with Overlay and Blur for Legibility */}
+      <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: 'url("/assets/uploads/fondo%20home%203.png")' }}
+        />
+        {/* Violaceous Overlay Tint */}
+        <div className="absolute inset-0 bg-accent-purple/10 mix-blend-multiply"></div>
+        {/* Softening Layer & Blur to keep text sharp */}
+        <div className="absolute inset-0 bg-bg-ivory/65 backdrop-blur-[2px]"></div>
+      </div>
+
       {/* 1. FLOATING NAVIGATION BAR (GLASSMORPHIC CHIC RECTANGULAR) */}
       <nav className="fixed top-5 left-0 right-0 z-[100] flex items-center justify-center px-4 w-full pointer-events-none">
         <div className="pointer-events-auto w-full max-w-5xl flex items-center justify-between bg-charcoal/95 backdrop-blur-md rounded-none px-5 py-2.5 shadow-xl border border-white/10 h-14">
