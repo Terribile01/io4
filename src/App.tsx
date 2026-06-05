@@ -25,7 +25,6 @@ export default function App() {
   const [businessName, setBusinessName] = useState("");
   const [niche, setNiche] = useState("Salute, Wellness & Bellezza");
   const [clientName, setClientName] = useState("");
-  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [goals, setGoals] = useState<string[]>(["Creare un nuovo Sito Web da zero"]);
   const [budget, setBudget] = useState("Professional (€1.500 - €3.500)");
@@ -33,47 +32,30 @@ export default function App() {
 
   const handleSubmitContact = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!businessName || !clientName || !email) return;
+    if (!businessName || !clientName || !phone) return;
 
-    // Create a new lead to inject into the CRM simulator local storage
-    const newLead: LeadSubmission = {
-      id: "lead_" + Date.now(),
-      businessName,
-      niche,
-      clientName,
-      email,
-      phone,
-      goals,
-      webType: "Da valutare insieme",
-      budget,
-      timestamp: "Adesso",
-      status: "Nuovo"
-    };
+    const message = `Ciao Maria Teresa! Ti contatto dal sito Faciilissimo Web.
+Ecco i dettagli della mia richiesta:
+- *Nome*: ${clientName}
+- *Attività*: ${businessName}
+- *Settore*: ${niche}
+- *Obiettivi*: ${goals.join(", ")}
+- *Budget*: ${budget}
+- *Telefono*: ${phone}`;
 
-    try {
-      const stored = localStorage.getItem("fw_leads_database");
-      let database: LeadSubmission[] = [];
-      if (stored) {
-        database = JSON.parse(stored);
-      }
-      database.unshift(newLead);
-      localStorage.setItem("fw_leads_database", JSON.stringify(database));
-      
-      // Notify the AdminHub component about the state update
-      window.dispatchEvent(new CustomEvent("fw_new_lead_added"));
-      setFormSubmitted(true);
-      
-      // Auto-reset after a delay
-      setTimeout(() => {
-        setFormSubmitted(false);
-        setBusinessName("");
-        setClientName("");
-        setEmail("");
-        setPhone("");
-      }, 5000);
-    } catch (e) {
-      console.error(e);
-    }
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/393793603321?text=${encodedMessage}`;
+
+    window.open(whatsappUrl, "_blank");
+    setFormSubmitted(true);
+
+    // Auto-reset after a delay
+    setTimeout(() => {
+      setFormSubmitted(false);
+      setBusinessName("");
+      setClientName("");
+      setPhone("");
+    }, 5000);
   };
 
   return (
@@ -565,29 +547,19 @@ export default function App() {
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal">La Tua E-mail <span className="text-accent-pink">*</span></label>
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal">Numero Telefonico <span className="text-accent-pink">*</span></label>
                       <input 
-                        type="email" 
+                        type="tel" 
                         required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Es. m.bianchi@email.it"
-                        className="w-full px-3 py-2 bg-white border border-line-ivory rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="Es: +39 340 9876543"
+                        className="w-full px-3 py-2 bg-white border border-line-ivory rounded-none text-xs focus:outline-none focus:border-accent-blue font-mono"
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal">Numero Telefonico</label>
-                      <input 
-                        type="tel" 
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="Consigliato, Es: +39 340 9876543"
-                        className="w-full px-3 py-2 bg-white border border-line-ivory rounded-none text-xs focus:outline-none focus:border-accent-blue font-mono"
-                      />
-                    </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
 
                     <div className="space-y-1.5">
                       <label className="block text-[11px] font-bold uppercase tracking-wider text-charcoal">Budget Stimato</label>
@@ -653,11 +625,13 @@ export default function App() {
               </p>
               <div className="flex gap-4">
                 <a 
-                  href="mailto:mariateresarogani@gmail.com" 
+                  href="https://wa.me/393793603321"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
-                  title="Contatta via Email"
+                  title="Contatta via WhatsApp"
                 >
-                  <Mail className="w-4 h-4" />
+                  <MessageSquare className="w-4 h-4" />
                 </a>
                 <a 
                   href="#hero" 
@@ -746,11 +720,11 @@ export default function App() {
                 </p>
                 <p>
                   <strong>2. DATI RACCOLTI:</strong><br />
-                  La compilazione dei moduli interattivi (AI Planner e CRM Simulator) acquisisce in sicurezza dati quali nome dell'attività, nome del contatto, email, telefono e risposte di target strategico.
+                  La compilazione dei moduli interattivi (AI Planner) acquisisce in sicurezza dati quali nome dell'attività, nome del contatto, telefono e risposte di target strategico.
                 </p>
                 <p>
                   <strong>3. FINALITÀ:</strong><br />
-                  I dati raccolti sono trattati al solo scopo di formulare la risposta simulata, preparare l'audit computazionale dell'AI e organizzare l'eventuale mini-call conoscitiva di 15-minuti. Nessun dato viene ceduto a terzi.
+                  I dati raccolti sono trattati al solo scopo di formulare la risposta simulata, preparare l'audit computazionale dell'AI e organizzare l'eventuale contatto su WhatsApp. Nessun dato viene ceduto a terzi.
                 </p>
                 <p>
                   <strong>4. COOKIES DI SESSIONE:</strong><br />
@@ -758,7 +732,7 @@ export default function App() {
                 </p>
                 <p>
                   <strong>5. DIRITTI DELL'INTERESSATO:</strong><br />
-                  Ai sensi del Regolamento GDPR 2016/679, puoi chiedere in ogni momento la cancellazione, rettifica o visione dei tuoi dati scrivendo a <a href="mailto:mariateresarogani@gmail.com" className="text-accent-blue underline">mariateresarogani@gmail.com</a>.
+                  Ai sensi del Regolamento GDPR 2016/679, puoi chiedere in ogni momento la cancellazione, rettifica o visione dei tuoi dati contattandomi su WhatsApp al numero +39 379 360 3321.
                 </p>
               </div>
               <div className="pt-3 border-t border-line-ivory flex justify-end">
