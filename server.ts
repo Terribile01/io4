@@ -24,6 +24,9 @@ async function startServer() {
     next();
   });
 
+  // Import the audit handler for local development proxy
+  const auditHandler = (await import("./api/audit")).default;
+
   // Secured Gemini API Proxy for the Lead Generation strategy builder
   // We place this BEFORE Vite middleware to ensure it's not caught by SPA fallback
   app.post("/api/audit", async (req, res, next) => {

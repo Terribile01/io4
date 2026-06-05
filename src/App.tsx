@@ -52,7 +52,6 @@ export default function App() {
   const [businessName, setBusinessName] = useState("");
   const [niche, setNiche] = useState("Salute, Wellness & Bellezza");
   const [clientName, setClientName] = useState("");
-  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [goals, setGoals] = useState<string[]>(["Creare un nuovo Sito Web da zero"]);
   const [budget, setBudget] = useState("Professional (€1.500 - €3.500)");
@@ -159,47 +158,30 @@ export default function App() {
 
   const handleSubmitContact = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!businessName || !clientName || !email) return;
+    if (!businessName || !clientName || !phone) return;
 
-    // Create a new lead to inject into the CRM simulator local storage
-    const newLead: LeadSubmission = {
-      id: "lead_" + Date.now(),
-      businessName,
-      niche,
-      clientName,
-      email,
-      phone,
-      goals,
-      webType: "Da valutare insieme",
-      budget,
-      timestamp: "Adesso",
-      status: "Nuovo"
-    };
+    const message = `Ciao Maria Teresa! Ti contatto dal sito Faciilissimo Web.
+Ecco i dettagli della mia richiesta:
+- *Nome*: ${clientName}
+- *Attività*: ${businessName}
+- *Settore*: ${niche}
+- *Obiettivi*: ${goals.join(", ")}
+- *Budget*: ${budget}
+- *Telefono*: ${phone}`;
 
-    try {
-      const stored = localStorage.getItem("fw_leads_database");
-      let database: LeadSubmission[] = [];
-      if (stored) {
-        database = JSON.parse(stored);
-      }
-      database.unshift(newLead);
-      localStorage.setItem("fw_leads_database", JSON.stringify(database));
-      
-      // Notify the AdminHub component about the state update
-      window.dispatchEvent(new CustomEvent("fw_new_lead_added"));
-      setFormSubmitted(true);
-      
-      // Auto-reset after a delay
-      setTimeout(() => {
-        setFormSubmitted(false);
-        setBusinessName("");
-        setClientName("");
-        setEmail("");
-        setPhone("");
-      }, 5000);
-    } catch (e) {
-      console.error(e);
-    }
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/393793603321?text=${encodedMessage}`;
+
+    window.open(whatsappUrl, "_blank");
+    setFormSubmitted(true);
+
+    // Auto-reset after a delay
+    setTimeout(() => {
+      setFormSubmitted(false);
+      setBusinessName("");
+      setClientName("");
+      setPhone("");
+    }, 5000);
   };
 
   return (
@@ -806,12 +788,16 @@ export default function App() {
                       <label className="block text-[11px] font-bold uppercase tracking-wider text-white">Numero Telefonico</label>
                       <input 
                         type="tel" 
+                        required
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="Consigliato, Es: +39 340 9876543"
                         className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-none text-xs focus:outline-none focus:border-accent-blue font-mono text-white"
                       />
                     </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
 
                     <div className="space-y-1.5">
                       <label className="block text-[11px] font-bold uppercase tracking-wider text-white">Budget Stimato</label>
@@ -998,99 +984,23 @@ export default function App() {
               <p className="text-xs text-[#BDBAB2] leading-relaxed">
                 Tutte le consulenze partono da una mini-call conoscitiva gratuita di 15 minuti su zoom o whatsapp.
               </p>
-              <div className="space-y-6">
-                <div className="flex gap-4">
-                  <a
-                    href="mailto:mariateresarogani@gmail.com"
-                    className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
-                    title="Contatta via Email"
-                  >
-                    <Mail className="w-4 h-4" />
-                  </a>
-                  <a
-                    href="#"
-                    className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
-                    title="Instagram (Prossimamente)"
-                  >
-                    <Instagram className="w-4 h-4" />
-                  </a>
-                  <a
-                    href="#"
-                    className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
-                    title="Facebook (Prossimamente)"
-                  >
-                    <Facebook className="w-4 h-4" />
-                  </a>
-                  <a
-                    href="#"
-                    className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
-                    title="LinkedIn (Prossimamente)"
-                  >
-                    <Linkedin className="w-4 h-4" />
-                  </a>
-                  <a
-                    href="#hero"
-                    className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
-                    title="Torna all'inizio"
-                  >
-                    <Compass className="w-4 h-4" />
-                  </a>
-                </div>
-
-                {/* Sharing Suite */}
-                <div className="space-y-3 pt-4 border-t border-white/5">
-                  <span className="text-[9px] uppercase font-bold text-white/30 tracking-widest block">Condividi Facilissimo Web</span>
-                  <div className="flex flex-wrap gap-2">
-                    <a
-                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin)}`}
-                      target="_blank" rel="noopener noreferrer"
-                      className="w-8 h-8 rounded-full bg-[#1877F2] flex items-center justify-center text-white shadow hover:scale-110 transition-all"
-                      title="Facebook"
-                    >
-                      <Facebook className="w-3.5 h-3.5" />
-                    </a>
-                    <a
-                      href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(window.location.origin)}&media=${encodeURIComponent(window.location.origin + SITE_CONFIG.logoImage)}&description=${encodeURIComponent(SITE_CONFIG.socialDescription)}`}
-                      target="_blank" rel="noopener noreferrer"
-                      className="w-8 h-8 rounded-full bg-[#E60023] flex items-center justify-center text-white shadow hover:scale-110 transition-all"
-                      title="Pinterest"
-                    >
-                      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.965 1.406-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/></svg>
-                    </a>
-                    <a
-                      href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.origin)}`}
-                      target="_blank" rel="noopener noreferrer"
-                      className="w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center text-white shadow hover:scale-110 transition-all"
-                      title="LinkedIn"
-                    >
-                      <Linkedin className="w-3.5 h-3.5" />
-                    </a>
-                    <a
-                      href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.origin)}&text=${encodeURIComponent(SITE_CONFIG.socialDescription)}`}
-                      target="_blank" rel="noopener noreferrer"
-                      className="w-8 h-8 rounded-full bg-black flex items-center justify-center text-white shadow hover:scale-110 transition-all border border-white/20"
-                      title="X"
-                    >
-                      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                    </a>
-                    <a
-                      href={`https://wa.me/?text=${encodeURIComponent(SITE_CONFIG.socialDescription + ": " + window.location.origin)}`}
-                      target="_blank" rel="noopener noreferrer"
-                      className="w-8 h-8 rounded-full bg-[#25D366] flex items-center justify-center text-white shadow hover:scale-110 transition-all"
-                      title="WhatsApp"
-                    >
-                      <MessageSquare className="w-3.5 h-3.5" />
-                    </a>
-                    <a
-                      href={`https://t.me/share/url?url=${encodeURIComponent(window.location.origin)}&text=${encodeURIComponent(SITE_CONFIG.socialDescription)}`}
-                      target="_blank" rel="noopener noreferrer"
-                      className="w-8 h-8 rounded-full bg-[#0088cc] flex items-center justify-center text-white shadow hover:scale-110 transition-all"
-                      title="Telegram"
-                    >
-                      <SendIcon className="w-3.5 h-3.5" />
-                    </a>
-                  </div>
-                </div>
+              <div className="flex gap-4">
+                <a 
+                  href="https://wa.me/393793603321"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
+                  title="Contatta via WhatsApp"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                </a>
+                <a 
+                  href="#hero" 
+                  className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/10 text-[#BDBAB2] hover:text-white transition-colors"
+                  title="Torna all'inizio"
+                >
+                  <Compass className="w-4 h-4" />
+                </a>
               </div>
             </div>
           </div>
@@ -1449,11 +1359,11 @@ export default function App() {
                 </p>
                 <p>
                   <strong>2. DATI RACCOLTI:</strong><br />
-                  La compilazione dei moduli interattivi (AI Planner e CRM Simulator) acquisisce in sicurezza dati quali nome dell'attività, nome del contatto, email, telefono e risposte di target strategico.
+                  La compilazione dei moduli interattivi (AI Planner) acquisisce in sicurezza dati quali nome dell'attività, nome del contatto, telefono e risposte di target strategico.
                 </p>
                 <p>
                   <strong>3. FINALITÀ:</strong><br />
-                  I dati raccolti sono trattati al solo scopo di formulare la risposta simulata, preparare l'audit computazionale dell'AI e organizzare l'eventuale mini-call conoscitiva di 15-minuti. Nessun dato viene ceduto a terzi.
+                  I dati raccolti sono trattati al solo scopo di formulare la risposta simulata, preparare l'audit computazionale dell'AI e organizzare l'eventuale contatto su WhatsApp. Nessun dato viene ceduto a terzi.
                 </p>
                 <p>
                   <strong>4. COOKIES DI SESSIONE:</strong><br />
@@ -1461,7 +1371,7 @@ export default function App() {
                 </p>
                 <p>
                   <strong>5. DIRITTI DELL'INTERESSATO:</strong><br />
-                  Ai sensi del Regolamento GDPR 2016/679, puoi chiedere in ogni momento la cancellazione, rettifica o visione dei tuoi dati scrivendo a <a href="mailto:mariateresarogani@gmail.com" className="text-accent-blue underline">mariateresarogani@gmail.com</a>.
+                  Ai sensi del Regolamento GDPR 2016/679, puoi chiedere in ogni momento la cancellazione, rettifica o visione dei tuoi dati contattandomi su WhatsApp al numero +39 379 360 3321.
                 </p>
               </div>
               <div className="pt-3 border-t border-line-ivory flex justify-end">

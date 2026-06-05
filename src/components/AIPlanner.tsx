@@ -10,7 +10,6 @@ export default function AIPlanner() {
   const [budget, setBudget] = useState("Professional (€1.500 - €3.500)");
   const [currentWebsite, setCurrentWebsite] = useState("");
   const [clientName, setClientName] = useState("");
-  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   
   // Loading & generation status
@@ -54,8 +53,8 @@ export default function AIPlanner() {
       setErrorMsg("Per favore, inserisci sia il nome del tuo business che il settore.");
       return;
     }
-    if (step === 3 && (!clientName.trim() || !email.trim())) {
-      setErrorMsg("Per favore, compila almeno Nome e Email per poterti inviare l'analisi.");
+    if (step === 3 && (!clientName.trim() || !phone.trim())) {
+      setErrorMsg("Per favore, compila almeno Nome e Telefono per poter generare l'analisi.");
       return;
     }
     setErrorMsg(null);
@@ -68,8 +67,8 @@ export default function AIPlanner() {
   };
 
   const handleGenerate = async () => {
-    if (!clientName.trim() || !email.trim()) {
-      setErrorMsg("Compila Nome e Email prima di procedere.");
+    if (!clientName.trim() || !phone.trim()) {
+      setErrorMsg("Compila Nome e Telefono prima di procedere.");
       return;
     }
 
@@ -127,7 +126,6 @@ export default function AIPlanner() {
     setBudget("Professional (€1.500 - €3.500)");
     setCurrentWebsite("");
     setClientName("");
-    setEmail("");
     setPhone("");
     setStrategy(null);
     setErrorMsg(null);
@@ -517,23 +515,24 @@ export default function AIPlanner() {
           <div className="p-6 rounded-none bg-white/10 backdrop-blur-md text-white flex flex-col md:flex-row justify-between items-stretch md:items-center gap-6 border border-white/10">
             <div className="space-y-1">
               <div className="flex items-center gap-2 text-accent-orange font-bold text-xs uppercase tracking-widest">
-                <Clock className="w-4 h-4" />
-                PARLIAMONE INSIEME
+                <MessageSquare className="w-4 h-4" />
+                PARLIAMONE SU WHATSAPP
               </div>
-              <h4 className="font-display text-lg font-bold text-white">Fissa una chiamata gratuita (15 min)</h4>
-              <p className="text-xs text-white/60">
-                Approfondiremo questi consigli e vedremo come applicarli alla tua attività. Senza impegno.
+              <h4 className="font-display text-lg font-bold">Inviami la tua analisi</h4>
+              <p className="text-xs text-muted-grey">
+                Inviami questi risultati su WhatsApp per discutere come applicarli alla tua attività. Senza impegno.
               </p>
             </div>
-            <a
-              href="https://calendly.com/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="bg-white text-charcoal hover:bg-white/90 transition-all font-bold px-5 py-3 rounded-none flex items-center justify-center gap-2 text-xs uppercase tracking-widest pointer-events-auto shadow-md"
+            <button
+              onClick={() => {
+                const message = `Ciao Maria Teresa! Ho generato un'analisi con il tuo AI Planner per "${businessName}".\n\nEcco i miei obiettivi: ${goals.join(", ")}\nBudget: ${budget}\n\nVorrei discuterne con te!`;
+                window.open(`https://wa.me/393793603321?text=${encodeURIComponent(message)}`, "_blank");
+              }}
+              className="bg-white text-charcoal hover:bg-white-soft transition-all font-bold px-5 py-3 rounded-none flex items-center justify-center gap-2 text-xs uppercase tracking-widest pointer-events-auto shadow-md cursor-pointer"
             >
-              <Calendar className="w-4 h-4 text-accent-blue" />
-              Prenota Ora su Calendly
-            </a>
+              <MessageSquare className="w-4 h-4 text-accent-blue" />
+              Invia su WhatsApp
+            </button>
           </div>
         </div>
       )}
