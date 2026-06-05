@@ -72,11 +72,16 @@ Usa formattazione Markdown elegante, parti in grassetto, punti elenco puliti ed 
 `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
-      contents: [
-        { role: 'system', parts: [{ text: systemInstruction }] },
-        { role: 'user', parts: [{ text: contents }] }
-      ]
+      model: "gemini-1.5-pro",
+      contents: [{ role: 'user', parts: [{ text: contents }] }],
+      config: {
+        // We use snake_case because some versions of the SDK (v2.7.0+)
+        // have a bug where they don't map camelCase correctly to the v1 API.
+        // We cast as any to bypass the TS definition that expects camelCase.
+        ["system_instruction" as any]: {
+          parts: [{ text: systemInstruction }]
+        }
+      } as any
     });
 
     const text = response.text;
