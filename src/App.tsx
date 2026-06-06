@@ -136,7 +136,7 @@ Ecco i dettagli della mia richiesta:
       <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center scale-105"
-          style={{ backgroundImage: 'url("/assets/uploads/fondo%20home%202.png")' }}
+          style={{ backgroundImage: 'url("/assets/uploads/facilissimo%20web%20web%20design%20siti%20web.webp")' }}
         />
         {/* Consistent Deep Overlay Tint (Purple/Black blend) */}
         <div className="absolute inset-0 bg-[#0A0015]/85 mix-blend-multiply"></div>
@@ -170,15 +170,25 @@ Ecco i dettagli della mia richiesta:
             >
               Chi Sono
             </button>
-            <a
-              onClick={() => {
-                setMobileMenuOpen(false);
-              }}
-              href="#servizi"
-              className="text-xs uppercase font-bold tracking-widest text-white/95 py-2 border-b border-white/5"
-            >
-              I Miei Servizi
-            </a>
+            <div className="space-y-2 border-b border-white/5 pb-2">
+              <span className="text-[10px] uppercase font-black tracking-widest text-white/40 block mb-1">
+                I Miei Servizi
+              </span>
+              <div className="grid grid-cols-1 gap-1">
+                {Object.keys(SERVICES_DATA).map((key) => (
+                  <button
+                    key={key}
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      handleServiceSelect(key as keyof typeof SERVICES_DATA);
+                    }}
+                    className="text-left text-[11px] uppercase font-bold tracking-widest text-white/90 py-2.5 px-3 bg-white/5 hover:bg-white/10 transition-colors"
+                  >
+                    {SERVICES_DATA[key as keyof typeof SERVICES_DATA].title.replace('Web Design Classico', 'Web Design').replace('Sviluppo Custom (React)', 'Sviluppo React').replace('Sistemi di Acquisizione', 'Lead Generation').replace('Advertising & Visibilità', 'Marketing & Ads')}
+                  </button>
+                ))}
+              </div>
+            </div>
             <a 
               onClick={() => {
                 setMobileMenuOpen(false);
