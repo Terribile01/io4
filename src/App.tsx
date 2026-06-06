@@ -158,7 +158,7 @@ Ecco i dettagli della mia richiesta:
             initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
-            className="fixed inset-x-4 top-[84px] bg-[#121214] text-white rounded-none p-6 z-[100] border-2 border-white/20 shadow-2xl flex flex-col gap-4 md:hidden"
+            className="fixed inset-x-4 top-[84px] glass-purple-50 text-white rounded-none p-6 z-[100] flex flex-col gap-4 md:hidden"
             style={{ pointerEvents: 'auto' }}
           >
             <button
@@ -236,7 +236,7 @@ Ecco i dettagli della mia richiesta:
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-[#0A0A0B] z-[210] shadow-2xl border-l border-white/10 overflow-y-auto"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-md glass-purple-50 z-[210] overflow-y-auto border-l border-white/10"
             >
               <div className="p-8 space-y-8">
                 <div className="flex justify-between items-center">
@@ -292,7 +292,7 @@ Ecco i dettagli della mia richiesta:
                         setAboutOpen(false);
                         window.location.hash = "#contatti";
                       }}
-                      className="w-full grad-electric text-white font-bold py-4 rounded-none uppercase tracking-widest text-xs"
+                      className="w-full glass-orange-50 text-white font-bold py-4 rounded-none uppercase tracking-widest text-xs cursor-pointer hover:bg-accent-orange/60 transition-all"
                     >
                       Lavoriamo Insieme
                     </button>
@@ -458,7 +458,7 @@ Ecco i dettagli della mia richiesta:
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full grad-electric hover:shadow-lg text-white font-bold py-3 px-6 rounded-none flex items-center justify-center gap-2 text-xs uppercase tracking-widest cursor-pointer transition-transform hover:scale-101"
+                      className="w-full glass-orange-50 hover:shadow-lg text-white font-bold py-3 px-6 rounded-none flex items-center justify-center gap-2 text-xs uppercase tracking-widest cursor-pointer transition-transform hover:scale-101"
                     >
                       Invia Richiesta e Traccia <Send className="w-4 h-4" />
                     </button>
@@ -479,7 +479,7 @@ Ecco i dettagli della mia richiesta:
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-0 inset-x-0 bg-[#121214] text-white border-t border-white/10 shadow-2xl p-4 sm:p-5 z-[200] flex flex-col sm:flex-row items-center justify-between gap-4"
+            className="fixed bottom-0 inset-x-0 glass-purple-50 text-white border-t border-white/10 p-4 sm:p-5 z-[200] flex flex-col sm:flex-row items-center justify-between gap-4"
           >
             <div className="text-left max-w-3xl space-y-1">
               <h5 className="text-[10px] uppercase font-bold text-accent-orange tracking-widest font-mono">Informativa sui Cookie &amp; Tracciamenti</h5>
@@ -510,7 +510,7 @@ Ecco i dettagli della mia richiesta:
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="bg-accent-purple/15 max-w-lg w-full border border-accent-purple/30 p-6 md:p-8 space-y-6 rounded-none shadow-2xl overflow-y-auto max-h-[90vh] text-left relative backdrop-blur-md"
+              className="glass-purple-50 max-w-lg w-full p-6 md:p-8 space-y-6 rounded-none shadow-2xl overflow-y-auto max-h-[90vh] text-left relative"
             >
               <div className="flex justify-between items-start border-b border-white/10 pb-4">
                 <div className="space-y-1">
@@ -558,7 +558,7 @@ Ecco i dettagli della mia richiesta:
                     href={`https://wa.me/393793603321?text=${encodeURIComponent(SERVICES_DATA[selectedService].whatsappMessage)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full grad-electric hover:shadow-xl hover:scale-[1.02] transition-all text-white font-bold py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] shadow-lg"
+                    className="w-full glass-orange-50 hover:shadow-xl hover:scale-[1.02] transition-all text-white font-bold py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] shadow-lg"
                   >
                     Prenota Consulenza Gratuita <MessageSquare className="w-4 h-4" />
                   </a>
@@ -577,7 +577,7 @@ Ecco i dettagli della mia richiesta:
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-[#0A0A0B]/50 max-w-md w-full border border-white/10 p-6 md:p-8 space-y-4 rounded-none shadow-2xl overflow-y-auto max-h-[85vh] text-left"
+              className="glass-purple-50 max-w-md w-full p-6 md:p-8 space-y-4 rounded-none shadow-2xl overflow-y-auto max-h-[85vh] text-left border border-white/10"
             >
               <div className="flex justify-between items-center border-b border-white/10 pb-3">
                 <h4 className="font-display font-bold text-lg text-white/95">Privacy Policy &amp; GDPR</h4>

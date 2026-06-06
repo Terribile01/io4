@@ -75,7 +75,7 @@ export const Navbar = React.memo(({ onAboutOpen, onServiceSelect, onMobileMenuTo
         <div className="flex items-center gap-3">
           <a
             href="#contatti"
-            className="hidden md:flex bg-[#0A0A0B]/50 text-white/95 hover:bg-[#0A0A0B]/90 transition-all text-[9px] h-9 font-bold px-4 rounded-none items-center justify-center uppercase tracking-wider shrink-0 shadow"
+            className="hidden md:flex glass-purple-50 text-white/95 hover:bg-accent-purple/30 transition-all text-[9px] h-9 font-bold px-4 rounded-none items-center justify-center uppercase tracking-wider shrink-0"
           >
             Parliamo del tuo Progetto
           </a>

@@ -36,7 +36,7 @@ export const ComparisonSection = React.memo(() => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="bg-[#0A0A0B]/50 border border-white/10 rounded-2xl p-6 shadow-sm space-y-4 relative overflow-hidden group hover:border-[#BF5AF2]/35 transition-all">
+          <div className="glass-panel rounded-2xl p-6 shadow-sm space-y-4 relative overflow-hidden group hover:border-[#BF5AF2]/50 transition-all">
             <div className="absolute top-0 right-0 w-16 h-16 bg-[#BF5AF2]/5 rounded-bl-3xl pointer-events-none transition-all group-hover:scale-130"></div>
             <span className="text-[9px] font-bold tracking-widest uppercase text-[#BF5AF2] bg-[#BF5AF2]/10 px-2 py-0.5 rounded">
               FACILE E VELOCE
@@ -53,7 +53,7 @@ export const ComparisonSection = React.memo(() => {
             </div>
           </div>
 
-          <div className="bg-black/40 text-white rounded-2xl p-6 shadow-md space-y-4 relative overflow-hidden group hover:shadow-lg transition-all">
+          <div className="glass-panel rounded-2xl p-6 shadow-md space-y-4 relative overflow-hidden group hover:border-accent-orange/50 transition-all">
             <div className="absolute top-0 right-0 w-16 h-16 bg-accent-orange/10 rounded-bl-3xl pointer-events-none transition-all group-hover:scale-130"></div>
             <span className="text-[9px] font-bold tracking-widest uppercase text-accent-orange bg-accent-orange/10 px-2.5 py-0.5 rounded">
               MASSIME PRESTAZIONI

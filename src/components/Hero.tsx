@@ -59,7 +59,7 @@ export const Hero = React.memo(({ onServiceSelect }: HeroProps) => {
       >
         <a
           href="#contatti"
-          className="grad-electric hover:shadow-xl hover:scale-[1.03] transition-all text-white font-bold px-8 py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
+          className="glass-orange-50 hover:shadow-xl hover:scale-[1.03] transition-all text-white font-bold px-8 py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
         >
           Inizia Ora - Parlami del tuo Progetto <ArrowRight className="w-4 h-4" />
         </a>
