@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { TrendingUp, RefreshCw, Sparkles, MessageSquare } from "lucide-react";
+import React, { useState } from "react";
+import { TrendingUp, RefreshCw, Sparkles } from "lucide-react";
 
-export default function ROICalculator() {
+const ROICalculator = React.memo(() => {
   const [budget, setBudget] = useState(1000); // Monthly budget €
   const [cpc, setCpc] = useState(0.80); // Avg cost per click
   const [convRate, setConvRate] = useState(1.5); // Website conversion rate % (standard is ~1.5%)
@@ -279,4 +279,6 @@ export default function ROICalculator() {
       </div>
     </div>
   );
-}
+});
+
+export default ROICalculator;

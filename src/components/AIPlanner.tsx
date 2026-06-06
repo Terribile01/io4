@@ -1,7 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Sparkles, ArrowRight, ArrowLeft, Send, Check, AlertCircle, RotateCcw, MessageSquare } from "lucide-react";
 
-export default function AIPlanner() {
+const AIPlanner = React.memo(() => {
   const [step, setStep] = useState(0); // 0 to 4
   const [businessName, setBusinessName] = useState("");
   const [niche, setNiche] = useState("");
@@ -381,4 +381,6 @@ export default function AIPlanner() {
       )}
     </div>
   );
-}
+});
+
+export default AIPlanner;
