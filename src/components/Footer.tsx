@@ -3,7 +3,7 @@ import { MessageSquare, Compass } from 'lucide-react';
 
 export const Footer = React.memo(({ onPrivacyOpen }: { onPrivacyOpen: () => void }) => {
   return (
-    <footer className="glass-cyan text-white pt-16 pb-10 px-6 sm:px-10 rounded-none relative z-20 mt-16 w-full shrink-0">
+    <footer className="glass-nav text-white pt-16 pb-10 px-6 sm:px-10 rounded-none relative z-20 mt-16 w-full shrink-0">
       <div className="max-w-5xl mx-auto space-y-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div className="space-y-4 text-left">
