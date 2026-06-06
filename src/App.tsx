@@ -1,16 +1,18 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useCallback } from "react";
 import { 
-  Sparkles, Code, Globe, MessageSquare, TrendingUp, Compass, 
-  Menu, X, Phone, Layers, Smartphone, Star, Check, ArrowRight,
-  Send, Database, ArrowUpRight, BarChart2, ShieldCheck, Mail, Pin, HelpCircle,
-  Clock, CheckCircle, Flame, Server, Laptop, ChevronRight
+  Sparkles, MessageSquare, X, Check,
+  Send, CheckCircle, ChevronRight
 } from "lucide-react";
 import ROICalculator from "./components/ROICalculator";
 import AIPlanner from "./components/AIPlanner";
-import { LeadSubmission } from "./types";
+import { Navbar } from "./components/Navbar";
+import { Hero } from "./components/Hero";
+import { ServicesSection } from "./components/ServicesSection";
+import { ComparisonSection } from "./components/ComparisonSection";
+import { Footer } from "./components/Footer";
 import { motion, AnimatePresence } from "motion/react";
 
-const SERVICES_DATA = {
+export const SERVICES_DATA = {
   "WordPress, Wix & Squarespace": {
     title: "Web Design Classico",
     description: "La soluzione ideale per chi cerca un sito professionale, elegante e facile da gestire in totale autonomia.",
@@ -74,6 +76,22 @@ export default function App() {
     }
   });
   
+  const handleServiceSelect = useCallback((service: keyof typeof SERVICES_DATA) => {
+    setSelectedService(service);
+  }, []);
+
+  const handleAboutOpen = useCallback(() => {
+    setAboutOpen(true);
+  }, []);
+
+  const handleMobileMenuToggle = useCallback(() => {
+    setMobileMenuOpen(prev => !prev);
+  }, []);
+
+  const handlePrivacyOpen = useCallback(() => {
+    setPrivacyModalOpen(true);
+  }, []);
+
   // App-level Contact Form state
   const [businessName, setBusinessName] = useState("");
   const [niche, setNiche] = useState("Salute, Wellness & Bellezza");
@@ -126,101 +144,12 @@ Ecco i dettagli della mia richiesta:
         <div className="absolute inset-0 backdrop-blur-[3px]"></div>
       </div>
 
-      {/* 1. FLOATING NAVIGATION BAR (GLASSMORPHIC CHIC RECTANGULAR) */}
-      <nav className="fixed top-5 left-0 right-0 z-[100] flex items-center justify-center px-4 w-full pointer-events-none">
-        <div className="pointer-events-auto w-full max-w-5xl flex items-center justify-between bg-[#0A0A0B]/95 backdrop-blur-md rounded-none px-5 py-2.5 shadow-xl border border-white/10 h-14">
-          <div className="flex items-center gap-8 pl-1">
-            <a 
-              href="#hero" 
-              onClick={() => {
-                window.scrollTo(0, 0);
-              }}
-              className="flex items-center gap-2 group cursor-pointer"
-            >
-              <div className="w-8 h-8 rounded-none border border-white/20 bg-white/15 flex items-center justify-center shrink-0 font-mono">
-                <span className="text-white font-black font-display text-sm tracking-widest">FW</span>
-              </div>
-              <span className="font-display font-bold text-xs uppercase tracking-widest text-white group-hover:text-accent-orange transition-colors">
-                FACILISSIMO WEB
-              </span>
-            </a>
-            
-            {/* Desktop Links */}
-            <div className="hidden md:flex items-center gap-7">
-              <button
-                onClick={() => setAboutOpen(true)}
-                className="text-[10px] font-bold uppercase tracking-widest text-white/90 hover:text-white transition-colors cursor-pointer"
-              >
-                CHI SONO
-              </button>
-              <div className="relative group/servizi">
-                <a
-                  href="#servizi"
-                  className="text-[10px] font-bold uppercase tracking-widest text-white/90 hover:text-white transition-colors flex items-center gap-1"
-                >
-                  Servizi <ChevronRight className="w-2.5 h-2.5 rotate-90" />
-                </a>
-                {/* Dropdown Menu */}
-                <div className="absolute top-[calc(100%+10px)] left-0 w-48 bg-[#0A0A0B] border border-white/10 shadow-2xl opacity-0 invisible group-hover/servizi:opacity-100 group-hover/servizi:visible transition-all duration-200 py-3 z-[110]">
-                  <button
-                    onClick={() => setSelectedService("WordPress, Wix & Squarespace")}
-                    className="w-full text-left px-4 py-2 text-[9px] font-bold uppercase tracking-widest text-white/70 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
-                  >
-                    Web Design
-                  </button>
-                  <button
-                    onClick={() => setSelectedService("Codice React su Misura")}
-                    className="w-full text-left px-4 py-2 text-[9px] font-bold uppercase tracking-widest text-white/70 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
-                  >
-                    Sviluppo React
-                  </button>
-                  <button
-                    onClick={() => setSelectedService("Lead Generation Strategica")}
-                    className="w-full text-left px-4 py-2 text-[9px] font-bold uppercase tracking-widest text-white/70 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
-                  >
-                    Lead Generation
-                  </button>
-                  <button
-                    onClick={() => setSelectedService("Campagne ADS (Meta & Google)")}
-                    className="w-full text-left px-4 py-2 text-[9px] font-bold uppercase tracking-widest text-white/70 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
-                  >
-                    Marketing & Ads
-                  </button>
-                </div>
-              </div>
-              <a 
-                href="#comparativa" 
-                className="text-[10px] font-bold uppercase tracking-widest text-white/90 hover:text-white transition-colors"
-              >
-                Codice vs WP
-              </a>
-              <a 
-                href="#ai-planner" 
-                className="text-[10px] font-bold uppercase tracking-widest text-accent-orange hover:text-white transition-colors flex items-center gap-1"
-              >
-                AI Planner <Sparkles className="w-3 h-3 text-accent-orange" />
-              </a>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <a 
-              href="#contatti" 
-              className="hidden md:flex bg-[#0A0A0B]/50 text-white/95 hover:bg-[#0A0A0B]/90 transition-all text-[9px] h-9 font-bold px-4 rounded-none items-center justify-center uppercase tracking-wider shrink-0 shadow"
-            >
-              Parliamo del tuo Progetto
-            </a>
-
-            {/* Mobile Menu Toggle */}
-            <button 
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden text-white/90 hover:text-white p-1 cursor-pointer pointer-events-auto"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-        </div>
-      </nav>
+      <Navbar
+        onAboutOpen={handleAboutOpen}
+        onServiceSelect={handleServiceSelect}
+        onMobileMenuToggle={handleMobileMenuToggle}
+        mobileMenuOpen={mobileMenuOpen}
+      />
 
       {/* MOBILE MENU PORTAL - Z-INDEX 100 TO STAND OVER ALL CELLULAR OVERLAYS */}
       <AnimatePresence>
@@ -366,235 +295,9 @@ Ecco i dettagli della mia richiesta:
       </AnimatePresence>
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-8 space-y-24 md:space-y-40 mt-12">
-          <>
-            {/* 2. HERO LANDING SECTION */}
-        <section className="pt-24 md:pt-36 flex flex-col items-center text-center relative max-w-4xl mx-auto pb-10" id="hero">
-          {/* Active Work Tag */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white/5 text-white rounded-none px-4 py-1.5 text-[9px] uppercase font-bold tracking-widest flex items-center gap-2 mb-6 shadow-md"
-          >
-            <span className="w-1.5 h-1.5 bg-green-400 rounded-full live-beacon"></span>
-            Maria Teresa Rogani • Freelance Web Designer &amp; Lead Generation
-          </motion.div>
-
-          <h1
-            className="font-display text-4xl md:text-6xl font-extrabold tracking-tighter text-white/95 leading-[1.05]"
-          >
-            Siti Web che vendono: Design e Strategia
-          </h1>
-          <div className="w-24 h-2 grad-sunset mx-auto mt-4 rounded-full"></div>
-
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-sm md:text-base text-white/95 mt-6 max-w-2xl leading-relaxed font-sans font-light"
-          >
-            Sono Maria Teresa, freelance specializzata nella creazione di siti web moderni e sistemi per generare nuovi contatti. Ti aiuto a far crescere il tuo business con soluzioni dirette, efficaci e facili da gestire.
-          </motion.p>
-
-          {/* Quick Pillar Badge Strip */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex flex-wrap gap-2.5 justify-center items-center mt-8"
-          >
-            {Object.keys(SERVICES_DATA).map((tag, idx) => (
-              <button
-                key={idx}
-                onClick={() => setSelectedService(tag as keyof typeof SERVICES_DATA)}
-                className="text-[10px] font-bold bg-accent-purple/20 text-white/95 px-4 py-2 border border-accent-purple/30 rounded-none shadow-sm flex items-center gap-2 hover:bg-accent-purple/40 hover:border-accent-purple/50 transition-all cursor-pointer backdrop-blur-sm group"
-              >
-                <div className="w-1.5 h-1.5 bg-accent-pink rounded-full group-hover:scale-125 transition-transform"></div>
-                {tag}
-              </button>
-            ))}
-          </motion.div>
-
-          {/* Call to Actions */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-3.5 justify-center items-center mt-10 w-full max-w-2xl"
-          >
-            <a
-              href="#contatti"
-              className="grad-electric hover:shadow-xl hover:scale-[1.03] transition-all text-white font-bold px-8 py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
-            >
-              Inizia Ora - Parlami del tuo Progetto <ArrowRight className="w-4 h-4" />
-            </a>
-            <a
-              href="#servizi"
-              className="bg-transparent border border-white/30 text-white/95 hover:bg-[#121214] hover:text-white transition-all font-bold px-8 py-4 rounded-none flex items-center justify-center uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
-            >
-              Cosa Posso Fare Per Te
-            </a>
-          </motion.div>
-        </section>
-
-        {/* 3. CORE VALUE PROPOSITIONS SERVICES */}
-        <section className="space-y-12" id="servizi">
-          <div className="text-center max-w-2xl mx-auto space-y-4">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-accent-pink bg-accent-pink/10 px-3.5 py-1 rounded-none">
-              Servizi Freelance
-            </span>
-            <h2 className="font-display text-2xl md:text-3xl font-bold mt-2 tracking-tight">
-              Soluzioni Semplici per Crescere Online
-            </h2>
-
-            {/* Service-derived subtitles */}
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pt-2 border-t border-white/5">
-              {["WEB DESIGN", "CUSTOM CODE", "LEAD GEN", "MARKETING"].map((sub, i) => (
-                <span key={i} className="text-[9px] font-black uppercase tracking-[0.2em] text-white/40">
-                  {sub}
-                </span>
-              ))}
-            </div>
-
-            <p className="text-xs text-white/95 max-w-md mx-auto pt-2">
-              Ti aiuto a costruire una presenza digitale forte che attira nuovi clienti ogni giorno.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {/* Box 1: Web Design Sartoriale */}
-            <div className="glass-panel rounded-3xl p-6 border border-white/10 flex flex-col justify-between hover:shadow-xl transition-all">
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-2xl bg-accent-blue/10 flex items-center justify-center text-accent-blue mb-4">
-                  <Laptop className="w-5 h-5" />
-                </div>
-                <h3 className="font-display text-lg font-bold">Sito Web Professionale</h3>
-                <p className="text-xs text-white/95 leading-relaxed">
-                  Realizzo il tuo sito web su misura, veloce e ottimizzato per i motori di ricerca. Che tu preferisca WordPress per gestirlo in autonomia o una soluzione su misura in codice per prestazioni massime, ho la soluzione giusta.
-                </p>
-              </div>
-              <div className="pt-6 border-t border-white/10/50 mt-6 flex justify-between items-center text-xs">
-                <span className="font-medium text-white/95 font-mono">Web Design</span>
-                <a href="#comparativa" className="text-accent-blue hover:underline flex items-center gap-1">
-                  Scopri di più <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
-
-            {/* Box 2: Lead Generation Specialist */}
-            <div className="glass-panel rounded-3xl p-6 border border-white/10 flex flex-col justify-between hover:shadow-xl transition-all">
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-2xl bg-accent-pink/10 flex items-center justify-center text-accent-pink mb-4">
-                  <Flame className="w-5 h-5" />
-                </div>
-                <h3 className="font-display text-lg font-bold">Trovare Nuovi Clienti</h3>
-                <p className="text-xs text-white/95 leading-relaxed">
-                  Non solo un bel sito, ma uno strumento che lavora per te. Creo sistemi per raccogliere contatti di persone interessate ai tuoi servizi e automatizzo il processo per farti risparmiare tempo prezioso.
-                </p>
-              </div>
-              <div className="pt-6 border-t border-white/10/50 mt-6 flex justify-between items-center text-xs">
-                <span className="font-medium text-white/95 font-mono">Lead Gen</span>
-                <a href="#calcolatore" className="text-accent-pink hover:underline flex items-center gap-1">
-                  Prova il simulatore <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
-
-            {/* Box 3: Social & Ads Management */}
-            <div className="glass-panel rounded-3xl p-6 border border-white/10 flex flex-col justify-between hover:shadow-xl transition-all">
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-2xl bg-accent-orange/10 flex items-center justify-center text-accent-orange mb-4">
-                  <BarChart2 className="w-5 h-5" />
-                </div>
-                <h3 className="font-display text-lg font-bold font-semibold text-white/95">Pubblicità Google e Meta</h3>
-                <p className="text-xs text-white/95 leading-relaxed">
-                  Porto traffico qualificato sul tuo sito attraverso campagne pubblicitarie mirate su Google, Facebook e Instagram. Massimizziamo insieme il tuo budget per ottenere il miglior risultato possibile.
-                </p>
-              </div>
-              <div className="pt-6 border-t border-white/10/50 mt-6 flex justify-between items-center text-xs">
-                <span className="font-medium text-white/95 font-mono">Marketing</span>
-                <a href="#contatti" className="text-accent-orange hover:underline flex items-center gap-1">
-                  Chiedi info <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 4. COMPARISON CHART SECTION (CLASSIC VS DESIGN CODE) */}
-        <section className="space-y-12" id="comparativa">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-            <div className="space-y-6">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-accent-blue bg-accent-blue/10 px-3 py-1 rounded-full">
-                La Tecnologia Giusta
-              </span>
-              <h2 className="font-display text-3xl font-extrabold tracking-tight text-white/95 leading-tight">
-                WordPress o Codice Su Misura?
-              </h2>
-              <p className="text-sm text-white/95 leading-relaxed">
-                Non esiste una soluzione universale. Se hai bisogno di un sito semplice da aggiornare da solo, <strong>WordPress</strong> è la scelta migliore. Se invece cerchi il massimo della velocità e un design unico, un sito in <strong>codice puro</strong> ti darà quel vantaggio competitivo necessario oggi.
-              </p>
-              <div className="space-y-4 text-xs font-semibold">
-                <div className="flex gap-3 items-start">
-                  <div className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="w-3 h-3" />
-                  </div>
-                  <p className="text-white/95/90">
-                    WordPress: Ideale per blog, piccoli siti e per chi vuole gestire i testi in autonomia.
-                  </p>
-                </div>
-                <div className="flex gap-3 items-start">
-                  <div className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="w-3 h-3" />
-                  </div>
-                  <p className="text-white/95/90">
-                    Codice Custom: Il top per velocità e sicurezza. Google lo ama perché è leggerissimo.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Visual Contrast Panel */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Card Metodo Classico */}
-              <div className="bg-[#0A0A0B]/50 border border-white/10 rounded-2xl p-6 shadow-sm space-y-4 relative overflow-hidden group hover:border-[#BF5AF2]/35 transition-all">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-[#BF5AF2]/5 rounded-bl-3xl pointer-events-none transition-all group-hover:scale-130"></div>
-                <span className="text-[9px] font-bold tracking-widest uppercase text-[#BF5AF2] bg-[#BF5AF2]/10 px-2 py-0.5 rounded">
-                  FACILE E VELOCE
-                </span>
-                <h4 className="font-display text-base font-bold text-white/95">WordPress &amp; Co.</h4>
-                <p className="text-[11px] text-white/95 leading-relaxed">
-                  Perfetto per chi vuole un sito professionale in tempi brevi.
-                </p>
-                <div className="space-y-2 text-[10px] text-white/95 pt-3 border-t border-white/10/50">
-                  <div className="flex justify-between font-mono"><span>Gestione:</span><strong>Autonoma al 100%</strong></div>
-                  <div className="flex justify-between font-mono"><span>Consegna:</span><strong>1-2 settimane</strong></div>
-                  <div className="flex justify-between font-mono"><span>Costo:</span><strong>Contenuto</strong></div>
-                  <div className="flex justify-between font-mono"><span>Performance:</span><b>Standard</b></div>
-                </div>
-              </div>
-
-              {/* Card Pure Code Level */}
-              <div className="bg-black/40 text-white rounded-2xl p-6 shadow-md space-y-4 relative overflow-hidden group hover:shadow-lg transition-all">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-accent-orange/10 rounded-bl-3xl pointer-events-none transition-all group-hover:scale-130"></div>
-                <span className="text-[9px] font-bold tracking-widest uppercase text-accent-orange bg-accent-orange/10 px-2.5 py-0.5 rounded">
-                  MASSIME PRESTAZIONI
-                </span>
-                <h4 className="font-display text-base font-bold text-white flex items-center gap-1">
-                  Codice Puro <Code className="w-4 h-4 text-accent-orange" />
-                </h4>
-                <p className="text-[11px] text-white/95 leading-relaxed">
-                  Creato riga per riga per chi vuole solo il meglio.
-                </p>
-                <div className="space-y-2 text-[10px] text-white/95 pt-3 border-t border-white/10">
-                  <div className="flex justify-between font-mono"><span>Velocità:</span><strong className="text-green-400">Istantanea</strong></div>
-                  <div className="flex justify-between font-mono"><span>SEO:</span><strong className="text-green-400">Superiore</strong></div>
-                  <div className="flex justify-between font-mono"><span>Design:</span><strong>Senza Limiti</strong></div>
-                  <div className="flex justify-between font-mono"><span>Sicurezza:</span><strong>Totale</strong></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <Hero onServiceSelect={handleServiceSelect} />
+        <ServicesSection />
+        <ComparisonSection />
 
         {/* 5. INTERACTIVE WIDGET 1: THE ROI CONVERSION CALCULATOR */}
         <section className="space-y-8 scroll-mt-24" id="calcolatore">
@@ -755,81 +458,9 @@ Ecco i dettagli della mia richiesta:
             </AnimatePresence>
           </div>
         </section>
-          </>
       </main>
 
-      {/* 12. HIGH END GRAPHICAL SLATE FOOTER */}
-      <footer className="bg-[#0A0A0B]/80 text-white pt-16 pb-10 px-6 sm:px-10 rounded-none border-t border-white/10 relative z-20 mt-16 w-full shrink-0">
-        <div className="max-w-5xl mx-auto space-y-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {/* Logo Column */}
-            <div className="space-y-4 text-left">
-              <div className="w-10 h-10 rounded-none border border-white/20 bg-white/5 flex items-center justify-center font-mono">
-                <span className="text-white font-black font-display text-base tracking-widest">FW</span>
-              </div>
-              <h4 className="font-display font-black text-xs uppercase tracking-widest text-white">FACILISSIMO WEB</h4>
-              <p className="text-xs text-white/90 leading-relaxed font-sans font-light">
-                Metodo d'eccellenza per la digitalizzazione delle imprese locali in tutta Italia. Sviluppo custom-code, design, visibilità e monetizzazione.
-              </p>
-            </div>
-
-            {/* Services Links column */}
-            <div className="space-y-4 text-left">
-              <h5 className="text-[10px] uppercase tracking-widest font-bold text-accent-orange">Servizi Principali</h5>
-              <ul className="text-xs text-white/90 space-y-2.5">
-                <li><a href="#comparativa" className="hover:text-white transition-colors">Siti in Vero Codice (React)</a></li>
-                <li><a href="#comparativa" className="hover:text-white transition-colors">Web Design Classico (WP/Wix)</a></li>
-                <li><a href="#servizi" className="hover:text-white transition-colors">Campagne Pubblicitarie ADS</a></li>
-                <li><a href="#servizi" className="hover:text-white transition-colors">Sistemi di Lead Generation</a></li>
-              </ul>
-            </div>
-
-            {/* Direct contact column */}
-            <div className="space-y-4 text-left">
-              <h5 className="text-[10px] uppercase tracking-widest font-bold text-accent-pink">Consulenza Istantanea</h5>
-              <p className="text-xs text-white/90 leading-relaxed">
-                Tutte le consulenze partono da una mini-call conoscitiva gratuita di 15 minuti su zoom o whatsapp.
-              </p>
-              <div className="flex gap-4">
-                <a 
-                  href="https://wa.me/393793603321"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/5 text-white/90 hover:text-white transition-colors"
-                  title="Contatta via WhatsApp"
-                >
-                  <MessageSquare className="w-4 h-4" />
-                </a>
-                <a 
-                  href="#hero" 
-                  className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/5 text-white/90 hover:text-white transition-colors"
-                  title="Torna all'inizio"
-                >
-                  <Compass className="w-4 h-4" />
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-[#8C8880] font-mono">
-            <p>© 2026 FACILISSIMO WEB / FW di Maria Teresa Rogani. Tutti i diritti riservati.</p>
-            <div className="flex gap-4">
-              <a href="#contatti" className="hover:text-white">P.IVA: 01234567890</a>
-              <span>•</span>
-              <a 
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPrivacyModalOpen(true);
-                }}
-                className="hover:text-white underline cursor-pointer"
-              >
-                Privacy Policy &amp; GDPR
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer onPrivacyOpen={handlePrivacyOpen} />
 
       {/* COOKIES DISCLAIMER (USO COOKIES SOLO PER LA SESSIONE) */}
       <AnimatePresence>
@@ -864,12 +495,12 @@ Ecco i dettagli della mia richiesta:
       {/* SERVICE TECHNICAL SHEET MODAL */}
       <AnimatePresence>
         {selectedService && (
-          <div className="fixed inset-0 bg-black/85 z-[300] backdrop-blur-md flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/80 z-[300] backdrop-blur-sm flex items-center justify-center p-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="bg-accent-purple/15 max-w-lg w-full border border-accent-purple/30 p-6 md:p-8 space-y-6 rounded-none shadow-2xl overflow-y-auto max-h-[90vh] text-left relative backdrop-blur-xl"
+              className="bg-accent-purple/15 max-w-lg w-full border border-accent-purple/30 p-6 md:p-8 space-y-6 rounded-none shadow-2xl overflow-y-auto max-h-[90vh] text-left relative backdrop-blur-md"
             >
               <div className="flex justify-between items-start border-b border-white/10 pb-4">
                 <div className="space-y-1">
