@@ -12,7 +12,7 @@ interface NavbarProps {
 export const Navbar = React.memo(({ onAboutOpen, onServiceSelect, onMobileMenuToggle, mobileMenuOpen }: NavbarProps) => {
   return (
     <nav className="fixed top-5 left-0 right-0 z-[100] flex items-center justify-center px-4 w-full pointer-events-none">
-      <div className="pointer-events-auto w-full max-w-5xl flex items-center justify-between bg-[#0A0A0B]/95 backdrop-blur-md rounded-none px-5 py-2.5 shadow-xl border border-white/10 h-14">
+      <div className="pointer-events-auto w-full max-w-5xl flex items-center justify-between glass-cyan rounded-none px-5 py-2.5 h-14">
         <div className="flex items-center gap-8 pl-1">
           <a
             href="#hero"
@@ -45,7 +45,7 @@ export const Navbar = React.memo(({ onAboutOpen, onServiceSelect, onMobileMenuTo
               >
                 Servizi <ChevronRight className="w-2.5 h-2.5 rotate-90" />
               </a>
-              <div className="absolute top-[calc(100%+10px)] left-0 w-48 bg-[#0A0A0B] border border-white/10 shadow-2xl opacity-0 invisible group-hover/servizi:opacity-100 group-hover/servizi:visible transition-all duration-200 py-3 z-[110]">
+              <div className="absolute top-[calc(100%+10px)] left-0 w-48 glass-cyan shadow-2xl opacity-0 invisible group-hover/servizi:opacity-100 group-hover/servizi:visible transition-all duration-200 py-3 z-[110]">
                 {Object.keys(SERVICES_DATA).map((key) => (
                   <button
                     key={key}
