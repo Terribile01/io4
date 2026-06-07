@@ -72,17 +72,17 @@ export const Hero = React.memo(({ onServiceSelect }: HeroProps) => {
       </motion.div>
 
       {/* Brand Logos Marquee */}
-      <div className="mt-20 w-full overflow-hidden relative py-6 border-y border-white/5">
+      <div className="mt-20 w-screen relative left-1/2 -translate-x-1/2 overflow-hidden py-8 border-y border-white/10 bg-black/40 backdrop-blur-md">
         {/* Fading Edges */}
-        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#0A0015] to-transparent z-10"></div>
-        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#0A0015] to-transparent z-10"></div>
+        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#0A0015]/80 to-transparent z-10"></div>
+        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#0A0015]/80 to-transparent z-10"></div>
 
         <motion.div
-          className="flex whitespace-nowrap gap-16 md:gap-24 items-center"
+          className="flex whitespace-nowrap gap-16 md:gap-28 items-center"
           animate={{ x: ["-50%", "0%"] }}
           transition={{
             repeat: Infinity,
-            duration: 20,
+            duration: 15,
             ease: "linear"
           }}
           style={{ width: "max-content" }}
