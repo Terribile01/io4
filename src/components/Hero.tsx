@@ -70,6 +70,47 @@ export const Hero = React.memo(({ onServiceSelect }: HeroProps) => {
           Cosa Posso Fare Per Te
         </a>
       </motion.div>
+
+      {/* Brand Logos Marquee */}
+      <div className="mt-20 w-full overflow-hidden relative py-6 border-y border-white/5">
+        {/* Fading Edges */}
+        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#0A0015] to-transparent z-10"></div>
+        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#0A0015] to-transparent z-10"></div>
+
+        <motion.div
+          className="flex whitespace-nowrap gap-16 md:gap-24 items-center"
+          animate={{ x: ["-50%", "0%"] }}
+          transition={{
+            repeat: Infinity,
+            duration: 20,
+            ease: "linear"
+          }}
+          style={{ width: "max-content" }}
+        >
+          {[...Array(2)].map((_, i) => (
+            <React.Fragment key={i}>
+              <BrandLogo name="WordPress" url="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/wordpress.svg" />
+              <BrandLogo name="Wix" url="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/wix.svg" />
+              <BrandLogo name="Squarespace" url="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/squarespace.svg" />
+              <BrandLogo name="Shopify" url="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/shopify.svg" />
+            </React.Fragment>
+          ))}
+        </motion.div>
+      </div>
     </section>
   );
 });
+
+const BrandLogo = ({ name, url }: { name: string; url: string }) => (
+  <div className="flex items-center gap-3 opacity-30 hover:opacity-60 transition-opacity group cursor-default">
+    <img
+      src={url}
+      alt={name}
+      className="w-6 h-6 md:w-8 md:h-8 invert"
+      loading="lazy"
+    />
+    <span className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-white">
+      {name}
+    </span>
+  </div>
+);
