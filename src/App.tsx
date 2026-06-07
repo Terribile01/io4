@@ -371,7 +371,7 @@ Ecco i dettagli della mia richiesta:
           <AIPlanner />
         </section>
 
-        <MarqueeBanner logos={AI_LOGOS} color="white" />
+        <MarqueeBanner logos={AI_LOGOS} />
 
         {/* 11. LEAD INTAKE CONTACT FORM WORKFLOW */}
         <section className="space-y-12 scroll-mt-24 pb-16 max-w-7xl mx-auto px-4 md:px-8" id="contatti">

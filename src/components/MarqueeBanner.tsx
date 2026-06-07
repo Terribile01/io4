@@ -40,7 +40,7 @@ const BrandLogo = ({ logo, color }: { logo: Logo; color: string; key?: string })
   );
 };
 
-export const MarqueeBanner = React.memo(({ logos, duration = 15, color = "accent-pink" }: MarqueeBannerProps) => {
+export const MarqueeBanner = React.memo(({ logos, duration = 15, color = "accent-cyan" }: MarqueeBannerProps) => {
   return (
     <div className="w-full relative overflow-hidden py-24 border-y border-white/10">
       {/* Background Image with dark purple overlay */}
