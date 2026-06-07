@@ -72,13 +72,13 @@ export const Hero = React.memo(({ onServiceSelect }: HeroProps) => {
       </motion.div>
 
       {/* Brand Logos Marquee */}
-      <div className="mt-20 w-screen relative left-1/2 -translate-x-1/2 overflow-hidden py-12 border-y border-white/10">
+      <div className="mt-24 w-screen relative left-1/2 -translate-x-1/2 overflow-hidden py-24 border-y border-white/10">
         {/* Background Image with dark purple overlay */}
         <div
-          className="absolute inset-0 z-0 bg-cover bg-center"
+          className="absolute inset-0 z-0 bg-cover bg-center scale-110"
           style={{ backgroundImage: `url('/assets/uploads/banner-bg.jpg')` }}
         >
-          <div className="absolute inset-0 bg-[#0A0015]/95 backdrop-blur-[2px]"></div>
+          <div className="absolute inset-0 bg-[#0A0015]/90 backdrop-blur-[1px]"></div>
         </div>
 
         {/* Fading Edges */}

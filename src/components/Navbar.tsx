@@ -23,8 +23,12 @@ export const Navbar = React.memo(({ onAboutOpen, onServiceSelect, onMobileMenuTo
             }}
             className="flex items-center gap-2 group cursor-pointer"
           >
-            <div className="w-8 h-8 rounded-none border border-white/20 bg-white/15 flex items-center justify-center shrink-0 font-mono">
-              <span className="text-white font-black font-display text-sm tracking-widest">FW</span>
+            <div className="w-10 h-10 rounded-none border border-white/10 overflow-hidden flex items-center justify-center shrink-0">
+              <img
+                src="/assets/uploads/def.logo%20facilissimo%20web%20.jpg"
+                alt="Logo"
+                className="w-full h-full object-cover"
+              />
             </div>
             <span className="font-display font-bold text-xs uppercase tracking-widest text-white group-hover:text-accent-orange transition-colors">
               FACILISSIMO WEB

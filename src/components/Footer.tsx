@@ -7,10 +7,14 @@ export const Footer = React.memo(({ onPrivacyOpen }: { onPrivacyOpen: () => void
       <div className="max-w-5xl mx-auto space-y-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div className="space-y-4 text-left">
-            <div className="w-10 h-10 rounded-none border border-white/20 bg-white/5 flex items-center justify-center font-mono">
-              <span className="text-white font-black font-display text-base tracking-widest">FW</span>
+            <div className="w-20 h-20 rounded-none border border-white/10 overflow-hidden flex items-center justify-center">
+              <img
+                src="/assets/uploads/def.logo%20facilissimo%20web%20.jpg"
+                alt="Logo"
+                className="w-full h-full object-cover"
+              />
             </div>
-            <h4 className="font-display font-black text-xs uppercase tracking-widest text-white">FACILISSIMO WEB</h4>
+            <h4 className="font-display font-black text-sm uppercase tracking-widest text-white">FACILISSIMO WEB</h4>
             <p className="text-xs text-white/90 leading-relaxed font-sans font-light">
               Metodo d'eccellenza per la digitalizzazione delle imprese locali in tutta Italia. Sviluppo custom-code, design, visibilità e monetizzazione.
             </p>
