@@ -304,9 +304,9 @@ Ecco i dettagli della mia richiesta:
         )}
       </AnimatePresence>
 
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-8 space-y-24 md:space-y-40 mt-12">
+      <main className="flex-1 w-full space-y-24 md:space-y-40 mt-12">
         {/* Branding Separator 1 */}
-        <div className="flex justify-center -mb-16 md:-mb-24 opacity-40">
+        <div className="flex justify-center -mb-16 md:-mb-24 opacity-40 max-w-7xl mx-auto px-4 md:px-8">
           <img
             src="/assets/uploads/def.logo%20facilissimo%20web%20.jpg"
             alt=""
@@ -316,10 +316,12 @@ Ecco i dettagli della mia richiesta:
 
         <Hero onServiceSelect={handleServiceSelect} />
 
-        <ServicesSection />
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <ServicesSection />
+        </div>
 
         {/* Branding Separator 2 */}
-        <div className="flex justify-center py-10 opacity-30">
+        <div className="flex justify-center py-10 opacity-30 max-w-7xl mx-auto px-4 md:px-8">
           <img
             src="/assets/uploads/def.logo%20facilissimo%20web%20.jpg"
             alt=""
@@ -327,10 +329,12 @@ Ecco i dettagli della mia richiesta:
           />
         </div>
 
-        <ComparisonSection />
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <ComparisonSection />
+        </div>
 
         {/* 5. INTERACTIVE WIDGET 1: THE ROI CONVERSION CALCULATOR */}
-        <section className="space-y-8 scroll-mt-24" id="calcolatore">
+        <section className="space-y-8 scroll-mt-24 max-w-7xl mx-auto px-4 md:px-8" id="calcolatore">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
               Strumento di Calcolo
@@ -347,7 +351,7 @@ Ecco i dettagli della mia richiesta:
         </section>
 
         {/* 6. INTERACTIVE WIDGET 2: THE AI PLANNER (GEMINI INTEGRATION) */}
-        <section className="space-y-12 scroll-mt-24" id="ai-planner">
+        <section className="space-y-12 scroll-mt-24 max-w-7xl mx-auto px-4 md:px-8" id="ai-planner">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="text-[10px] font-bold uppercase tracking-widest text-[#BF5AF2] bg-[#BF5AF2]/10 px-3.5 py-1 rounded-full flex items-center justify-center gap-1 mx-auto w-max">
               Assistente Strategico <Sparkles className="w-3.5 h-3.5" />
@@ -367,7 +371,7 @@ Ecco i dettagli della mia richiesta:
 
 
         {/* 11. LEAD INTAKE CONTACT FORM WORKFLOW */}
-        <section className="space-y-12 scroll-mt-24 pb-16" id="contatti">
+        <section className="space-y-12 scroll-mt-24 pb-16 max-w-7xl mx-auto px-4 md:px-8" id="contatti">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
               Inizia Ora
