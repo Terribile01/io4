@@ -305,8 +305,28 @@ Ecco i dettagli della mia richiesta:
       </AnimatePresence>
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-8 space-y-24 md:space-y-40 mt-12">
+        {/* Branding Separator 1 */}
+        <div className="flex justify-center -mb-16 md:-mb-24 opacity-40">
+          <img
+            src="/assets/uploads/def.logo%20facilissimo%20web%20.jpg"
+            alt=""
+            className="w-16 h-16 md:w-24 md:h-24 object-cover rounded-full border border-white/10"
+          />
+        </div>
+
         <Hero onServiceSelect={handleServiceSelect} />
+
         <ServicesSection />
+
+        {/* Branding Separator 2 */}
+        <div className="flex justify-center py-10 opacity-30">
+          <img
+            src="/assets/uploads/def.logo%20facilissimo%20web%20.jpg"
+            alt=""
+            className="w-12 h-12 md:w-16 md:h-16 object-cover rounded-full border border-white/5"
+          />
+        </div>
+
         <ComparisonSection />
 
         {/* 5. INTERACTIVE WIDGET 1: THE ROI CONVERSION CALCULATOR */}
