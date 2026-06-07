@@ -21,7 +21,7 @@ export const DEV_LOGOS: Logo[] = [
 ];
 
 export const AI_LOGOS: Logo[] = [
-  { name: "Jules AI", url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/robotframework.svg", brandColor: "#000000" },
+  { name: "Jules", url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/octopusenergy.svg", brandColor: "#000000" },
   { name: "ChatGPT", url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/openai.svg", brandColor: "#412991" },
   { name: "Gemini", url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/googlegemini.svg", brandColor: "#8E75FF" },
   { name: "Claude", url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/anthropic.svg", brandColor: "#D97757" },
