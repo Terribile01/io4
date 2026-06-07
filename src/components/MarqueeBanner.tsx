@@ -9,30 +9,40 @@ interface Logo {
 interface MarqueeBannerProps {
   logos: Logo[];
   duration?: number;
+  color?: string; // Tailwind class like "accent-pink" or "white"
 }
 
-const BrandLogo = ({ name, url }: { name: string; url: string; key?: string }) => (
-  <div className="flex items-center gap-3 opacity-80 hover:opacity-100 transition-opacity group cursor-default">
-    <div
-      className="w-6 h-6 md:w-8 md:h-8 bg-accent-pink"
-      style={{
-        maskImage: `url(${url})`,
-        WebkitMaskImage: `url(${url})`,
-        maskRepeat: 'no-repeat',
-        WebkitMaskRepeat: 'no-repeat',
-        maskPosition: 'center',
-        WebkitMaskPosition: 'center',
-        maskSize: 'contain',
-        WebkitMaskSize: 'contain'
-      }}
-    />
-    <span className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-accent-pink">
-      {name}
-    </span>
-  </div>
-);
+const BrandLogo = ({ name, url, color }: { name: string; url: string; color: string; key?: string }) => {
+  // Determine if the color is a utility class or a raw color
+  const isUtility = !color.startsWith('#') && !color.startsWith('rgb');
+  const iconClass = isUtility ? `bg-${color}` : '';
+  const textClass = isUtility ? `text-${color}` : '';
 
-export const MarqueeBanner = React.memo(({ logos, duration = 15 }: MarqueeBannerProps) => {
+  return (
+    <div className="flex items-center gap-3 opacity-80 hover:opacity-100 transition-opacity group cursor-default">
+      <div
+        className={`w-6 h-6 md:w-8 md:h-8 ${iconClass}`}
+        style={{
+          backgroundColor: isUtility ? undefined : color,
+          maskImage: `url(${url})`,
+          WebkitMaskImage: `url(${url})`,
+          maskRepeat: 'no-repeat',
+          WebkitMaskRepeat: 'no-repeat',
+          maskPosition: 'center',
+          WebkitMaskPosition: 'center',
+          maskSize: 'contain',
+          WebkitMaskSize: 'contain'
+        }}
+      />
+      <span className={`text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] ${textClass}`}
+            style={{ color: isUtility ? undefined : color }}>
+        {name}
+      </span>
+    </div>
+  );
+};
+
+export const MarqueeBanner = React.memo(({ logos, duration = 15, color = "accent-pink" }: MarqueeBannerProps) => {
   return (
     <div className="w-full relative overflow-hidden py-24 border-y border-white/10">
       {/* Background Image with dark purple overlay */}
@@ -60,7 +70,7 @@ export const MarqueeBanner = React.memo(({ logos, duration = 15 }: MarqueeBanner
         {[...Array(2)].map((_, i) => (
           <React.Fragment key={i}>
             {logos.map((logo, idx) => (
-              <BrandLogo key={`${i}-${idx}`} name={logo.name} url={logo.url} />
+              <BrandLogo key={`${i}-${idx}`} name={logo.name} url={logo.url} color={color} />
             ))}
           </React.Fragment>
         ))}
