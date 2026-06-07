@@ -9,7 +9,7 @@ export const Footer = React.memo(({ onPrivacyOpen }: { onPrivacyOpen: () => void
           <div className="space-y-4 text-left">
             <div className="w-20 h-20 rounded-none border border-white/10 overflow-hidden flex items-center justify-center">
               <img
-                src="/assets/uploads/def.logo%20facilissimo%20web%20.jpg"
+                src="/assets/uploads/logo-facilissimo.jpg"
                 alt="Logo"
                 className="w-full h-full object-cover"
               />
