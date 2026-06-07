@@ -17,9 +17,9 @@ const BrandLogo = ({ logo, color }: { logo: Logo; color: string; key?: string })
   const textClass = isUtility ? `text-${displayColor}` : '';
 
   return (
-    <div className="flex items-center gap-3 opacity-80 hover:opacity-100 transition-opacity group cursor-default">
+    <div className="flex items-center gap-4 opacity-80 hover:opacity-100 transition-opacity group cursor-default">
       <div
-        className={`w-6 h-6 md:w-8 md:h-8 ${iconClass}`}
+        className={`w-[40px] h-[40px] md:w-[50px] md:h-[50px] ${iconClass}`}
         style={{
           backgroundColor: isUtility ? undefined : displayColor,
           maskImage: `url(${logo.url})`,
@@ -32,7 +32,7 @@ const BrandLogo = ({ logo, color }: { logo: Logo; color: string; key?: string })
           WebkitMaskSize: 'contain'
         }}
       />
-      <span className={`text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] ${textClass}`}
+      <span className={`text-[11px] md:text-sm font-bold uppercase tracking-[0.2em] ${textClass}`}
             style={{ color: isUtility ? undefined : displayColor }}>
         {logo.name}
       </span>
@@ -40,7 +40,7 @@ const BrandLogo = ({ logo, color }: { logo: Logo; color: string; key?: string })
   );
 };
 
-export const MarqueeBanner = React.memo(({ logos, duration = 15, color = "accent-cyan" }: MarqueeBannerProps) => {
+export const MarqueeBanner = React.memo(({ logos, duration = 15, color = "accent-blue" }: MarqueeBannerProps) => {
   return (
     <div className="w-full relative overflow-hidden py-24 border-y border-white/10">
       {/* Background Image with dark purple overlay */}

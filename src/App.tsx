@@ -335,7 +335,7 @@ Ecco i dettagli della mia richiesta:
           <ComparisonSection />
         </div>
 
-        <MarqueeBanner logos={DEV_LOGOS} />
+        <MarqueeBanner logos={DEV_LOGOS} color="accent-blue" />
 
         {/* 5. INTERACTIVE WIDGET 1: THE ROI CONVERSION CALCULATOR */}
         <section className="space-y-8 scroll-mt-24 max-w-7xl mx-auto px-4 md:px-8" id="calcolatore">
@@ -371,7 +371,7 @@ Ecco i dettagli della mia richiesta:
           <AIPlanner />
         </section>
 
-        <MarqueeBanner logos={AI_LOGOS} />
+        <MarqueeBanner logos={AI_LOGOS} color="accent-blue" />
 
         {/* 11. LEAD INTAKE CONTACT FORM WORKFLOW */}
         <section className="space-y-12 scroll-mt-24 pb-16 max-w-7xl mx-auto px-4 md:px-8" id="contatti">
