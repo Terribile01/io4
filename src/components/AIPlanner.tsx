@@ -3,6 +3,7 @@ import { Sparkles, ArrowRight, ArrowLeft, Send, Check, AlertCircle, RotateCcw, M
 
 const AIPlanner = React.memo(() => {
   const [step, setStep] = useState(0); // 0 to 4
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [businessName, setBusinessName] = useState("");
   const [niche, setNiche] = useState("");
   const [goals, setGoals] = useState<string[]>([]);
@@ -41,6 +42,7 @@ const AIPlanner = React.memo(() => {
 
   const restartPlanner = () => {
     setStep(0);
+    setPrivacyAccepted(false);
     setBusinessName("");
     setNiche("");
     setGoals([]);
@@ -349,8 +351,8 @@ const AIPlanner = React.memo(() => {
             </div>
           </div>
 
-          <div className="p-6 rounded-none bg-charcoal text-white flex flex-col md:flex-row justify-between items-stretch md:items-center gap-6">
-            <div className="space-y-1">
+          <div className="p-6 rounded-none glass-nav text-white flex flex-col md:flex-row justify-between items-stretch md:items-center gap-6">
+            <div className="space-y-4 md:space-y-1 max-w-md">
               <div className="flex items-center gap-2 text-accent-orange font-bold text-xs uppercase tracking-widest">
                 <MessageSquare className="w-4 h-4" />
                 PARLIAMONE SU WHATSAPP
@@ -359,13 +361,28 @@ const AIPlanner = React.memo(() => {
               <p className="text-xs text-white/90">
                 Clicca il pulsante qui sotto per inviarmi questi dettagli. Ti risponderò subito con una proposta concreta.
               </p>
+
+              {/* Privacy Checkbox */}
+              <div className="pt-2 flex items-start gap-2 cursor-pointer group" onClick={() => setPrivacyAccepted(!privacyAccepted)}>
+                <div className={`mt-0.5 w-4 h-4 border rounded flex items-center justify-center transition-colors ${privacyAccepted ? 'bg-[#25D366] border-[#25D366]' : 'border-white/30 group-hover:border-white/50'}`}>
+                  {privacyAccepted && <Check className="w-3 h-3 text-white" />}
+                </div>
+                <p className="text-[10px] text-white/70 leading-tight">
+                  Accetto il trattamento dei dati personali secondo la <a href="/privacy-policy" className="underline hover:text-white" onClick={(e) => e.stopPropagation()}>Privacy Policy</a>.
+                </p>
+              </div>
             </div>
             <button
-              onClick={handleWhatsApp}
-              className="bg-black/50 text-white/95 hover:bg-black/50-soft transition-all font-bold px-5 py-3 rounded-none flex items-center justify-center gap-2 text-xs uppercase tracking-widest shadow-md cursor-pointer"
+              onClick={() => privacyAccepted && handleWhatsApp()}
+              disabled={!privacyAccepted}
+              className={`transition-all font-bold px-8 py-4 rounded-none flex items-center justify-center gap-2 text-xs uppercase tracking-widest shadow-lg ${
+                privacyAccepted
+                  ? "bg-[#25D366] text-white hover:bg-[#20ba5a] cursor-pointer"
+                  : "bg-white/10 text-white/30 cursor-not-allowed border border-white/5"
+              }`}
             >
-              <MessageSquare className="w-4 h-4 text-accent-blue" />
-              Invia su WhatsApp
+              <MessageSquare className="w-5 h-5 fill-current" />
+              Invia
             </button>
           </div>
 
