@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { SERVICES_DATA } from '../App';
 import { MarqueeBanner } from './MarqueeBanner';
+import { CMS_LOGOS } from '../constants/logos';
 
 interface HeroProps {
   onServiceSelect: (service: keyof typeof SERVICES_DATA) => void;
@@ -76,7 +77,7 @@ export const Hero = React.memo(({ onServiceSelect }: HeroProps) => {
 
       {/* Brand Logos Marquee */}
       <div className="mt-24 w-full">
-        <MarqueeBanner />
+        <MarqueeBanner logos={CMS_LOGOS} />
       </div>
     </section>
   );

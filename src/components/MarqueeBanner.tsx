@@ -1,7 +1,17 @@
 import React from 'react';
 import { motion } from 'motion/react';
 
-const BrandLogo = ({ name, url }: { name: string; url: string }) => (
+interface Logo {
+  name: string;
+  url: string;
+}
+
+interface MarqueeBannerProps {
+  logos: Logo[];
+  duration?: number;
+}
+
+const BrandLogo = ({ name, url }: { name: string; url: string; key?: string }) => (
   <div className="flex items-center gap-3 opacity-80 hover:opacity-100 transition-opacity group cursor-default">
     <div
       className="w-6 h-6 md:w-8 md:h-8 bg-accent-pink"
@@ -22,7 +32,7 @@ const BrandLogo = ({ name, url }: { name: string; url: string }) => (
   </div>
 );
 
-export const MarqueeBanner = React.memo(() => {
+export const MarqueeBanner = React.memo(({ logos, duration = 15 }: MarqueeBannerProps) => {
   return (
     <div className="w-full relative overflow-hidden py-24 border-y border-white/10">
       {/* Background Image with dark purple overlay */}
@@ -42,18 +52,16 @@ export const MarqueeBanner = React.memo(() => {
         animate={{ x: ["-50%", "0%"] }}
         transition={{
           repeat: Infinity,
-          duration: 15,
+          duration: duration,
           ease: "linear"
         }}
         style={{ width: "max-content" }}
       >
         {[...Array(2)].map((_, i) => (
           <React.Fragment key={i}>
-            <BrandLogo name="WordPress" url="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/wordpress.svg" />
-            <BrandLogo name="Hostinger" url="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/hostinger.svg" />
-            <BrandLogo name="Wix" url="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/wix.svg" />
-            <BrandLogo name="Squarespace" url="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/squarespace.svg" />
-            <BrandLogo name="Shopify" url="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/shopify.svg" />
+            {logos.map((logo, idx) => (
+              <BrandLogo key={`${i}-${idx}`} name={logo.name} url={logo.url} />
+            ))}
           </React.Fragment>
         ))}
       </motion.div>
