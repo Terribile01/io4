@@ -9,6 +9,7 @@ import { Navbar } from "./components/Navbar";
 import { Hero } from "./components/Hero";
 import { ServicesSection } from "./components/ServicesSection";
 import { ComparisonSection } from "./components/ComparisonSection";
+import { MarqueeBanner } from "./components/MarqueeBanner";
 import { Footer } from "./components/Footer";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -333,6 +334,8 @@ Ecco i dettagli della mia richiesta:
           <ComparisonSection />
         </div>
 
+        <MarqueeBanner />
+
         {/* 5. INTERACTIVE WIDGET 1: THE ROI CONVERSION CALCULATOR */}
         <section className="space-y-8 scroll-mt-24 max-w-7xl mx-auto px-4 md:px-8" id="calcolatore">
           <div className="text-center max-w-xl mx-auto space-y-2">
@@ -367,8 +370,7 @@ Ecco i dettagli della mia richiesta:
           <AIPlanner />
         </section>
 
-
-
+        <MarqueeBanner />
 
         {/* 11. LEAD INTAKE CONTACT FORM WORKFLOW */}
         <section className="space-y-12 scroll-mt-24 pb-16 max-w-7xl mx-auto px-4 md:px-8" id="contatti">
