@@ -72,13 +72,21 @@ export const Hero = React.memo(({ onServiceSelect }: HeroProps) => {
       </motion.div>
 
       {/* Brand Logos Marquee */}
-      <div className="mt-20 w-screen relative left-1/2 -translate-x-1/2 overflow-hidden py-8 border-y border-white/10 bg-black/40 backdrop-blur-md">
+      <div className="mt-20 w-screen relative left-1/2 -translate-x-1/2 overflow-hidden py-12 border-y border-white/10">
+        {/* Background Image with bluish-purple overlay */}
+        <div
+          className="absolute inset-0 z-0 bg-cover bg-center"
+          style={{ backgroundImage: `url('/assets/uploads/banner-bg.jpg')` }}
+        >
+          <div className="absolute inset-0 bg-accent-purple/85 backdrop-blur-[2px]"></div>
+        </div>
+
         {/* Fading Edges */}
-        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#0A0015]/80 to-transparent z-10"></div>
-        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#0A0015]/80 to-transparent z-10"></div>
+        <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-accent-purple to-transparent z-10"></div>
+        <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-accent-purple to-transparent z-10"></div>
 
         <motion.div
-          className="flex whitespace-nowrap gap-16 md:gap-28 items-center"
+          className="relative z-10 flex whitespace-nowrap gap-16 md:gap-28 items-center"
           animate={{ x: ["-50%", "0%"] }}
           transition={{
             repeat: Infinity,
@@ -90,6 +98,7 @@ export const Hero = React.memo(({ onServiceSelect }: HeroProps) => {
           {[...Array(2)].map((_, i) => (
             <React.Fragment key={i}>
               <BrandLogo name="WordPress" url="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/wordpress.svg" />
+              <BrandLogo name="Hostinger" url="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/hostinger.svg" />
               <BrandLogo name="Wix" url="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/wix.svg" />
               <BrandLogo name="Squarespace" url="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/squarespace.svg" />
               <BrandLogo name="Shopify" url="https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/shopify.svg" />
@@ -102,14 +111,21 @@ export const Hero = React.memo(({ onServiceSelect }: HeroProps) => {
 });
 
 const BrandLogo = ({ name, url }: { name: string; url: string }) => (
-  <div className="flex items-center gap-3 opacity-30 hover:opacity-60 transition-opacity group cursor-default">
-    <img
-      src={url}
-      alt={name}
-      className="w-6 h-6 md:w-8 md:h-8 invert"
-      loading="lazy"
+  <div className="flex items-center gap-3 opacity-80 hover:opacity-100 transition-opacity group cursor-default">
+    <div
+      className="w-6 h-6 md:w-8 md:h-8 bg-accent-pink"
+      style={{
+        maskImage: `url(${url})`,
+        WebkitMaskImage: `url(${url})`,
+        maskRepeat: 'no-repeat',
+        WebkitMaskRepeat: 'no-repeat',
+        maskPosition: 'center',
+        WebkitMaskPosition: 'center',
+        maskSize: 'contain',
+        WebkitMaskSize: 'contain'
+      }}
     />
-    <span className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-white">
+    <span className="text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] text-accent-pink">
       {name}
     </span>
   </div>
