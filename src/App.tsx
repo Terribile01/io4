@@ -10,7 +10,7 @@ import { Hero } from "./components/Hero";
 import { ServicesSection } from "./components/ServicesSection";
 import { ComparisonSection } from "./components/ComparisonSection";
 import { MarqueeBanner } from "./components/MarqueeBanner";
-import { CMS_LOGOS, DEV_LOGOS } from "./constants/logos";
+import { CMS_LOGOS, DEV_LOGOS, AI_LOGOS } from "./constants/logos";
 import { Footer } from "./components/Footer";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -371,7 +371,7 @@ Ecco i dettagli della mia richiesta:
           <AIPlanner />
         </section>
 
-        <MarqueeBanner logos={CMS_LOGOS} />
+        <MarqueeBanner logos={AI_LOGOS} color="white" />
 
         {/* 11. LEAD INTAKE CONTACT FORM WORKFLOW */}
         <section className="space-y-12 scroll-mt-24 pb-16 max-w-7xl mx-auto px-4 md:px-8" id="contatti">
