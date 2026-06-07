@@ -1,31 +1,29 @@
 import React from 'react';
 import { motion } from 'motion/react';
-
-interface Logo {
-  name: string;
-  url: string;
-}
+import { Logo } from '../constants/logos';
 
 interface MarqueeBannerProps {
   logos: Logo[];
   duration?: number;
-  color?: string; // Tailwind class like "accent-pink" or "white"
+  color?: string; // Tailwind class like "accent-pink", "white", or "original"
 }
 
-const BrandLogo = ({ name, url, color }: { name: string; url: string; color: string; key?: string }) => {
-  // Determine if the color is a utility class or a raw color
-  const isUtility = !color.startsWith('#') && !color.startsWith('rgb');
-  const iconClass = isUtility ? `bg-${color}` : '';
-  const textClass = isUtility ? `text-${color}` : '';
+const BrandLogo = ({ logo, color }: { logo: Logo; color: string; key?: string }) => {
+  const isOriginal = color === "original";
+  const displayColor = isOriginal ? logo.brandColor : color;
+
+  const isUtility = !displayColor.startsWith('#') && !displayColor.startsWith('rgb');
+  const iconClass = isUtility ? `bg-${displayColor}` : '';
+  const textClass = isUtility ? `text-${displayColor}` : '';
 
   return (
     <div className="flex items-center gap-3 opacity-80 hover:opacity-100 transition-opacity group cursor-default">
       <div
         className={`w-6 h-6 md:w-8 md:h-8 ${iconClass}`}
         style={{
-          backgroundColor: isUtility ? undefined : color,
-          maskImage: `url(${url})`,
-          WebkitMaskImage: `url(${url})`,
+          backgroundColor: isUtility ? undefined : displayColor,
+          maskImage: `url(${logo.url})`,
+          WebkitMaskImage: `url(${logo.url})`,
           maskRepeat: 'no-repeat',
           WebkitMaskRepeat: 'no-repeat',
           maskPosition: 'center',
@@ -35,8 +33,8 @@ const BrandLogo = ({ name, url, color }: { name: string; url: string; color: str
         }}
       />
       <span className={`text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] ${textClass}`}
-            style={{ color: isUtility ? undefined : color }}>
-        {name}
+            style={{ color: isUtility ? undefined : displayColor }}>
+        {logo.name}
       </span>
     </div>
   );
@@ -70,7 +68,7 @@ export const MarqueeBanner = React.memo(({ logos, duration = 15, color = "accent
         {[...Array(2)].map((_, i) => (
           <React.Fragment key={i}>
             {logos.map((logo, idx) => (
-              <BrandLogo key={`${i}-${idx}`} name={logo.name} url={logo.url} color={color} />
+              <BrandLogo key={`${i}-${idx}`} logo={logo} color={color} />
             ))}
           </React.Fragment>
         ))}

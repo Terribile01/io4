@@ -310,7 +310,7 @@ Ecco i dettagli della mia richiesta:
         {/* Branding Separator 1 */}
         <div className="flex justify-center -mb-16 md:-mb-24 opacity-40 max-w-7xl mx-auto px-4 md:px-8">
           <img
-            src="/assets/uploads/def.logo%20facilissimo%20web%20.jpg"
+            src="/assets/uploads/logo-facilissimo.jpg"
             alt=""
             className="w-16 h-16 md:w-24 md:h-24 object-cover rounded-full border border-white/10"
           />
@@ -325,7 +325,7 @@ Ecco i dettagli della mia richiesta:
         {/* Branding Separator 2 */}
         <div className="flex justify-center py-10 opacity-30 max-w-7xl mx-auto px-4 md:px-8">
           <img
-            src="/assets/uploads/def.logo%20facilissimo%20web%20.jpg"
+            src="/assets/uploads/logo-facilissimo.jpg"
             alt=""
             className="w-12 h-12 md:w-16 md:h-16 object-cover rounded-full border border-white/5"
           />

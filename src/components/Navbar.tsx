@@ -25,7 +25,7 @@ export const Navbar = React.memo(({ onAboutOpen, onServiceSelect, onMobileMenuTo
           >
             <div className="w-10 h-10 rounded-none border border-white/10 overflow-hidden flex items-center justify-center shrink-0">
               <img
-                src="/assets/uploads/def.logo%20facilissimo%20web%20.jpg"
+                src="/assets/uploads/logo-facilissimo.jpg"
                 alt="Logo"
                 className="w-full h-full object-cover"
               />
