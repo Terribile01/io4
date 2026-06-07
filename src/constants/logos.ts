@@ -25,5 +25,10 @@ export const AI_LOGOS: Logo[] = [
   { name: "ChatGPT", url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/openai.svg", brandColor: "#412991" },
   { name: "Gemini", url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/googlegemini.svg", brandColor: "#8E75FF" },
   { name: "Claude", url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/anthropic.svg", brandColor: "#D97757" },
-  { name: "Meta AI", url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/meta.svg", brandColor: "#0668E1" }
+  { name: "Meta AI", url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/meta.svg", brandColor: "#0668E1" },
+  { name: "Midjourney", url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/midjourney.svg", brandColor: "#000000" },
+  { name: "Perplexity", url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/perplexity.svg", brandColor: "#21A0A0" },
+  { name: "Hugging Face", url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/huggingface.svg", brandColor: "#FFD21E" },
+  { name: "Mistral AI", url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/mistralai.svg", brandColor: "#000000" },
+  { name: "Groq", url: "https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/groq.svg", brandColor: "#F55036" }
 ];
