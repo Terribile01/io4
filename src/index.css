@@ -42,7 +42,7 @@ html {
 }
 
 .glass-orange-50 {
-  background: rgba(255, 159, 10, 0.5);
+  background: linear-gradient(135deg, rgba(255, 159, 10, 0.6) 0%, rgba(255, 55, 95, 0.6) 100%);
   backdrop-filter: blur(12px) saturate(180%) contrast(110%);
   border: 1px solid rgba(255, 159, 10, 0.4);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
