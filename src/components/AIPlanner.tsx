@@ -381,7 +381,19 @@ const AIPlanner = React.memo(() => {
                   : "bg-white/10 text-white/30 cursor-not-allowed border border-white/5"
               }`}
             >
-              <MessageSquare className="w-5 h-5 fill-current" />
+              <div
+                className="w-5 h-5 bg-current"
+                style={{
+                  maskImage: 'url(https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/whatsapp.svg)',
+                  WebkitMaskImage: 'url(https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/whatsapp.svg)',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskPosition: 'center',
+                  WebkitMaskPosition: 'center',
+                  maskSize: 'contain',
+                  WebkitMaskSize: 'contain'
+                }}
+              />
               Invia
             </button>
           </div>
