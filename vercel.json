@@ -5,6 +5,10 @@
       "destination": "/api/audit.ts"
     },
     {
+      "source": "/api/chat",
+      "destination": "/api/chat.ts"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/server.ts"
     },
