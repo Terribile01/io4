@@ -10,18 +10,41 @@ interface MarqueeBannerProps {
 
 const BrandLogo = ({ logo, color }: { logo: Logo; color: string; key?: string }) => {
   const isOriginal = color === "original";
-  const displayColor = isOriginal ? logo.brandColor : color;
 
+  if (isOriginal) {
+    return (
+      <div className="flex items-center gap-4 opacity-80 hover:opacity-100 transition-opacity group cursor-default">
+        <img
+          src={logo.url}
+          alt={logo.name}
+          className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] object-contain"
+        />
+        <span className="text-[11px] md:text-sm font-bold uppercase tracking-[0.2em] text-white">
+          {logo.name}
+        </span>
+      </div>
+    );
+  }
+
+  const displayColor = color;
   const isUtility = !displayColor.startsWith('#') && !displayColor.startsWith('rgb');
-  const iconClass = isUtility ? `bg-${displayColor}` : '';
   const textClass = isUtility ? `text-${displayColor}` : '';
+
+  const getBackgroundColor = () => {
+    if (!isUtility) return displayColor;
+    if (displayColor === 'accent-blue') return 'var(--color-accent-blue)';
+    if (displayColor === 'accent-pink') return 'var(--color-accent-pink)';
+    if (displayColor === 'accent-purple') return 'var(--color-accent-purple)';
+    if (displayColor === 'white') return '#FFFFFF';
+    return undefined;
+  };
 
   return (
     <div className="flex items-center gap-4 opacity-80 hover:opacity-100 transition-opacity group cursor-default">
       <div
-        className={`w-[40px] h-[40px] md:w-[50px] md:h-[50px] ${iconClass}`}
+        className="w-[40px] h-[40px] md:w-[50px] md:h-[50px]"
         style={{
-          backgroundColor: isUtility ? undefined : displayColor,
+          backgroundColor: getBackgroundColor(),
           maskImage: `url(${logo.url})`,
           WebkitMaskImage: `url(${logo.url})`,
           maskRepeat: 'no-repeat',
