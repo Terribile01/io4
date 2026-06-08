@@ -49,9 +49,12 @@ const AIPlanner = React.memo(() => {
       }
 
       const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
       setAiAudit(data.audit);
     } catch (err) {
-      console.error(err);
+      console.error("AI Planner Error:", err);
       setErrorMsg("Non sono riuscita a generare l'audit AI in questo momento, ma puoi comunque procedere con l'invio WhatsApp.");
     } finally {
       setIsAiLoading(false);
