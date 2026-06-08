@@ -4,6 +4,8 @@ import { Sparkles, ArrowRight, ArrowLeft, Send, Check, AlertCircle, RotateCcw, M
 const AIPlanner = React.memo(() => {
   const [step, setStep] = useState(0); // 0 to 4
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [aiAudit, setAiAudit] = useState<string | null>(null);
+  const [isAiLoading, setIsAiLoading] = useState(false);
   const [businessName, setBusinessName] = useState("");
   const [niche, setNiche] = useState("");
   const [goals, setGoals] = useState<string[]>([]);
@@ -22,6 +24,40 @@ const AIPlanner = React.memo(() => {
     }
   };
 
+  const generateAiAudit = async () => {
+    setIsAiLoading(true);
+    setErrorMsg(null);
+    try {
+      const response = await fetch('/api/audit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          businessName,
+          niche,
+          goals,
+          webType,
+          budget,
+          currentWebsite,
+          clientName,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Errore durante la generazione dell\'audit');
+      }
+
+      const data = await response.json();
+      setAiAudit(data.audit);
+    } catch (err) {
+      console.error(err);
+      setErrorMsg("Non sono riuscita a generare l'audit AI in questo momento, ma puoi comunque procedere con l'invio WhatsApp.");
+    } finally {
+      setIsAiLoading(false);
+    }
+  };
+
   const handleNext = () => {
     if (step === 1 && (!businessName.trim() || !niche.trim())) {
       setErrorMsg("Per favore, inserisci sia il nome del tuo business che il settore.");
@@ -31,6 +67,11 @@ const AIPlanner = React.memo(() => {
       setErrorMsg("Per favore, compila almeno Nome e Telefono per procedere.");
       return;
     }
+
+    if (step === 3) {
+      generateAiAudit();
+    }
+
     setErrorMsg(null);
     setStep(prev => prev + 1);
   };
@@ -43,6 +84,8 @@ const AIPlanner = React.memo(() => {
   const restartPlanner = () => {
     setStep(0);
     setPrivacyAccepted(false);
+    setAiAudit(null);
+    setIsAiLoading(false);
     setBusinessName("");
     setNiche("");
     setGoals([]);
@@ -56,14 +99,19 @@ const AIPlanner = React.memo(() => {
 
   const handleWhatsApp = () => {
     const goalsText = goals.length > 0 ? goals.join(", ") : "Non specificati";
-    const message = `Ciao Maria Teresa! Sono ${clientName}. Ho configurato il mio progetto web:\n\n` +
+    let message = `Ciao Maria Teresa! Sono ${clientName}. Ho configurato il mio progetto web:\n\n` +
       `🏢 *Business*: ${businessName}\n` +
       `📍 *Settore*: ${niche}\n` +
       `🎯 *Obiettivi*: ${goalsText}\n` +
       `💻 *Tecnologia*: ${webType}\n` +
       `💰 *Budget*: ${budget}\n` +
-      `${currentWebsite ? `🌐 *Sito attuale*: ${currentWebsite}\n` : ""}\n` +
-      `Mi piacerebbe ricevere una tua proposta di strategia e collaborazione!`;
+      `${currentWebsite ? `🌐 *Sito attuale*: ${currentWebsite}\n` : ""}\n`;
+
+    if (aiAudit) {
+      message += `✨ *Audit AI ricevuto*: ${aiAudit.substring(0, 500)}${aiAudit.length > 500 ? '...' : ''}\n\n`;
+    }
+
+    message += `Mi piacerebbe ricevere una tua proposta di strategia e collaborazione!`;
 
     window.open(`https://wa.me/393793603321?text=${encodeURIComponent(message)}`, "_blank");
   };
@@ -324,29 +372,52 @@ const AIPlanner = React.memo(() => {
             <h3 className="font-display text-2xl font-bold mt-1 text-white/95">Ecco il riepilogo del tuo progetto</h3>
           </div>
 
-          <div className="bg-black/50 rounded-none p-6 border border-white/10 shadow-inner space-y-4">
+          <div className="bg-black/50 rounded-none p-6 border border-white/10 shadow-inner space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
-                <p className="text-xs font-bold text-white/90 uppercase tracking-widest">Business</p>
+                <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest mb-1">Business</p>
                 <p className="font-medium text-white/95">{businessName} ({niche})</p>
               </div>
               <div>
-                <p className="text-xs font-bold text-white/90 uppercase tracking-widest">Obiettivi</p>
+                <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest mb-1">Obiettivi</p>
                 <p className="font-medium text-white/95">{goals.join(", ")}</p>
               </div>
               <div>
-                <p className="text-xs font-bold text-white/90 uppercase tracking-widest">Tecnologia</p>
+                <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest mb-1">Tecnologia</p>
                 <p className="font-medium text-white/95">{webType}</p>
               </div>
               <div>
-                <p className="text-xs font-bold text-white/90 uppercase tracking-widest">Budget Stimato</p>
+                <p className="text-[10px] font-bold text-white/50 uppercase tracking-widest mb-1">Budget Stimato</p>
                 <p className="font-medium text-white/95">{budget}</p>
               </div>
             </div>
 
+            <div className="pt-6 border-t border-white/10 space-y-3">
+              <div className="flex items-center gap-2">
+                <Sparkles className={`w-4 h-4 ${isAiLoading ? 'animate-pulse text-accent-blue' : 'text-accent-blue'}`} />
+                <span className="text-[10px] font-bold uppercase tracking-widest text-accent-blue">Analisi Strategica AI</span>
+              </div>
+
+              {isAiLoading ? (
+                <div className="space-y-2 animate-pulse">
+                  <div className="h-3 bg-white/10 rounded w-full"></div>
+                  <div className="h-3 bg-white/10 rounded w-5/6"></div>
+                  <div className="h-3 bg-white/10 rounded w-4/6"></div>
+                </div>
+              ) : aiAudit ? (
+                <div className="text-xs text-white/90 leading-relaxed font-light bg-accent-blue/5 p-4 border-l-2 border-accent-blue">
+                  {aiAudit.split('\n').map((line, i) => (
+                    <p key={i} className={line.trim() === '' ? 'h-2' : 'mb-1'}>{line}</p>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-white/50 italic">Analisi non disponibile. Procedi pure con il contatto diretto.</p>
+              )}
+            </div>
+
             <div className="pt-4 border-t border-white/10/50">
-              <p className="text-sm italic text-white/95/70">
-                "Ciao Maria Teresa, ho appena configurato i dettagli per il mio progetto. Inviami una proposta su come possiamo collaborare per raggiungere questi obiettivi!"
+              <p className="text-xs italic text-white/60">
+                "Ciao Maria Teresa, ho analizzato il mio progetto con l'AI e sono pronto a parlarne. Inviami una proposta su come possiamo collaborare!"
               </p>
             </div>
           </div>
