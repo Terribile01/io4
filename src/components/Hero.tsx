@@ -9,7 +9,7 @@ interface HeroProps {
   onServiceSelect: (service: keyof typeof SERVICES_DATA) => void;
 }
 
-export const Hero = React.memo(({ onServiceSelect }: HeroProps) => {
+const HeroComponent: React.FC<HeroProps> = ({ onServiceSelect }) => {
   return (
     <section className="pt-24 md:pt-36 flex flex-col items-center text-center relative w-full overflow-hidden pb-10" id="hero">
       <div className="max-w-4xl mx-auto px-4 flex flex-col items-center">
@@ -81,4 +81,6 @@ export const Hero = React.memo(({ onServiceSelect }: HeroProps) => {
       </div>
     </section>
   );
-});
+};
+
+export const Hero = React.memo(HeroComponent);

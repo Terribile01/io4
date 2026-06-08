@@ -84,7 +84,7 @@ export const ChatWidget: React.FC = () => {
     }
   };
 
-  const handleSend = async (content: string) => {
+  const handleSend = useCallback(async (content: string) => {
     if (!content.trim() || isLoading) return;
 
     const newMessages: Message[] = [...messages, { role: 'user', content }];
@@ -128,7 +128,7 @@ export const ChatWidget: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [messages, isLoading]);
 
   return (
     <div className="fixed bottom-6 right-6 z-[500] pointer-events-auto">
@@ -138,7 +138,8 @@ export const ChatWidget: React.FC = () => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="absolute bottom-20 right-0 w-[350px] md:w-[400px] h-[550px] glass-purple-50 rounded-2xl shadow-2xl border border-white/10 flex flex-col overflow-hidden"
+            className="fixed inset-0 md:absolute md:inset-auto md:bottom-20 md:right-0 w-full h-full md:w-[400px] md:h-[550px] glass-purple-50 md:rounded-2xl shadow-2xl border-0 md:border md:border-white/10 flex flex-col overflow-hidden z-[1000]"
+            style={{ height: '100dvh' }}
           >
             {/* Header */}
             <div className="p-4 bg-white/5 border-b border-white/10 flex justify-between items-center">
