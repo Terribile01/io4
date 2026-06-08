@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { MessageSquare, X, Send, Mic, MicOff, Loader2, Sparkles, ArrowRight } from 'lucide-react';
+import { MessageSquare, X, Send, Mic, MicOff, Loader2, Sparkles, ArrowRight, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -13,6 +15,8 @@ const QUICK_ACTIONS = [
   "Vorrei un consiglio",
   "Parlami del form AI"
 ];
+
+const ROI_ACTION = "Analizziamo il mio ROI";
 
 export const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,6 +35,14 @@ export const ChatWidget: React.FC = () => {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages, isLoading]);
+
+  // Auto-open after 3 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsOpen(true);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Setup Speech Recognition
   useEffect(() => {
@@ -81,10 +93,26 @@ export const ChatWidget: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // Retrieve ROI data from sessionStorage if available
+      let roiContext = null;
+      try {
+        const storedData = sessionStorage.getItem("fw_roi_data");
+        if (storedData) {
+          roiContext = JSON.parse(storedData);
+        }
+      } catch (e) {
+        console.error("Error parsing ROI data from session:", e);
+      }
+
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages }),
+        body: JSON.stringify({
+          messages: newMessages,
+          context: {
+            roiData: roiContext
+          }
+        }),
       });
 
       if (!response.ok) throw new Error('Errore nella risposta del server');
@@ -93,7 +121,10 @@ export const ChatWidget: React.FC = () => {
       setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
     } catch (error) {
       console.error('Chat error:', error);
-      setMessages(prev => [...prev, { role: 'assistant', content: "Scusami, ho avuto un piccolo problema tecnico. Puoi riprovare o scrivermi direttamente su WhatsApp!" }]);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: "Scusami, ho avuto un piccolo problema tecnico nel collegarmi all'AI. Puoi riprovare tra un attimo o scrivermi direttamente su WhatsApp per una risposta immediata!"
+      }]);
     } finally {
       setIsLoading(false);
     }
@@ -146,7 +177,25 @@ export const ChatWidget: React.FC = () => {
                       ? 'bg-accent-blue text-white rounded-tr-none'
                       : 'bg-white/10 text-white/90 rounded-tl-none border border-white/5'
                   }`}>
-                    {msg.content}
+                    {msg.role === 'assistant' ? (
+                      <div className="prose prose-invert prose-p:leading-relaxed prose-p:my-1 prose-headings:my-2 prose-headings:text-sm prose-ul:my-2 prose-li:my-0.5 max-w-none">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {msg.content}
+                        </ReactMarkdown>
+                        {msg.content.includes("WhatsApp") && (
+                          <a
+                            href="https://wa.me/393793603321"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-3 flex items-center justify-center gap-2 py-2 px-4 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-xl font-bold uppercase text-[10px] tracking-widest transition-all no-underline"
+                          >
+                            <MessageCircle className="w-4 h-4" /> Scrivi su WhatsApp
+                          </a>
+                        )}
+                      </div>
+                    ) : (
+                      msg.content
+                    )}
                   </div>
                 </div>
               ))}
@@ -171,6 +220,14 @@ export const ChatWidget: React.FC = () => {
                     {action}
                   </button>
                 ))}
+                {sessionStorage.getItem("fw_roi_data") && (
+                  <button
+                    onClick={() => handleSend(ROI_ACTION)}
+                    className="text-[10px] uppercase font-bold tracking-wider px-3 py-1.5 bg-accent-orange/10 hover:bg-accent-orange/20 border border-accent-orange/20 rounded-full text-accent-orange transition-all flex items-center gap-1"
+                  >
+                    <Sparkles className="w-3 h-3" /> {ROI_ACTION}
+                  </button>
+                )}
               </div>
             )}
 

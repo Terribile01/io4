@@ -25,6 +25,24 @@ const ROICalculator = React.memo(() => {
 
   const extraRevenue = estimatedRevenue - baseRevenue;
 
+  // Persistence for Chat Context
+  React.useEffect(() => {
+    const data = {
+      budget,
+      cpc,
+      convRate,
+      closeRate,
+      customerValue,
+      results: {
+        leads: estimatedLeads,
+        customers: estimatedCustomers,
+        revenue: estimatedRevenue,
+        roi
+      }
+    };
+    sessionStorage.setItem("fw_roi_data", JSON.stringify(data));
+  }, [budget, cpc, convRate, closeRate, customerValue, estimatedLeads, estimatedCustomers, estimatedRevenue, roi]);
+
   const handleReset = () => {
     setBudget(1000);
     setCpc(0.80);
