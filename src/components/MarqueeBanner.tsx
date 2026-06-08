@@ -5,63 +5,56 @@ import { Logo } from '../constants/logos';
 interface MarqueeBannerProps {
   logos: Logo[];
   duration?: number;
-  color?: string; // Tailwind class like "accent-pink", "white", or "original"
+  color?: string; // Tailwind color key or hex
 }
 
-const BrandLogo = ({ logo, color }: { logo: Logo; color: string; key?: string }) => {
-  const isOriginal = color === "original";
+interface BrandLogoProps {
+  logo: Logo;
+  color: string;
+}
 
-  if (isOriginal) {
-    return (
-      <div className="flex items-center gap-4 opacity-80 hover:opacity-100 transition-opacity group cursor-default">
-        <img
-          src={logo.url}
-          alt={logo.name}
-          className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] object-contain"
-        />
-        <span className="text-[11px] md:text-sm font-bold uppercase tracking-[0.2em] text-white">
-          {logo.name}
-        </span>
-      </div>
-    );
-  }
+const BrandLogo = React.memo(({ logo, color }: BrandLogoProps) => {
+  // Use standard img tag for better compatibility and visibility
+  // If the URL already contains the color (SimpleIcons), it will render in that color.
+  // For SVGL fallbacks, we use a grayscale filter and then apply a blue tint via CSS filter if possible,
+  // or just rely on the SVG itself. To be safe and consistent with the "mask" effect without CORS issues:
 
-  const displayColor = color;
-  const isUtility = !displayColor.startsWith('#') && !displayColor.startsWith('rgb');
-  const textClass = isUtility ? `text-${displayColor}` : '';
+  const getFilterStyle = () => {
+    // If it's the requested vivid blue (#0A84FF), we can attempt to color SVGL icons
+    // But since SimpleIcons is our primary source and already has the color,
+    // we only need a fallback for the 3-4 SVGL icons.
+    if (logo.url.includes('svgl.app')) {
+      // Approximate filter for #0A84FF: invert(41%) sepia(99%) saturate(4156%) hub-rotate(195deg) brightness(101%) contrast(106%)
+      return { filter: 'invert(41%) sepia(99%) saturate(4156%) hue-rotate(195deg) brightness(101%) contrast(106%)' };
+    }
+    return {};
+  };
 
-  const getBackgroundColor = () => {
-    if (!isUtility) return displayColor;
-    if (displayColor === 'accent-blue') return 'var(--color-accent-blue)';
-    if (displayColor === 'accent-pink') return 'var(--color-accent-pink)';
-    if (displayColor === 'accent-purple') return 'var(--color-accent-purple)';
-    if (displayColor === 'white') return '#FFFFFF';
-    return undefined;
+  const getTextColor = () => {
+    if (color === 'accent-blue') return 'var(--color-accent-blue)';
+    return color;
   };
 
   return (
-    <div className="flex items-center gap-4 opacity-80 hover:opacity-100 transition-opacity group cursor-default">
-      <div
-        className="w-[40px] h-[40px] md:w-[50px] md:h-[50px]"
-        style={{
-          backgroundColor: getBackgroundColor(),
-          maskImage: `url(${logo.url})`,
-          WebkitMaskImage: `url(${logo.url})`,
-          maskRepeat: 'no-repeat',
-          WebkitMaskRepeat: 'no-repeat',
-          maskPosition: 'center',
-          WebkitMaskPosition: 'center',
-          maskSize: 'contain',
-          WebkitMaskSize: 'contain'
-        }}
+    <div className="flex items-center gap-4 opacity-90 hover:opacity-100 transition-opacity group cursor-default">
+      <img
+        src={logo.url}
+        alt={logo.name}
+        className="w-[45px] h-[45px] md:w-[50px] md:h-[50px] object-contain"
+        style={getFilterStyle()}
+        loading="eager"
       />
-      <span className={`text-[11px] md:text-sm font-bold uppercase tracking-[0.2em] ${textClass}`}
-            style={{ color: isUtility ? undefined : displayColor }}>
+      <span
+        className="text-[11px] md:text-sm font-bold uppercase tracking-[0.2em]"
+        style={{ color: getTextColor() }}
+      >
         {logo.name}
       </span>
     </div>
   );
-};
+});
+
+BrandLogo.displayName = 'BrandLogo';
 
 export const MarqueeBanner = React.memo(({ logos, duration = 15, color = "accent-blue" }: MarqueeBannerProps) => {
   return (
@@ -99,3 +92,5 @@ export const MarqueeBanner = React.memo(({ logos, duration = 15, color = "accent
     </div>
   );
 });
+
+MarqueeBanner.displayName = 'MarqueeBanner';

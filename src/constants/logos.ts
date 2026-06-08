@@ -1,34 +1,39 @@
 export interface Logo {
   name: string;
   url: string;
-  brandColor: string;
+  slug: string;
 }
 
+// Color hex for accent-blue (#0A84FF) -> 0A84FF
+const ACCENT_BLUE_HEX = "0A84FF";
+
+const getSiUrl = (slug: string) => `https://cdn.simpleicons.org/${slug}/${ACCENT_BLUE_HEX}`;
+
 export const CMS_LOGOS: Logo[] = [
-  { name: "WordPress", url: "https://svgl.app/library/wordpress.svg", brandColor: "#21759B" },
-  { name: "Hostinger", url: "https://cdn.simpleicons.org/hostinger/673DE6", brandColor: "#673DE6" },
-  { name: "Wix", url: "https://cdn.simpleicons.org/wix/000000", brandColor: "#000000" },
-  { name: "Squarespace", url: "https://cdn.simpleicons.org/squarespace/000000", brandColor: "#000000" },
-  { name: "Shopify", url: "https://svgl.app/library/shopify.svg", brandColor: "#7AB55C" }
+  { name: "WordPress", slug: "wordpress", url: getSiUrl("wordpress") },
+  { name: "Hostinger", slug: "hostinger", url: getSiUrl("hostinger") },
+  { name: "Wix", slug: "wix", url: getSiUrl("wix") },
+  { name: "Squarespace", slug: "squarespace", url: getSiUrl("squarespace") },
+  { name: "Shopify", slug: "shopify", url: getSiUrl("shopify") }
 ];
 
 export const DEV_LOGOS: Logo[] = [
-  { name: "GitHub", url: "https://cdn.simpleicons.org/github/181717", brandColor: "#181717" },
-  { name: "Vercel", url: "https://svgl.app/library/vercel.svg", brandColor: "#000000" },
-  { name: "Vite", url: "https://svgl.app/library/vite.svg", brandColor: "#646CFF" },
-  { name: "React", url: "https://cdn.simpleicons.org/react/61DAFB", brandColor: "#61DAFB" },
-  { name: "Tailwind CSS", url: "https://svgl.app/library/tailwindcss.svg", brandColor: "#06B6D4" }
+  { name: "GitHub", slug: "github", url: getSiUrl("github") },
+  { name: "Vercel", slug: "vercel", url: getSiUrl("vercel") },
+  { name: "Vite", slug: "vite", url: getSiUrl("vite") },
+  { name: "React", slug: "react", url: getSiUrl("react") },
+  { name: "Tailwind CSS", slug: "tailwindcss", url: getSiUrl("tailwindcss") }
 ];
 
 export const AI_LOGOS: Logo[] = [
-  { name: "Jules", url: "https://cdn.simpleicons.org/digitalocean", brandColor: "#0080FF" },
-  { name: "ChatGPT", url: "https://svgl.app/library/openai.svg", brandColor: "#412991" },
-  { name: "Gemini", url: "https://cdn.simpleicons.org/googlegemini", brandColor: "#8E75FF" },
-  { name: "Claude", url: "https://cdn.simpleicons.org/anthropic", brandColor: "#D97757" },
-  { name: "Meta AI", url: "https://svgl.app/library/meta.svg", brandColor: "#0668E1" },
-  { name: "Midjourney", url: "https://svgl.app/library/midjourney.svg", brandColor: "#000000" },
-  { name: "Perplexity", url: "https://cdn.simpleicons.org/perplexity", brandColor: "#21A0A0" },
-  { name: "Hugging Face", url: "https://cdn.simpleicons.org/huggingface", brandColor: "#FFD21E" },
-  { name: "Mistral AI", url: "https://cdn.simpleicons.org/mistralai", brandColor: "#000000" },
-  { name: "Groq", url: "https://svgl.app/library/groq.svg", brandColor: "#F55036" }
+  { name: "Jules", slug: "digitalocean", url: getSiUrl("digitalocean") },
+  { name: "ChatGPT", slug: "openai", url: "https://svgl.app/library/openai.svg" }, // SimpleIcons doesn't have it under 'openai' or 'chatgpt' reliably in some CDNs
+  { name: "Gemini", slug: "googlegemini", url: getSiUrl("googlegemini") },
+  { name: "Claude", slug: "anthropic", url: getSiUrl("anthropic") },
+  { name: "Meta AI", slug: "meta", url: getSiUrl("meta") },
+  { name: "Midjourney", slug: "midjourney", url: "https://svgl.app/library/midjourney.svg" },
+  { name: "Perplexity", slug: "perplexity", url: getSiUrl("perplexity") },
+  { name: "Hugging Face", slug: "huggingface", url: getSiUrl("huggingface") },
+  { name: "Mistral AI", slug: "mistralai", url: getSiUrl("mistralai") },
+  { name: "Groq", slug: "groq", url: "https://svgl.app/library/groq.svg" }
 ];
