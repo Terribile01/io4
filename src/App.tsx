@@ -13,6 +13,7 @@ import { MarqueeBanner } from "./components/MarqueeBanner";
 import { CMS_LOGOS, DEV_LOGOS, AI_LOGOS } from "./constants/logos";
 import { Footer } from "./components/Footer";
 import { motion, AnimatePresence } from "motion/react";
+import { Helmet } from "react-helmet-async";
 
 export const SERVICES_DATA = {
   "WordPress, Wix & Squarespace": {
@@ -133,7 +134,26 @@ Ecco i dettagli della mia richiesta:
 
   return (
     <div className="min-h-screen text-white flex flex-col font-sans relative overflow-x-hidden antialiased select-none">
-      
+      <Helmet>
+        <title>Facilissimo Web | Creazione Siti Web e Strategia Lead Generation a Macerata</title>
+        <meta name="description" content="Siti web professionali, veloci e ottimizzati per vendere. Freelance Web Designer a Macerata specializzata in Lead Generation, React e Marketing per piccole imprese." />
+        <meta name="keywords" content="web designer macerata, creazione siti web macerata, lead generation macerata, siti web react, marketing piccole imprese" />
+        <link rel="canonical" href="https://facilissimo-web.vercel.app/" />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://facilissimo-web.vercel.app/" />
+        <meta property="og:title" content="Facilissimo Web | Siti Web che vendono a Macerata" />
+        <meta property="og:description" content="Trasforma i visitatori in clienti. Web Design e Strategia Digitale per microimprese e professionisti a Macerata." />
+        <meta property="og:image" content="https://facilissimo-web.vercel.app/assets/uploads/logo-facilissimo.jpg" />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://facilissimo-web.vercel.app/" />
+        <meta property="twitter:title" content="Facilissimo Web | Strategia Digital per Piccole Imprese" />
+        <meta property="twitter:description" content="Web Design e Lead Generation a Macerata. Soluzioni digitali semplici ed efficaci." />
+      </Helmet>
+
       {/* Global Site Background with Dark Consistent Overlay for Legibility */}
       <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
         <div
