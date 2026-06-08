@@ -77,7 +77,7 @@ export const Hero = React.memo(({ onServiceSelect }: HeroProps) => {
 
       {/* Brand Logos Marquee */}
       <div className="mt-24 w-full">
-        <MarqueeBanner logos={CMS_LOGOS} color="accent-blue" />
+          <MarqueeBanner logos={CMS_LOGOS} color="accent-blue" duration={25} />
       </div>
     </section>
   );
