@@ -10,6 +10,8 @@ export default async function handler(
 
   const { businessName, niche, goals, webType, budget, currentWebsite, clientName } = req.body;
 
+  const goalsText = Array.isArray(goals) ? goals.join(', ') : 'Non specificati';
+
   const apiKey = process.env.SITO_FACILISSIMO_WEB?.trim();
 
   if (!apiKey) {
@@ -31,7 +33,7 @@ Dati del cliente:
 - Nome: ${clientName || 'Cliente'}
 - Business: ${businessName}
 - Settore: ${niche}
-- Obiettivi: ${goals.join(', ')}
+- Obiettivi: ${goalsText}
 - Tecnologia preferita: ${webType}
 - Budget stimato: ${budget}
 - Sito attuale: ${currentWebsite || 'Nessuno'}

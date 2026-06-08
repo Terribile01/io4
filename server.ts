@@ -57,6 +57,16 @@ Sitemap: https://facilissimo-web.vercel.app/sitemap.xml`;
     }
   });
 
+  app.post("/api/chat", async (req, res) => {
+    try {
+      const { default: chatHandler } = await import("./api/chat.js").catch(() => import("./api/chat.ts"));
+      await chatHandler(req as any, res as any);
+    } catch (err) {
+      console.error("Local chat proxy error:", err);
+      res.status(500).json({ error: "Failed to run local chat handler" });
+    }
+  });
+
   // Middleware to ensure API requests receive JSON errors
   app.use("/api/*", (req, res, next) => {
     res.setHeader("Content-Type", "application/json");

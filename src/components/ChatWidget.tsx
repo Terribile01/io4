@@ -1,0 +1,251 @@
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { MessageSquare, X, Send, Mic, MicOff, Loader2, Sparkles, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+interface Message {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+const QUICK_ACTIONS = [
+  "Come funziona?",
+  "Quali servizi offri?",
+  "Vorrei un consiglio",
+  "Parlami del form AI"
+];
+
+export const ChatWidget: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([
+    { role: 'assistant', content: "Ciao! Sono l'assistente virtuale di Facilissimo Web. Come posso aiutarti oggi?" }
+  ]);
+  const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages, isLoading]);
+
+  // Setup Speech Recognition
+  useEffect(() => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = false;
+      recognitionRef.current.lang = 'it-IT';
+
+      recognitionRef.current.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setInputValue(prev => prev + (prev ? ' ' : '') + transcript);
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+    }
+  }, []);
+
+  const toggleListening = () => {
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+    } else {
+      if (recognitionRef.current) {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } else {
+        alert("Il riconoscimento vocale non è supportato dal tuo browser.");
+      }
+    }
+  };
+
+  const handleSend = async (content: string) => {
+    if (!content.trim() || isLoading) return;
+
+    const newMessages: Message[] = [...messages, { role: 'user', content }];
+    setMessages(newMessages);
+    setInputValue('');
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: newMessages }),
+      });
+
+      if (!response.ok) throw new Error('Errore nella risposta del server');
+
+      const data = await response.json();
+      setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
+    } catch (error) {
+      console.error('Chat error:', error);
+      setMessages(prev => [...prev, { role: 'assistant', content: "Scusami, ho avuto un piccolo problema tecnico. Puoi riprovare o scrivermi direttamente su WhatsApp!" }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed bottom-6 right-6 z-[500] pointer-events-auto">
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="absolute bottom-20 right-0 w-[350px] md:w-[400px] h-[550px] glass-purple-50 rounded-2xl shadow-2xl border border-white/10 flex flex-col overflow-hidden"
+          >
+            {/* Header */}
+            <div className="p-4 bg-white/5 border-b border-white/10 flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-accent-blue/20 flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 text-accent-blue" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold uppercase tracking-tight">Assistente Facilissimo</h4>
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-[10px] text-white/60 uppercase font-bold tracking-widest">Online</span>
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-1.5 hover:bg-white/10 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Messages */}
+            <div
+              ref={scrollRef}
+              className="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth"
+            >
+              {messages.map((msg, i) => (
+                <div
+                  key={i}
+                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div className={`max-w-[85%] p-3 rounded-2xl text-xs leading-relaxed ${
+                    msg.role === 'user'
+                      ? 'bg-accent-blue text-white rounded-tr-none'
+                      : 'bg-white/10 text-white/90 rounded-tl-none border border-white/5'
+                  }`}>
+                    {msg.content}
+                  </div>
+                </div>
+              ))}
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div className="bg-white/10 p-3 rounded-2xl rounded-tl-none border border-white/5">
+                    <Loader2 className="w-4 h-4 animate-spin text-accent-blue" />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Quick Actions */}
+            {messages.length === 1 && (
+              <div className="px-4 pb-2 flex flex-wrap gap-2">
+                {QUICK_ACTIONS.map(action => (
+                  <button
+                    key={action}
+                    onClick={() => handleSend(action)}
+                    className="text-[10px] uppercase font-bold tracking-wider px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all"
+                  >
+                    {action}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Input */}
+            <div className="p-4 bg-white/5 border-t border-white/10 space-y-3">
+              <div className="relative flex items-center gap-2">
+                <button
+                  onClick={toggleListening}
+                  className={`p-2 rounded-xl transition-all ${
+                    isListening ? 'bg-red-500/20 text-red-500' : 'bg-white/5 text-white/60 hover:text-white'
+                  }`}
+                >
+                  {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                </button>
+                <div className="flex-1 relative">
+                  <input
+                    type="text"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSend(inputValue)}
+                    placeholder={isListening ? "Sto ascoltando..." : "Chiedimi qualcosa..."}
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-accent-blue transition-colors pr-10"
+                  />
+                  <button
+                    onClick={() => handleSend(inputValue)}
+                    disabled={!inputValue.trim() || isLoading}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-accent-blue disabled:text-white/20 transition-colors"
+                  >
+                    <Send className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  window.location.hash = "#ai-planner";
+                }}
+                className="w-full py-2 bg-accent-orange/10 hover:bg-accent-orange/20 border border-accent-orange/20 rounded-xl flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest text-accent-orange transition-all"
+              >
+                Configura Strategia AI <ArrowRight className="w-3 h-3" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-14 h-14 bg-accent-blue rounded-full shadow-2xl flex items-center justify-center text-white hover:scale-110 active:scale-95 transition-all group relative"
+      >
+        <AnimatePresence mode="wait">
+          {isOpen ? (
+            <motion.div
+              key="close"
+              initial={{ rotate: -90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: 90, opacity: 0 }}
+            >
+              <X className="w-6 h-6" />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="open"
+              initial={{ rotate: 90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: -90, opacity: 0 }}
+              className="relative"
+            >
+              <MessageSquare className="w-6 h-6" />
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-accent-orange rounded-full border-2 border-[#0A0015] animate-ping" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </button>
+    </div>
+  );
+};

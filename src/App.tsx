@@ -12,6 +12,7 @@ import { ComparisonSection } from "./components/ComparisonSection";
 import { MarqueeBanner } from "./components/MarqueeBanner";
 import { CMS_LOGOS, DEV_LOGOS, AI_LOGOS } from "./constants/logos";
 import { Footer } from "./components/Footer";
+import { ChatWidget } from "./components/ChatWidget";
 import { motion, AnimatePresence } from "motion/react";
 import { Helmet } from "react-helmet-async";
 
@@ -518,6 +519,8 @@ Ecco i dettagli della mia richiesta:
       </main>
 
       <Footer onPrivacyOpen={handlePrivacyOpen} />
+
+      <ChatWidget />
 
       {/* COOKIES DISCLAIMER (USO COOKIES SOLO PER LA SESSIONE) */}
       <AnimatePresence>
