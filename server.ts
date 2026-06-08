@@ -17,6 +17,19 @@ async function startServer() {
     res.json({ status: "ok", time: new Date().toISOString() });
   });
 
+  // Proxy for local development of /api/audit
+  app.post("/api/audit", async (req, res) => {
+    try {
+      // In development, we can try to load the local handler or just mock it
+      // Since it's a serverless function, for local dev we can just import it if using tsx
+      const { default: auditHandler } = await import("./api/audit.js").catch(() => import("./api/audit.ts"));
+      await auditHandler(req as any, res as any);
+    } catch (err) {
+      console.error("Local audit proxy error:", err);
+      res.status(500).json({ error: "Failed to run local audit handler" });
+    }
+  });
+
   // Middleware to ensure API requests receive JSON errors
   app.use("/api/*", (req, res, next) => {
     res.setHeader("Content-Type", "application/json");
