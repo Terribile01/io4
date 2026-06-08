@@ -111,7 +111,7 @@ const AIPlanner = React.memo(() => {
       `${currentWebsite ? `🌐 *Sito attuale*: ${currentWebsite}\n` : ""}\n`;
 
     if (aiAudit) {
-      message += `✨ *Audit AI ricevuto*: ${aiAudit.substring(0, 500)}${aiAudit.length > 500 ? '...' : ''}\n\n`;
+      message += `✨ *Audit AI ricevuto*:\n${aiAudit}\n\n`;
     }
 
     message += `Mi piacerebbe ricevere una tua proposta di strategia e collaborazione!`;
