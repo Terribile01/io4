@@ -10,7 +10,7 @@ export default async function handler(
 
   const { businessName, niche, goals, webType, budget, currentWebsite, clientName } = req.body;
 
-  const apiKey = process.env.SITO_FACILISSIMO_WEB;
+  const apiKey = process.env.SITO_FACILISSIMO_WEB?.trim();
 
   if (!apiKey) {
     return res.status(500).json({ error: 'Groq API key not configured' });
@@ -45,7 +45,7 @@ Dati del cliente:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama3-8b-8192',
+        model: 'llama-3.1-8b-instant',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: 'Genera il mio audit strategico per Facilissimo Web.' }
@@ -56,9 +56,12 @@ Dati del cliente:
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json().catch(() => ({}));
       console.error('Groq API error:', errorData);
-      return res.status(response.status).json({ error: 'Error calling Groq API' });
+      return res.status(response.status).json({
+        error: 'Error calling Groq API',
+        details: errorData
+      });
     }
 
     const data = await response.json();
