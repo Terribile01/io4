@@ -17,56 +17,6 @@ async function startServer() {
     res.json({ status: "ok", time: new Date().toISOString() });
   });
 
-  // Sitemap generation
-  app.get("/sitemap.xml", (req, res) => {
-    const baseUrl = "https://facilissimo-web.vercel.app"; // Update with actual domain if known, otherwise use generic or relative
-    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${baseUrl}/</loc>
-    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-</urlset>`;
-    res.header("Content-Type", "application/xml");
-    res.send(sitemap);
-  });
-
-  // Robots.txt
-  app.get("/robots.txt", (req, res) => {
-    const robots = `User-agent: *
-Allow: /
-Disallow: /api/*
-
-Sitemap: https://facilissimo-web.vercel.app/sitemap.xml`;
-    res.header("Content-Type", "text/plain");
-    res.send(robots);
-  });
-
-  // Proxy for local development of /api/audit
-  app.post("/api/audit", async (req, res) => {
-    try {
-      // In development, we can try to load the local handler or just mock it
-      // Since it's a serverless function, for local dev we can just import it if using tsx
-      const { default: auditHandler } = await import("./api/audit.js").catch(() => import("./api/audit.ts"));
-      await auditHandler(req as any, res as any);
-    } catch (err) {
-      console.error("Local audit proxy error:", err);
-      res.status(500).json({ error: "Failed to run local audit handler" });
-    }
-  });
-
-  app.post("/api/chat", async (req, res) => {
-    try {
-      const { default: chatHandler } = await import("./api/chat.js").catch(() => import("./api/chat.ts"));
-      await chatHandler(req as any, res as any);
-    } catch (err) {
-      console.error("Local chat proxy error:", err);
-      res.status(500).json({ error: "Failed to run local chat handler" });
-    }
-  });
-
   // Middleware to ensure API requests receive JSON errors
   app.use("/api/*", (req, res, next) => {
     res.setHeader("Content-Type", "application/json");

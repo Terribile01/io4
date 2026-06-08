@@ -25,24 +25,6 @@ const ROICalculator = React.memo(() => {
 
   const extraRevenue = estimatedRevenue - baseRevenue;
 
-  // Persistence for Chat Context
-  React.useEffect(() => {
-    const data = {
-      budget,
-      cpc,
-      convRate,
-      closeRate,
-      customerValue,
-      results: {
-        leads: estimatedLeads,
-        customers: estimatedCustomers,
-        revenue: estimatedRevenue,
-        roi
-      }
-    };
-    sessionStorage.setItem("fw_roi_data", JSON.stringify(data));
-  }, [budget, cpc, convRate, closeRate, customerValue, estimatedLeads, estimatedCustomers, estimatedRevenue, roi]);
-
   const handleReset = () => {
     setBudget(1000);
     setCpc(0.80);
@@ -212,7 +194,7 @@ const ROICalculator = React.memo(() => {
 
         {/* Right column: ROI Metrics Visual Block */}
         <div className="lg:col-span-5 flex flex-col justify-between gap-6">
-          <div className="glass-nav text-white rounded-2xl p-6 flex flex-col gap-5 shadow-inner">
+          <div className="bg-charcoal text-white rounded-2xl p-6 flex flex-col gap-5 shadow-inner">
             <div className="flex justify-between items-center">
               <span className="text-xs uppercase tracking-widest text-[#BDBAB2] font-semibold">Risultati Stimati</span>
               <div className="flex items-center gap-1 text-[11px] text-accent-orange font-bold font-mono">
@@ -290,7 +272,7 @@ const ROICalculator = React.memo(() => {
         </span>
         <a 
           href="#contatti"
-          className="grad-electric text-white hover:shadow-lg transition-all px-4 py-2.5 rounded-none font-bold text-center w-full sm:w-auto shrink-0 uppercase tracking-widest text-[10px]"
+          className="bg-charcoal text-white hover:bg-[#2A2A2F] transition-all px-4 py-2.5 rounded-none font-bold text-center w-full sm:w-auto shrink-0 uppercase tracking-widest text-[10px]"
         >
           Chiedimi una consulenza
         </a>
