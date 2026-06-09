@@ -62,7 +62,7 @@ const ROICalculator = React.memo(() => {
             Calcola il Tuo Potenziale
           </h3>
           <p className="text-xs text-white/90 mt-1">
-            Scopri come un sito web che funziona può aumentare i tuoi guadagni.
+            Trascina i cursori per definire lo status della tua attività e scoprire come un sito web ottimizzato può aumentare i tuoi guadagni.
           </p>
         </div>
         <button
@@ -86,6 +86,9 @@ const ROICalculator = React.memo(() => {
                 € {budget.toLocaleString("it-IT")}
               </span>
             </div>
+            <p className="text-[10px] text-white/70 leading-tight italic">
+              Serve per supporre una metrica aderente partendo dalla tua reale capacità di investimento aziendale.
+            </p>
             <input
               type="range"
               min="200"
@@ -112,6 +115,9 @@ const ROICalculator = React.memo(() => {
                 € {cpc.toFixed(2)}
               </span>
             </div>
+            <p className="text-[10px] text-white/70 leading-tight italic">
+              Rappresenta il costo medio che paghi alle piattaforme (come Google o Meta) per ogni potenziale cliente che clicca sul tuo annuncio.
+            </p>
             <input
               type="range"
               min="0.15"
@@ -141,6 +147,9 @@ const ROICalculator = React.memo(() => {
                 {convRate}%
               </span>
             </div>
+            <p className="text-[10px] text-white/70 leading-tight italic">
+              È la capacità del tuo sito di convertire i visitatori in contatti reali. Un sito professionale punta a superare il 2.5%.
+            </p>
             <input
               type="range"
               min="0.3"
@@ -167,6 +176,9 @@ const ROICalculator = React.memo(() => {
                 {closeRate}%
               </span>
             </div>
+            <p className="text-[10px] text-white/70 leading-tight italic">
+              Indica la tua efficacia commerciale nel trasformare un preventivo o una richiesta in una vendita effettiva.
+            </p>
             <input
               type="range"
               min="2"
@@ -193,6 +205,9 @@ const ROICalculator = React.memo(() => {
                 € {customerValue.toLocaleString("it-IT")}
               </span>
             </div>
+            <p className="text-[10px] text-white/70 leading-tight italic">
+              Il valore economico medio generato da un cliente acquisito, fondamentale per capire se il costo di acquisizione è sostenibile.
+            </p>
             <input
               type="range"
               min="50"
@@ -285,9 +300,18 @@ const ROICalculator = React.memo(() => {
       </div>
 
       <div className="mt-6 flex flex-col sm:flex-row gap-4 items-center justify-between p-4 bg-black/50 rounded-none border border-white/10/60 text-xs">
-        <span className="text-white/90 text-left">
-          * Nota: questi calcoli sono stime basate su medie di mercato. I risultati reali dipendono dal tuo settore e dalla tua zona.
-        </span>
+        <div className="flex flex-col gap-1">
+          <span className="text-white/95 font-bold flex items-center gap-1">
+            <Sparkles className="w-3 h-3 text-accent-blue" />
+            Hai dubbi su questi valori?
+          </span>
+          <span className="text-white/90 text-left">
+            Chiedi aiuto alla nostra AI in chat (in basso a destra) per una stima personalizzata basata sul tuo settore specifico.
+          </span>
+          <span className="text-white/60 text-[10px] mt-1">
+            * Nota: questi calcoli sono stime basate su medie di mercato. I risultati reali dipendono dal tuo settore e dalla tua zona.
+          </span>
+        </div>
         <a 
           href="#contatti"
           className="grad-electric text-white hover:shadow-lg transition-all px-4 py-2.5 rounded-none font-bold text-center w-full sm:w-auto shrink-0 uppercase tracking-widest text-[10px]"
