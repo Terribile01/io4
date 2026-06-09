@@ -5,7 +5,19 @@
       "destination": "/api/audit.ts"
     },
     {
+      "source": "/api/chat",
+      "destination": "/api/chat.ts"
+    },
+    {
       "source": "/api/(.*)",
+      "destination": "/server.ts"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/server.ts"
+    },
+    {
+      "source": "/robots.txt",
       "destination": "/server.ts"
     },
     {
