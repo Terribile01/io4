@@ -277,6 +277,7 @@ export const ChatWidget: React.FC = () => {
       </AnimatePresence>
 
       <button
+        aria-label="Open chat"
         onClick={() => setIsOpen(!isOpen)}
         className="w-14 h-14 bg-accent-blue rounded-full shadow-2xl flex items-center justify-center text-white hover:scale-110 active:scale-95 transition-all group relative"
       >
