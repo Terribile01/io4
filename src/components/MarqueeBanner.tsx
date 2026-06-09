@@ -62,7 +62,7 @@ export const MarqueeBanner = React.memo(({ logos, duration = 15, color = "accent
       {/* Background Image with dark purple overlay */}
       <div
         className="absolute inset-0 z-0 bg-cover bg-center scale-110"
-        style={{ backgroundImage: `url('/assets/uploads/banner-bg.jpg')` }}
+        style={{ backgroundImage: `url('/assets/uploads/fondo%20home%202.png')` }}
       >
         <div className="absolute inset-0 bg-[#0A0015]/90 backdrop-blur-[1px]"></div>
       </div>

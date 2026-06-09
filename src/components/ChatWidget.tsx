@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { MessageSquare, X, Send, Mic, MicOff, Loader2, Sparkles, ArrowRight, MessageCircle } from 'lucide-react';
+import { MessageSquare, X, Send, Mic, MicOff, Loader2, Sparkles, ArrowRight, MessageCircle, Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -21,14 +21,16 @@ const ROI_ACTION = "Analizziamo il mio ROI";
 export const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: "Ciao! Sono l'assistente virtuale di Facilissimo Web. Come posso aiutarti oggi?" }
+    { role: 'assistant', content: "Ciao! Sono Teresa di Facilissimo Web. Sono qui per aiutarti a far crescere il tuo business online. Come posso esserti utile oggi?" }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [speakingIndex, setSpeakingIndex] = useState<number | null>(null);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
+  const synthRef = useRef<SpeechSynthesis | null>(window.speechSynthesis);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -84,6 +86,53 @@ export const ChatWidget: React.FC = () => {
     }
   };
 
+  const stopSpeaking = useCallback(() => {
+    if (synthRef.current) {
+      synthRef.current.cancel();
+    }
+    setSpeakingIndex(null);
+  }, []);
+
+  const speak = useCallback((text: string, index: number) => {
+    if (!synthRef.current) return;
+
+    if (speakingIndex === index) {
+      stopSpeaking();
+      return;
+    }
+
+    stopSpeaking();
+
+    // Clean markdown for better speech
+    const cleanText = text
+      .replace(/[*#_]/g, '')
+      .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
+      .replace(/<[^>]*>/g, '');
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+
+    // Find a nice female Italian voice if possible
+    const voices = synthRef.current.getVoices();
+    const femaleItalianVoice = voices.find(v =>
+      v.lang.startsWith('it') &&
+      (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('elsa') || v.name.toLowerCase().includes('alice'))
+    ) || voices.find(v => v.lang.startsWith('it'));
+
+    if (femaleItalianVoice) {
+      utterance.voice = femaleItalianVoice;
+    }
+
+    utterance.lang = 'it-IT';
+    utterance.rate = 1.0;
+    utterance.pitch = 1.1; // Slightly higher for a more "human/friendly" tone
+
+    utterance.onend = () => setSpeakingIndex(null);
+    utterance.onerror = () => setSpeakingIndex(null);
+
+    setSpeakingIndex(index);
+    synthRef.current.speak(utterance);
+  }, [speakingIndex, stopSpeaking]);
+
   const handleSend = useCallback(async (content: string) => {
     if (!content.trim() || isLoading) return;
 
@@ -118,12 +167,20 @@ export const ChatWidget: React.FC = () => {
       if (!response.ok) throw new Error('Errore nella risposta del server');
 
       const data = await response.json();
-      setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
+      let reply = data.reply;
+
+      // Logic to add WhatsApp CTA after 4 user messages if not already present
+      const userMessageCount = newMessages.filter(m => m.role === 'user').length;
+      if (userMessageCount >= 4 && !reply.includes("WhatsApp") && !reply.includes("+39")) {
+        reply += "\n\nSe vuoi approfondire questi temi in modo più diretto, possiamo sentirci su **WhatsApp** per una consulenza rapida!";
+      }
+
+      setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
     } catch (error) {
       console.error('Chat error:', error);
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: "Scusami, ho avuto un piccolo problema tecnico nel collegarmi all'AI. Puoi riprovare tra un attimo o scrivermi direttamente su WhatsApp per una risposta immediata!"
+        content: "Scusami, ho avuto un piccolo problema tecnico nel collegarmi all'AI. Puoi scrivermi direttamente su WhatsApp per una risposta immediata, sono qui per aiutarti!"
       }]);
     } finally {
       setIsLoading(false);
@@ -148,7 +205,7 @@ export const ChatWidget: React.FC = () => {
                   <Sparkles className="w-4 h-4 text-accent-blue" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold uppercase tracking-tight">Assistente Facilissimo</h4>
+                  <h4 className="text-sm font-bold uppercase tracking-tight">Teresa | Facilissimo Web</h4>
                   <div className="flex items-center gap-1.5">
                     <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                     <span className="text-[10px] text-white/60 uppercase font-bold tracking-widest">Online</span>
@@ -173,16 +230,31 @@ export const ChatWidget: React.FC = () => {
                   key={i}
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <div className={`max-w-[85%] p-3 rounded-2xl text-xs leading-relaxed ${
+                  <div className={`max-w-[85%] p-3 rounded-2xl text-xs leading-relaxed relative group/msg ${
                     msg.role === 'user'
                       ? 'bg-accent-blue text-white rounded-tr-none'
                       : 'bg-white/10 text-white/90 rounded-tl-none border border-white/5'
                   }`}>
                     {msg.role === 'assistant' ? (
-                      <div className="prose prose-invert prose-p:leading-relaxed prose-p:my-1 prose-headings:my-2 prose-headings:text-sm prose-ul:my-2 prose-li:my-0.5 max-w-none">
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                          {msg.content}
-                        </ReactMarkdown>
+                      <div className="prose prose-invert prose-p:leading-relaxed prose-p:my-1 prose-headings:my-2 prose-headings:text-sm prose-ul:my-2 prose-li:my-0.5 max-w-none relative">
+                        <div className="flex justify-between items-start gap-2">
+                          <div className="flex-1">
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                              {msg.content}
+                            </ReactMarkdown>
+                          </div>
+                          <button
+                            onClick={() => speak(msg.content, i)}
+                            className={`p-1.5 rounded-lg transition-all shrink-0 ${
+                              speakingIndex === i
+                                ? 'bg-accent-blue text-white'
+                                : 'bg-white/5 text-white/40 hover:text-white hover:bg-white/10 opacity-0 group-hover/msg:opacity-100'
+                            }`}
+                            title={speakingIndex === i ? "Interrompi lettura" : "Ascolta risposta"}
+                          >
+                            {speakingIndex === i ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                          </button>
+                        </div>
                         {msg.content.includes("WhatsApp") && (
                           <a
                             href="https://wa.me/393793603321"
