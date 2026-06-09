@@ -9,13 +9,8 @@ import { Navbar } from "./components/Navbar";
 import { Hero } from "./components/Hero";
 import { ServicesSection } from "./components/ServicesSection";
 import { ComparisonSection } from "./components/ComparisonSection";
-import { MarqueeBanner } from "./components/MarqueeBanner";
-import { CMS_LOGOS, DEV_LOGOS, AI_LOGOS } from "./constants/logos";
 import { Footer } from "./components/Footer";
-import { ChatWidget } from "./components/ChatWidget";
-import ContactForm from "./components/ContactForm";
 import { motion, AnimatePresence } from "motion/react";
-import { Helmet } from "react-helmet-async";
 
 export const SERVICES_DATA = {
   "WordPress, Wix & Squarespace": {
@@ -97,33 +92,51 @@ export default function App() {
     setPrivacyModalOpen(true);
   }, []);
 
+  // App-level Contact Form state
+  const [businessName, setBusinessName] = useState("");
+  const [niche, setNiche] = useState("Salute, Wellness & Bellezza");
+  const [clientName, setClientName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [goals, setGoals] = useState<string[]>(["Creare un nuovo Sito Web da zero"]);
+  const [budget, setBudget] = useState("Professional (€1.500 - €3.500)");
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const handleSubmitContact = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!businessName || !clientName || !phone) return;
+
+    const message = `Ciao Maria Teresa! Ti contatto dal sito Facilissimo Web.
+Ecco i dettagli della mia richiesta:
+- *Nome*: ${clientName}
+- *Attività*: ${businessName}
+- *Settore*: ${niche}
+- *Obiettivi*: ${goals.join(", ")}
+- *Budget*: ${budget}
+- *Telefono*: ${phone}`;
+
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/393793603321?text=${encodedMessage}`;
+
+    window.open(whatsappUrl, "_blank");
+    setFormSubmitted(true);
+
+    // Auto-reset after a delay
+    setTimeout(() => {
+      setFormSubmitted(false);
+      setBusinessName("");
+      setClientName("");
+      setPhone("");
+    }, 5000);
+  };
+
   return (
     <div className="min-h-screen text-white flex flex-col font-sans relative overflow-x-hidden antialiased select-none">
-      <Helmet>
-        <title>Facilissimo Web | Creazione Siti Web e Strategia Lead Generation a Macerata</title>
-        <meta name="description" content="Siti web professionali, veloci e ottimizzati per vendere. Freelance Web Designer a Macerata specializzata in Lead Generation, React e Marketing per piccole imprese." />
-        <meta name="keywords" content="web designer macerata, creazione siti web macerata, lead generation macerata, siti web react, marketing piccole imprese" />
-        <link rel="canonical" href="https://facilissimo-web.vercel.app/" />
-
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://facilissimo-web.vercel.app/" />
-        <meta property="og:title" content="Facilissimo Web | Siti Web che vendono a Macerata" />
-        <meta property="og:description" content="Trasforma i visitatori in clienti. Web Design e Strategia Digitale per microimprese e professionisti a Macerata." />
-        <meta property="og:image" content="https://facilissimo-web.vercel.app/assets/uploads/logo-facilissimo.jpg" />
-
-        {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://facilissimo-web.vercel.app/" />
-        <meta property="twitter:title" content="Facilissimo Web | Strategia Digital per Piccole Imprese" />
-        <meta property="twitter:description" content="Web Design e Lead Generation a Macerata. Soluzioni digitali semplici ed efficaci." />
-      </Helmet>
 
       {/* Global Site Background with Dark Consistent Overlay for Legibility */}
       <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center scale-105"
-          style={{ backgroundImage: 'url("/assets/uploads/facilissimo%20web%20web%20design%20siti%20web.webp")' }}
+          style={{ backgroundImage: 'url("/assets/uploads/fondo%20home%202.png")' }}
         />
         {/* Consistent Deep Overlay Tint (Purple/Black blend) */}
         <div className="absolute inset-0 bg-[#0A0015]/85 mix-blend-multiply"></div>
@@ -145,7 +158,7 @@ export default function App() {
             initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
-            className="fixed inset-x-4 top-[84px] glass-purple-50 text-white rounded-none p-6 z-[100] flex flex-col gap-4 md:hidden"
+            className="fixed inset-x-4 top-[84px] bg-[#121214] text-white rounded-none p-6 z-[100] border-2 border-white/20 shadow-2xl flex flex-col gap-4 md:hidden"
             style={{ pointerEvents: 'auto' }}
           >
             <button
@@ -157,25 +170,15 @@ export default function App() {
             >
               Chi Sono
             </button>
-            <div className="space-y-2 border-b border-white/5 pb-2">
-              <span className="text-[10px] uppercase font-black tracking-widest text-white/40 block mb-1">
-                I Miei Servizi
-              </span>
-              <div className="grid grid-cols-1 gap-1">
-                {Object.keys(SERVICES_DATA).map((key) => (
-                  <button
-                    key={key}
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      handleServiceSelect(key as keyof typeof SERVICES_DATA);
-                    }}
-                    className="text-left text-[11px] uppercase font-bold tracking-widest text-white/90 py-2.5 px-3 bg-white/5 hover:bg-white/10 transition-colors"
-                  >
-                    {SERVICES_DATA[key as keyof typeof SERVICES_DATA].title.replace('Web Design Classico', 'Web Design').replace('Sviluppo Custom (React)', 'Sviluppo React').replace('Sistemi di Acquisizione', 'Lead Generation').replace('Advertising & Visibilità', 'Marketing & Ads')}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <a
+              onClick={() => {
+                setMobileMenuOpen(false);
+              }}
+              href="#servizi"
+              className="text-xs uppercase font-bold tracking-widest text-white/95 py-2 border-b border-white/5"
+            >
+              I Miei Servizi
+            </a>
             <a 
               onClick={() => {
                 setMobileMenuOpen(false);
@@ -223,7 +226,7 @@ export default function App() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 w-full max-w-md glass-purple-50 z-[210] overflow-y-auto border-l border-white/10"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-[#0A0A0B] z-[210] shadow-2xl border-l border-white/10 overflow-y-auto"
             >
               <div className="p-8 space-y-8">
                 <div className="flex justify-between items-center">
@@ -279,7 +282,7 @@ export default function App() {
                         setAboutOpen(false);
                         window.location.hash = "#contatti";
                       }}
-                      className="w-full glass-orange-50 text-white font-bold py-4 rounded-none uppercase tracking-widest text-xs cursor-pointer hover:bg-accent-orange/60 transition-all"
+                      className="w-full grad-electric text-white font-bold py-4 rounded-none uppercase tracking-widest text-xs"
                     >
                       Lavoriamo Insieme
                     </button>
@@ -291,39 +294,13 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <main className="flex-1 w-full space-y-24 md:space-y-40 mt-12">
-        {/* Branding Separator 1 */}
-        <div className="flex justify-center -mb-16 md:-mb-24 opacity-40 max-w-7xl mx-auto px-4 md:px-8">
-          <img
-            src="/assets/uploads/logo-facilissimo.jpg"
-            alt=""
-            className="w-16 h-16 md:w-24 md:h-24 object-cover rounded-full border border-white/10"
-          />
-        </div>
-
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-8 space-y-24 md:space-y-40 mt-12">
         <Hero onServiceSelect={handleServiceSelect} />
-
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <ServicesSection />
-        </div>
-
-        {/* Branding Separator 2 */}
-        <div className="flex justify-center py-10 opacity-30 max-w-7xl mx-auto px-4 md:px-8">
-          <img
-            src="/assets/uploads/logo-facilissimo.jpg"
-            alt=""
-            className="w-12 h-12 md:w-16 md:h-16 object-cover rounded-full border border-white/5"
-          />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <ComparisonSection />
-        </div>
-
-        <MarqueeBanner logos={DEV_LOGOS} color="accent-blue" />
+        <ServicesSection />
+        <ComparisonSection />
 
         {/* 5. INTERACTIVE WIDGET 1: THE ROI CONVERSION CALCULATOR */}
-        <section className="space-y-8 scroll-mt-24 max-w-7xl mx-auto px-4 md:px-8" id="calcolatore">
+        <section className="space-y-8 scroll-mt-24" id="calcolatore">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
               Strumento di Calcolo
@@ -340,7 +317,7 @@ export default function App() {
         </section>
 
         {/* 6. INTERACTIVE WIDGET 2: THE AI PLANNER (GEMINI INTEGRATION) */}
-        <section className="space-y-12 scroll-mt-24 max-w-7xl mx-auto px-4 md:px-8" id="ai-planner">
+        <section className="space-y-12 scroll-mt-24" id="ai-planner">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="text-[10px] font-bold uppercase tracking-widest text-[#BF5AF2] bg-[#BF5AF2]/10 px-3.5 py-1 rounded-full flex items-center justify-center gap-1 mx-auto w-max">
               Assistente Strategico <Sparkles className="w-3.5 h-3.5" />
@@ -356,10 +333,11 @@ export default function App() {
           <AIPlanner />
         </section>
 
-        <MarqueeBanner logos={AI_LOGOS} color="accent-blue" />
+
+
 
         {/* 11. LEAD INTAKE CONTACT FORM WORKFLOW */}
-        <section className="space-y-12 scroll-mt-24 pb-16 max-w-7xl mx-auto px-4 md:px-8" id="contatti">
+        <section className="space-y-12 scroll-mt-24 pb-16" id="contatti">
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
               Inizia Ora
@@ -372,13 +350,117 @@ export default function App() {
             </p>
           </div>
 
-          <ContactForm />
+          <div className="glass-panel rounded-none p-6 md:p-8 border border-white/10 max-w-2xl mx-auto shadow-md relative overflow-hidden">
+            <AnimatePresence mode="wait">
+              {formSubmitted ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="py-12 text-center space-y-4"
+                >
+                  <div className="w-14 h-14 bg-green-100 text-green-600 rounded-none flex items-center justify-center mx-auto shadow-inner border border-green-200">
+                    <CheckCircle className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h4 className="font-display text-lg font-bold">Messaggio Inviato!</h4>
+                    <p className="text-xs text-white/95 mt-1 max-w-sm mx-auto">
+                      Grazie per avermi contattato. Ti risponderò al più presto per discutere del tuo progetto!
+                    </p>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.form
+                  onSubmit={handleSubmitContact}
+                  className="space-y-5 text-left"
+                >
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5 animate-none">
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white/95">Nome dell'Attività <span className="text-accent-pink">*</span></label>
+                      <input
+                        type="text"
+                        required
+                        value={businessName}
+                        onChange={(e) => setBusinessName(e.target.value)}
+                        placeholder="Es. Officina del Gusto Verona"
+                        className="w-full px-3 py-2 bg-[#0A0A0B]/50 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white/95">Nicchia / Settore</label>
+                      <select
+                        value={niche}
+                        onChange={(e) => setNiche(e.target.value)}
+                        className="w-full px-3 py-2 bg-[#0A0A0B]/50 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                      >
+                        <option value="Salute, Wellness &amp; Bellezza">Salute, Wellness &amp; Bellezza</option>
+                        <option value="Ristorazione e Food">Ristorazione &amp; Food</option>
+                        <option value="Servizi Professionali (Legali, Medici, Fiscale)">Servizi Professionali / Studi</option>
+                        <option value="E-commerce e Vendita Prodotti">E-commerce e Retail</option>
+                        <option value="Altro">Altro</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5 animate-none">
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white/95">Il Tuo Nome <span className="text-accent-pink">*</span></label>
+                      <input
+                        type="text"
+                        required
+                        value={clientName}
+                        onChange={(e) => setClientName(e.target.value)}
+                        placeholder="Es. Matteo Bianchi"
+                        className="w-full px-3 py-2 bg-[#0A0A0B]/50 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white/95">Numero Telefonico <span className="text-accent-pink">*</span></label>
+                      <input
+                        type="tel"
+                        required
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="Es: +39 340 9876543"
+                        className="w-full px-3 py-2 bg-[#0A0A0B]/50 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue font-mono"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
+
+                    <div className="space-y-1.5">
+                      <label className="block text-[11px] font-bold uppercase tracking-wider text-white/95">Budget Stimato</label>
+                      <select
+                        value={budget}
+                        onChange={(e) => setBudget(e.target.value)}
+                        className="w-full px-3 py-2 bg-[#0A0A0B]/50 border border-white/10 rounded-none text-xs focus:outline-none focus:border-accent-blue"
+                      >
+                        <option value="Starter (€500 - €1.500)">Starter (€500 - €1.500) - Ottimizzazione Standard</option>
+                        <option value="Professional (€1.500 - €3.500)">Professional (€1.500 - €3.500) - Sito + Tracciamenti</option>
+                        <option value="Premium / Scalabile (€3.500+)">Premium / Scalabile (€3.500+) - Macchina Acquisizione</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="pt-2">
+                    <button
+                      type="submit"
+                      className="w-full grad-electric hover:shadow-lg text-white font-bold py-3 px-6 rounded-none flex items-center justify-center gap-2 text-xs uppercase tracking-widest cursor-pointer transition-transform hover:scale-101"
+                    >
+                      Invia Richiesta e Traccia <Send className="w-4 h-4" />
+                    </button>
+                  </div>
+                </motion.form>
+              )}
+            </AnimatePresence>
+          </div>
         </section>
       </main>
 
       <Footer onPrivacyOpen={handlePrivacyOpen} />
-
-      <ChatWidget />
 
       {/* COOKIES DISCLAIMER (USO COOKIES SOLO PER LA SESSIONE) */}
       <AnimatePresence>
@@ -387,7 +469,7 @@ export default function App() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-0 inset-x-0 glass-purple-50 text-white border-t border-white/10 p-4 sm:p-5 z-[200] flex flex-col sm:flex-row items-center justify-between gap-4"
+            className="fixed bottom-0 inset-x-0 bg-[#121214] text-white border-t border-white/10 shadow-2xl p-4 sm:p-5 z-[200] flex flex-col sm:flex-row items-center justify-between gap-4"
           >
             <div className="text-left max-w-3xl space-y-1">
               <h5 className="text-[10px] uppercase font-bold text-accent-orange tracking-widest font-mono">Informativa sui Cookie &amp; Tracciamenti</h5>
@@ -418,7 +500,7 @@ export default function App() {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="glass-purple-50 max-w-lg w-full p-6 md:p-8 space-y-6 rounded-none shadow-2xl overflow-y-auto max-h-[90vh] text-left relative"
+              className="bg-accent-purple/15 max-w-lg w-full border border-accent-purple/30 p-6 md:p-8 space-y-6 rounded-none shadow-2xl overflow-y-auto max-h-[90vh] text-left relative backdrop-blur-md"
             >
               <div className="flex justify-between items-start border-b border-white/10 pb-4">
                 <div className="space-y-1">
@@ -466,7 +548,7 @@ export default function App() {
                     href={`https://wa.me/393793603321?text=${encodeURIComponent(SERVICES_DATA[selectedService].whatsappMessage)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full glass-orange-50 hover:shadow-xl hover:scale-[1.02] transition-all text-white font-bold py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] shadow-lg"
+                    className="w-full grad-electric hover:shadow-xl hover:scale-[1.02] transition-all text-white font-bold py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] shadow-lg"
                   >
                     Prenota Consulenza Gratuita <MessageSquare className="w-4 h-4" />
                   </a>
@@ -485,7 +567,7 @@ export default function App() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="glass-purple-50 max-w-md w-full p-6 md:p-8 space-y-4 rounded-none shadow-2xl overflow-y-auto max-h-[85vh] text-left border border-white/10"
+              className="bg-[#0A0A0B]/50 max-w-md w-full border border-white/10 p-6 md:p-8 space-y-4 rounded-none shadow-2xl overflow-y-auto max-h-[85vh] text-left"
             >
               <div className="flex justify-between items-center border-b border-white/10 pb-3">
                 <h4 className="font-display font-bold text-lg text-white/95">Privacy Policy &amp; GDPR</h4>
