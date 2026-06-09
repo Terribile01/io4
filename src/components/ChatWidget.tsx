@@ -31,6 +31,20 @@ export const ChatWidget: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const synthRef = useRef<SpeechSynthesis | null>(window.speechSynthesis);
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+
+  useEffect(() => {
+    const updateVoices = () => {
+      if (synthRef.current) {
+        setVoices(synthRef.current.getVoices());
+      }
+    };
+
+    updateVoices();
+    if (synthRef.current) {
+      synthRef.current.onvoiceschanged = updateVoices;
+    }
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -111,12 +125,15 @@ export const ChatWidget: React.FC = () => {
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
 
-    // Find a nice female Italian voice if possible
-    const voices = synthRef.current.getVoices();
-    const femaleItalianVoice = voices.find(v =>
-      v.lang.startsWith('it') &&
-      (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('elsa') || v.name.toLowerCase().includes('alice'))
-    ) || voices.find(v => v.lang.startsWith('it'));
+    // Priority voice selection: look for Neural/Natural/Google voices first as they sound more human
+    const itVoices = voices.filter(v => v.lang.startsWith('it'));
+
+    const femaleItalianVoice = itVoices.find(v =>
+      (v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('neural')) &&
+      (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('elsa') || v.name.toLowerCase().includes('cosimo') === false)
+    ) || itVoices.find(v =>
+      v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('elsa') || v.name.toLowerCase().includes('alice')
+    ) || itVoices[0];
 
     if (femaleItalianVoice) {
       utterance.voice = femaleItalianVoice;
@@ -124,7 +141,7 @@ export const ChatWidget: React.FC = () => {
 
     utterance.lang = 'it-IT';
     utterance.rate = 1.0;
-    utterance.pitch = 1.1; // Slightly higher for a more "human/friendly" tone
+    utterance.pitch = 1.0; // Reset pitch to 1.0 to avoid the "drunk" effect
 
     utterance.onend = () => setSpeakingIndex(null);
     utterance.onerror = () => setSpeakingIndex(null);
@@ -245,14 +262,14 @@ export const ChatWidget: React.FC = () => {
                           </div>
                           <button
                             onClick={() => speak(msg.content, i)}
-                            className={`p-1.5 rounded-lg transition-all shrink-0 ${
+                              className={`p-2 rounded-full transition-all shrink-0 shadow-lg border border-white/10 ${
                               speakingIndex === i
-                                ? 'bg-accent-blue text-white'
-                                : 'bg-white/5 text-white/40 hover:text-white hover:bg-white/10 opacity-0 group-hover/msg:opacity-100'
+                                  ? 'bg-accent-blue text-white animate-pulse'
+                                  : 'bg-white/10 text-white/70 hover:text-white hover:bg-white/20'
                             }`}
                             title={speakingIndex === i ? "Interrompi lettura" : "Ascolta risposta"}
                           >
-                            {speakingIndex === i ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                              {speakingIndex === i ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
                           </button>
                         </div>
                         {msg.content.includes("WhatsApp") && (
@@ -309,9 +326,12 @@ export const ChatWidget: React.FC = () => {
               <div className="relative flex items-center gap-2">
                 <button
                   onClick={toggleListening}
-                  className={`p-2 rounded-xl transition-all ${
-                    isListening ? 'bg-red-500/20 text-red-500' : 'bg-white/5 text-white/60 hover:text-white'
+                  className={`p-2 rounded-full transition-all shadow-lg border border-white/10 ${
+                    isListening
+                      ? 'bg-red-500 text-white animate-pulse'
+                      : 'bg-white/10 text-white/70 hover:text-white hover:bg-white/20'
                   }`}
+                  title={isListening ? "Ferma ascolto" : "Parla con Teresa"}
                 >
                   {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
                 </button>
