@@ -14,6 +14,7 @@
   --color-accent-purple: #BF5AF2;
   --color-accent-pink: #FF375F;
   --color-accent-orange: #FF9F0A;
+  --color-accent-cyan: #00C7BE;
   --color-line-ivory: rgba(255, 255, 255, 0.1);
   --color-glass-card-bg: rgba(20, 20, 22, 0.65);
 }
@@ -28,10 +29,24 @@ html {
 
 /* Glassmorphism custom classes - Refactored for Dark Mode */
 .glass-panel {
-  background: rgba(20, 20, 22, 0.5);
-  backdrop-filter: blur(24px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, rgba(45, 20, 80, 0.3) 0%, rgba(10, 132, 255, 0.15) 100%);
+  backdrop-filter: blur(12px) saturate(180%) contrast(110%);
+  border: 1px solid rgba(191, 90, 242, 0.3); /* Slightly stronger purple border for definition */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(191, 90, 242, 0.1);
+}
+
+.glass-nav, .glass-purple-50 {
+  background: rgba(45, 20, 80, 0.5);
+  backdrop-filter: blur(16px) saturate(180%) contrast(110%);
+  border: 1px solid rgba(191, 90, 242, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(191, 90, 242, 0.1);
+}
+
+.glass-orange-50 {
+  background: linear-gradient(135deg, rgba(255, 159, 10, 0.6) 0%, rgba(255, 55, 95, 0.6) 100%);
+  backdrop-filter: blur(12px) saturate(180%) contrast(110%);
+  border: 1px solid rgba(255, 159, 10, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
 }
 
 .glass-panel-dark {
