@@ -61,44 +61,59 @@ export const ChatWidget: React.FC = () => {
   }, []);
 
   // Setup Speech Recognition
-  useEffect(() => {
+  const initRecognition = useCallback(() => {
+    if (recognitionRef.current) return recognitionRef.current;
+
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (SpeechRecognition) {
-      recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = false;
-      recognitionRef.current.interimResults = false;
-      recognitionRef.current.lang = 'it-IT';
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'it-IT';
 
-      recognitionRef.current.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
-        setInputValue(prev => prev + (prev ? ' ' : '') + transcript);
-        setIsListening(false);
+      recognition.onstart = () => {
+        setIsListening(true);
       };
 
-      recognitionRef.current.onerror = (event: any) => {
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setInputValue(prev => prev + (prev ? ' ' : '') + transcript);
+      };
+
+      recognition.onerror = (event: any) => {
         console.error('Speech recognition error:', event.error);
         setIsListening(false);
       };
 
-      recognitionRef.current.onend = () => {
+      recognition.onend = () => {
         setIsListening(false);
       };
+
+      recognitionRef.current = recognition;
+      return recognition;
     }
+    return null;
   }, []);
 
-  const toggleListening = () => {
-    if (isListening) {
-      recognitionRef.current?.stop();
-      setIsListening(false);
-    } else {
-      if (recognitionRef.current) {
-        recognitionRef.current.start();
-        setIsListening(true);
-      } else {
-        alert("Il riconoscimento vocale non è supportato dal tuo browser.");
-      }
+  const toggleListening = useCallback(() => {
+    const recognition = initRecognition();
+
+    if (!recognition) {
+      alert("Il riconoscimento vocale non è supportato dal tuo browser. Su iOS usa Safari per questa funzione.");
+      return;
     }
-  };
+
+    try {
+      if (isListening) {
+        recognition.stop();
+      } else {
+        recognition.start();
+      }
+    } catch (error) {
+      console.error("Speech recognition toggle error:", error);
+      setIsListening(false);
+    }
+  }, [isListening, initRecognition]);
 
   const stopSpeaking = useCallback(() => {
     if (synthRef.current) {
@@ -224,8 +239,7 @@ export const ChatWidget: React.FC = () => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed inset-0 md:absolute md:inset-auto md:bottom-20 md:right-0 w-full h-full md:w-[400px] md:h-[550px] glass-purple-50 md:rounded-2xl shadow-2xl border-0 md:border md:border-white/10 flex flex-col overflow-hidden z-[1000]"
-            style={{ height: '100dvh' }}
+            className="fixed inset-0 md:absolute md:inset-auto md:bottom-20 md:right-0 w-full h-[100dvh] md:h-[550px] md:w-[400px] glass-purple-50 md:rounded-2xl shadow-2xl border-0 md:border md:border-white/10 flex flex-col overflow-hidden z-[1000]"
           >
             {/* Header */}
             <div className="p-4 bg-white/5 border-b border-white/10 flex justify-between items-center">
