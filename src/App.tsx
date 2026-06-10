@@ -145,7 +145,7 @@ export default function App() {
             initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
-            className="fixed inset-x-4 top-[84px] glass-purple-50 text-white rounded-none p-6 z-[100] flex flex-col gap-4 md:hidden"
+            className="fixed inset-x-4 top-[84px] md:right-4 md:left-auto md:w-80 glass-purple-50 text-white rounded-none p-6 z-[100] flex flex-col gap-4"
             style={{ pointerEvents: 'auto' }}
           >
             <button
@@ -199,7 +199,7 @@ export default function App() {
                 setMobileMenuOpen(false);
               }}
               href="#contatti" 
-              className="text-xs uppercase font-bold tracking-widest text-white/95 bg-[#0A0A0B]/50 py-3 px-4 rounded-none hover:bg-[#0A0A0B]/90 transition-all text-center block mt-2 shadow font-semibold"
+              className="text-xs uppercase font-bold tracking-widest text-white btn-brand py-3 px-4 rounded-none text-center block mt-2 shadow font-bold"
             >
               Parliamo del tuo Progetto
             </a>
@@ -279,7 +279,7 @@ export default function App() {
                         setAboutOpen(false);
                         window.location.hash = "#contatti";
                       }}
-                      className="w-full glass-orange-50 text-white font-bold py-4 rounded-none uppercase tracking-widest text-xs cursor-pointer hover:bg-accent-orange/60 transition-all"
+                      className="w-full btn-brand text-white font-bold py-4 rounded-none uppercase tracking-widest text-xs cursor-pointer transition-all"
                     >
                       Lavoriamo Insieme
                     </button>
@@ -376,7 +376,11 @@ export default function App() {
         </section>
       </main>
 
-      <Footer onPrivacyOpen={handlePrivacyOpen} />
+      <Footer
+        onPrivacyOpen={handlePrivacyOpen}
+        onAboutOpen={handleAboutOpen}
+        onServiceSelect={handleServiceSelect}
+      />
 
       <ChatWidget />
 
@@ -402,7 +406,7 @@ export default function App() {
                 } catch {}
                 setCookiesAccepted(true);
               }}
-              className="bg-[#0A0A0B]/50 text-white/95 hover:bg-[#0A0A0B]/90 transition-all text-[10px] font-bold px-5 py-2 rounded-none uppercase tracking-widest shrink-0 shadow cursor-pointer w-full sm:w-auto text-center"
+              className="text-white btn-brand text-[10px] font-bold px-5 py-2 rounded-none uppercase tracking-widest shrink-0 shadow cursor-pointer w-full sm:w-auto text-center"
             >
               Accetto Cookie di Sessione
             </button>
@@ -466,7 +470,7 @@ export default function App() {
                     href={`https://wa.me/393793603321?text=${encodeURIComponent(SERVICES_DATA[selectedService].whatsappMessage)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full glass-orange-50 hover:shadow-xl hover:scale-[1.02] transition-all text-white font-bold py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] shadow-lg"
+                    className="w-full btn-brand hover:shadow-xl hover:scale-[1.02] transition-all text-white font-bold py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] shadow-lg"
                   >
                     Prenota Consulenza Gratuita <MessageSquare className="w-4 h-4" />
                   </a>

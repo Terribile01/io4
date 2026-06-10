@@ -1,7 +1,16 @@
 import React from 'react';
-import { MessageSquare, Compass } from 'lucide-react';
+import { MessageSquare, Compass, Facebook, Linkedin, Send, MessageCircle, ChevronRight } from 'lucide-react';
+import { SERVICES_DATA } from '../App';
 
-export const Footer = React.memo(({ onPrivacyOpen }: { onPrivacyOpen: () => void }) => {
+interface FooterProps {
+  onPrivacyOpen: () => void;
+  onAboutOpen: () => void;
+  onServiceSelect: (service: keyof typeof SERVICES_DATA) => void;
+}
+
+export const Footer = React.memo(({ onPrivacyOpen, onAboutOpen, onServiceSelect }: FooterProps) => {
+  const currentUrl = "https://facilissimo-web.vercel.app/";
+
   return (
     <footer className="glass-nav text-white pt-16 pb-10 px-6 sm:px-10 rounded-none relative z-20 mt-16 w-full shrink-0">
       <div className="max-w-5xl mx-auto space-y-12">
@@ -21,33 +30,97 @@ export const Footer = React.memo(({ onPrivacyOpen }: { onPrivacyOpen: () => void
           </div>
 
           <div className="space-y-4 text-left">
-            <h5 className="text-[10px] uppercase tracking-widest font-bold text-accent-orange">Servizi Principali</h5>
-            <ul className="text-xs text-white/90 space-y-2.5">
-              <li><a href="#comparativa" className="hover:text-white transition-colors">Siti in Vero Codice (React)</a></li>
-              <li><a href="#comparativa" className="hover:text-white transition-colors">Web Design Classico (WP/Wix)</a></li>
-              <li><a href="#servizi" className="hover:text-white transition-colors">Campagne Pubblicitarie ADS</a></li>
-              <li><a href="#servizi" className="hover:text-white transition-colors">Sistemi di Lead Generation</a></li>
-            </ul>
+            <h5 className="text-[10px] uppercase tracking-widest font-bold text-accent-orange">MENU</h5>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={onAboutOpen}
+                className="text-left text-[10px] font-bold uppercase tracking-widest text-white/90 hover:text-white transition-colors cursor-pointer"
+              >
+                CHI SONO
+              </button>
+              <div className="space-y-2">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-white/90 flex items-center gap-1">
+                  Servizi <ChevronRight className="w-2.5 h-2.5 rotate-90" />
+                </div>
+                <div className="flex flex-col gap-2 pl-2 border-l border-white/10">
+                  {Object.keys(SERVICES_DATA).map((key) => (
+                    <button
+                      key={key}
+                      onClick={() => onServiceSelect(key as keyof typeof SERVICES_DATA)}
+                      className="text-left text-[9px] font-bold uppercase tracking-widest text-white/70 hover:text-white transition-colors cursor-pointer"
+                    >
+                      {SERVICES_DATA[key as keyof typeof SERVICES_DATA].title.replace('Web Design Classico', 'Web Design').replace('Sviluppo Custom (React)', 'Sviluppo React').replace('Sistemi di Acquisizione', 'Lead Generation').replace('Advertising & Visibilità', 'Marketing & Ads')}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <a
+                href="#comparativa"
+                className="text-[10px] font-bold uppercase tracking-widest text-white/90 hover:text-white transition-colors"
+              >
+                Codice vs WP
+              </a>
+              <a
+                href="#ai-planner"
+                className="text-[10px] font-bold uppercase tracking-widest text-accent-orange hover:text-white transition-colors"
+              >
+                AI Planner
+              </a>
+              <a
+                href="#contatti"
+                className="text-[10px] font-bold uppercase tracking-widest text-white/90 hover:text-white transition-colors"
+              >
+                Parliamo del tuo Progetto
+              </a>
+            </div>
           </div>
 
           <div className="space-y-4 text-left">
-            <h5 className="text-[10px] uppercase tracking-widest font-bold text-accent-pink">Consulenza Istantanea</h5>
-            <p className="text-xs text-white/90 leading-relaxed">
-              Tutte le consulenze partono da una mini-call conoscitiva gratuita di 15 minuti su zoom o whatsapp.
-            </p>
+            <h5 className="text-[10px] uppercase tracking-widest font-bold text-accent-pink">Condividi</h5>
             <div className="flex gap-4">
               <a
-                href="https://wa.me/393793603321"
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/5 text-white/90 hover:text-white transition-colors"
-                title="Contatta via WhatsApp"
+                className="w-10 h-10 rounded-full bg-[#0077B5] flex items-center justify-center text-white hover:scale-110 transition-transform"
+                title="Condividi su LinkedIn"
               >
-                <MessageSquare className="w-4 h-4" />
+                <Linkedin className="w-5 h-5" />
               </a>
               <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-[#1877F2] flex items-center justify-center text-white hover:scale-110 transition-transform"
+                title="Condividi su Facebook"
+              >
+                <Facebook className="w-5 h-5" />
+              </a>
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent("Guarda questo sito: " + currentUrl)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-[#25D366] flex items-center justify-center text-white hover:scale-110 transition-transform"
+                title="Condividi su WhatsApp"
+              >
+                <MessageCircle className="w-5 h-5" />
+              </a>
+              <a
+                href={`https://t.me/share/url?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent("Guarda questo sito!")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-[#0088CC] flex items-center justify-center text-white hover:scale-110 transition-transform"
+                title="Condividi su Telegram"
+              >
+                <Send className="w-5 h-5" />
+              </a>
+            </div>
+
+            <div className="pt-6">
+              <h5 className="text-[10px] uppercase tracking-widest font-bold text-accent-cyan">Torna su</h5>
+              <a
                 href="#hero"
-                className="w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/5 text-white/90 hover:text-white transition-colors"
+                className="mt-2 w-9 h-9 rounded-none border border-white/15 flex items-center justify-center hover:bg-white/5 text-white/90 hover:text-white transition-colors"
                 title="Torna all'inizio"
               >
                 <Compass className="w-4 h-4" />
@@ -59,7 +132,7 @@ export const Footer = React.memo(({ onPrivacyOpen }: { onPrivacyOpen: () => void
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-[#8C8880] font-mono">
           <p>© 2026 FACILISSIMO WEB / FW di Maria Teresa Rogani. Tutti i diritti riservati.</p>
           <div className="flex gap-4">
-            <a href="#contatti" className="hover:text-white">P.IVA: 01234567890</a>
+            <a href="#contatti" className="hover:text-white">P.IVA: 02136780430</a>
             <span>•</span>
             <a
               href="#"
