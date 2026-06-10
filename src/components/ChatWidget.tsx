@@ -129,6 +129,9 @@ export const ChatWidget: React.FC = () => {
     const itVoices = voices.filter(v => v.lang.startsWith('it'));
 
     const femaleItalianVoice = itVoices.find(v =>
+      (v.name.toLowerCase().includes('neural') || v.name.toLowerCase().includes('natural')) &&
+      (v.name.toLowerCase().includes('elsa') || v.name.toLowerCase().includes('alice') || v.name.toLowerCase().includes('paola'))
+    ) || itVoices.find(v =>
       (v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('neural')) &&
       (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('elsa') || v.name.toLowerCase().includes('cosimo') === false)
     ) || itVoices.find(v =>
@@ -140,8 +143,8 @@ export const ChatWidget: React.FC = () => {
     }
 
     utterance.lang = 'it-IT';
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0; // Reset pitch to 1.0 to avoid the "drunk" effect
+    utterance.rate = 1.25;
+    utterance.pitch = 1.1; // Slightly higher pitch for enthusiasm and confidence
 
     utterance.onend = () => setSpeakingIndex(null);
     utterance.onerror = () => setSpeakingIndex(null);
