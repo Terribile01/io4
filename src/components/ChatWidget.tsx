@@ -142,9 +142,18 @@ export const ChatWidget: React.FC = () => {
       utterance.voice = femaleItalianVoice;
     }
 
+    // Detect Apple devices (Mac, iPhone, iPad) to avoid excessive speed
+    const isApple = /Macintosh|iPhone|iPad|iPod/.test(navigator.userAgent) ||
+                   (navigator.userAgent.includes('Mac') && navigator.maxTouchPoints > 1);
+
     utterance.lang = 'it-IT';
-    utterance.rate = 1.25;
-    utterance.pitch = 1.1; // Slightly higher pitch for enthusiasm and confidence
+    if (isApple) {
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+    } else {
+      utterance.rate = 1.25;
+      utterance.pitch = 1.1; // Slightly higher pitch for enthusiasm and confidence
+    }
 
     utterance.onend = () => setSpeakingIndex(null);
     utterance.onerror = () => setSpeakingIndex(null);
