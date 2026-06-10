@@ -181,6 +181,12 @@ ${dynamicDetails}
                       <option value="Servizi Professionali">Servizi Professionali / Studi</option>
                       <option value="E-commerce e Retail">E-commerce e Retail</option>
                       <option value="Artigianato & Produzione">Artigianato & Produzione</option>
+                      <option value="Turismo e Hospitality">Turismo e Hospitality</option>
+                      <option value="Immobiliare e Real Estate">Immobiliare e Real Estate</option>
+                      <option value="Formazione e Coaching">Formazione e Coaching</option>
+                      <option value="Automotive e Concessionarie">Automotive e Concessionarie</option>
+                      <option value="Pet Services">Pet Services</option>
+                      <option value="Eventi e Matrimoni">Eventi e Matrimoni</option>
                       <option value="Altro">Altro</option>
                     </select>
                   </div>

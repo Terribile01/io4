@@ -345,8 +345,8 @@ export default function App() {
             <span className="text-[10px] font-bold uppercase tracking-widest text-[#BF5AF2] bg-[#BF5AF2]/10 px-3.5 py-1 rounded-full flex items-center justify-center gap-1 mx-auto w-max">
               Assistente Strategico <Sparkles className="w-3.5 h-3.5" />
             </span>
-            <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-white/95">
-              Ricevi un'Idea di Strategia Subito
+            <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-white/95 uppercase">
+              Ricevi una Strategia di Crescita
             </h2>
             <p className="text-xs text-white/95">
               Rispondi a qualche domanda sulla tua attività e riceverai immediatamente alcuni suggerimenti su come migliorare la tua presenza online per trovare più contatti.
@@ -364,8 +364,8 @@ export default function App() {
             <span className="text-[10px] font-bold uppercase tracking-widest text-accent-orange bg-accent-orange/10 px-3.5 py-1 rounded-full">
               Inizia Ora
             </span>
-            <h2 className="font-display text-2xl md:text-3xl font-extrabold text-white/95">
-              Raccontami il Tuo Progetto
+            <h2 className="font-display text-2xl md:text-3xl font-extrabold text-white/95 uppercase">
+              Parliamo del Tuo Progetto
             </h2>
             <p className="text-xs text-white/95">
               Compila il modulo qui sotto. Riceverò i tuoi dati e ti ricontatterò per fissare una breve chiamata gratuita.

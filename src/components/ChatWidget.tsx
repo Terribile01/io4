@@ -357,15 +357,26 @@ export const ChatWidget: React.FC = () => {
                 </div>
               </div>
 
-              <button
-                onClick={() => {
-                  setIsOpen(false);
-                  window.location.hash = "#ai-planner";
-                }}
-                className="w-full py-2 bg-accent-orange/10 hover:bg-accent-orange/20 border border-accent-orange/20 rounded-xl flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest text-accent-orange transition-all"
-              >
-                Configura Strategia AI <ArrowRight className="w-3 h-3" />
-              </button>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    window.location.hash = "#ai-planner";
+                  }}
+                  className="py-2 bg-[#BF5AF2]/10 hover:bg-[#BF5AF2]/20 border border-[#BF5AF2]/20 rounded-xl flex items-center justify-center gap-2 text-[8px] font-bold uppercase tracking-widest text-[#BF5AF2] transition-all"
+                >
+                  Configura la tua Strategia <ArrowRight className="w-3 h-3" />
+                </button>
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    window.location.hash = "#contatti";
+                  }}
+                  className="py-2 bg-accent-orange/10 hover:bg-accent-orange/20 border border-accent-orange/20 rounded-xl flex items-center justify-center gap-2 text-[8px] font-bold uppercase tracking-widest text-accent-orange transition-all"
+                >
+                  Parliamo del tuo Progetto <ArrowRight className="w-3 h-3" />
+                </button>
+              </div>
             </div>
           </motion.div>
         )}
