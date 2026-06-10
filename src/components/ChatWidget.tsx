@@ -21,7 +21,7 @@ const ROI_ACTION = "Analizziamo il mio ROI";
 export const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: "Ciao! Sono Teresa di Facilissimo Web. Sono qui per aiutarti a far crescere il tuo business online. Come posso esserti utile oggi?" }
+    { role: 'assistant', content: "Ciao! Sono l'assistente virtuale di Facilissimo Web, progettata da M. Teresa Rogani (Free Web Designer e proprietaria del brand). Sono qui per aiutarti a far crescere il tuo business online. Come posso esserti utile oggi?" }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -248,7 +248,7 @@ export const ChatWidget: React.FC = () => {
                   <Sparkles className="w-4 h-4 text-accent-blue" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold uppercase tracking-tight">Teresa | Facilissimo Web</h4>
+                  <h4 className="text-sm font-bold uppercase tracking-tight">ASSISTENTE / FACILISSIMO WEB</h4>
                   <div className="flex items-center gap-1.5">
                     <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
                     <span className="text-[10px] text-white/60 uppercase font-bold tracking-widest">Online</span>

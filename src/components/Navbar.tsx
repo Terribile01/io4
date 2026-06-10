@@ -35,60 +35,14 @@ export const Navbar = React.memo(({ onAboutOpen, onServiceSelect, onMobileMenuTo
             </span>
           </a>
 
-          <div className="hidden md:flex items-center gap-7">
-            <button
-              onClick={onAboutOpen}
-              className="text-[10px] font-bold uppercase tracking-widest text-white/90 hover:text-white transition-colors cursor-pointer"
-            >
-              CHI SONO
-            </button>
-            <div className="relative group/servizi">
-              <a
-                href="#servizi"
-                className="text-[10px] font-bold uppercase tracking-widest text-white/90 hover:text-white transition-colors flex items-center gap-1"
-              >
-                Servizi <ChevronRight className="w-2.5 h-2.5 rotate-90" />
-              </a>
-              <div className="absolute top-[calc(100%+10px)] left-0 w-48 glass-nav shadow-2xl opacity-0 invisible group-hover/servizi:opacity-100 group-hover/servizi:visible transition-all duration-200 py-3 z-[110]">
-                {Object.keys(SERVICES_DATA).map((key) => (
-                  <button
-                    key={key}
-                    onClick={() => onServiceSelect(key as keyof typeof SERVICES_DATA)}
-                    className="w-full text-left px-4 py-2 text-[9px] font-bold uppercase tracking-widest text-white/70 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
-                  >
-                    {SERVICES_DATA[key as keyof typeof SERVICES_DATA].title.replace('Web Design Classico', 'Web Design').replace('Sviluppo Custom (React)', 'Sviluppo React').replace('Sistemi di Acquisizione', 'Lead Generation').replace('Advertising & Visibilità', 'Marketing & Ads')}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <a
-              href="#comparativa"
-              className="text-[10px] font-bold uppercase tracking-widest text-white/90 hover:text-white transition-colors"
-            >
-              Codice vs WP
-            </a>
-            <a
-              href="#ai-planner"
-              className="text-[10px] font-bold uppercase tracking-widest text-accent-orange hover:text-white transition-colors flex items-center gap-1"
-            >
-              AI Planner <Sparkles className="w-3 h-3 text-accent-orange" />
-            </a>
-          </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <a
-            href="#contatti"
-            className="hidden md:flex glass-purple-50 text-white/95 hover:bg-accent-purple/30 transition-all text-[9px] h-9 font-bold px-4 rounded-none items-center justify-center uppercase tracking-wider shrink-0"
-          >
-            Parliamo del tuo Progetto
-          </a>
-
           <button
             onClick={onMobileMenuToggle}
-            className="md:hidden text-white/90 hover:text-white p-1 cursor-pointer pointer-events-auto"
+            className="text-white/90 hover:text-white p-1 cursor-pointer pointer-events-auto"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? <X className="w-6 h-6 md:w-10 md:h-10" /> : <Menu className="w-6 h-6 md:w-10 md:h-10" />}
           </button>
         </div>
       </div>

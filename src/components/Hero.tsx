@@ -46,9 +46,9 @@ const HeroComponent: React.FC<HeroProps> = ({ onServiceSelect }) => {
             <button
               key={idx}
               onClick={() => onServiceSelect(tag as keyof typeof SERVICES_DATA)}
-              className="text-[10px] font-bold bg-accent-purple/20 text-white/95 px-4 py-2 border border-accent-purple/30 rounded-none shadow-sm flex items-center gap-2 hover:bg-accent-purple/40 hover:border-accent-purple/50 transition-all cursor-pointer backdrop-blur-sm group"
+              className="text-[12px] font-black bg-accent-purple/20 text-white px-6 py-3 border border-accent-purple/30 rounded-none shadow-sm flex items-center gap-2 hover:bg-accent-purple/40 hover:border-accent-purple/50 transition-all cursor-pointer backdrop-blur-sm group"
             >
-              <div className="w-1.5 h-1.5 bg-accent-pink rounded-full group-hover:scale-125 transition-transform"></div>
+              <div className="w-2 h-2 bg-accent-pink rounded-full group-hover:scale-125 transition-transform"></div>
               {tag}
             </button>
           ))}
@@ -62,13 +62,13 @@ const HeroComponent: React.FC<HeroProps> = ({ onServiceSelect }) => {
         >
           <a
             href="#contatti"
-            className="glass-orange-50 hover:shadow-xl hover:scale-[1.03] transition-all text-white font-bold px-8 py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
+            className="btn-brand hover:shadow-xl hover:scale-[1.03] transition-all text-white font-bold px-8 py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
           >
-            Inizia Ora - Parlami del tuo Progetto <ArrowRight className="w-4 h-4" />
+            Inizia Ora - Parlami del tuo Progetto
           </a>
           <a
             href="#servizi"
-            className="bg-transparent border border-white/30 text-white/95 hover:bg-[#121214] hover:text-white transition-all font-bold px-8 py-4 rounded-none flex items-center justify-center uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
+            className="btn-brand hover:shadow-xl hover:scale-[1.03] transition-all text-white font-bold px-8 py-4 rounded-none flex items-center justify-center gap-2 uppercase tracking-widest text-[11px] w-full sm:w-auto cursor-pointer"
           >
             Cosa Posso Fare Per Te
           </a>
