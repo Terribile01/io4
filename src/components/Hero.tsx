@@ -46,7 +46,7 @@ const HeroComponent: React.FC<HeroProps> = ({ onServiceSelect }) => {
             <button
               key={idx}
               onClick={() => onServiceSelect(tag as keyof typeof SERVICES_DATA)}
-              className="text-[12px] font-black bg-accent-purple/20 text-white px-6 py-3 border border-accent-purple/30 rounded-none shadow-sm flex items-center gap-2 hover:bg-accent-purple/40 hover:border-accent-purple/50 transition-all cursor-pointer backdrop-blur-sm group"
+              className="text-sm font-black bg-accent-purple/20 text-white px-8 py-4 border-[4px] border-white rounded-none shadow-sm flex items-center gap-2 hover:bg-accent-purple/40 hover:border-accent-purple/50 transition-all cursor-pointer backdrop-blur-sm group"
             >
               <div className="w-2 h-2 bg-accent-pink rounded-full group-hover:scale-125 transition-transform"></div>
               {tag}

@@ -147,9 +147,9 @@ const AIPlanner = React.memo(() => {
           <div className="flex justify-center">
             <button
               onClick={() => setStep(1)}
-              className="grad-electric hover:shadow-lg text-white font-bold px-6 py-3 rounded-none flex items-center gap-2 select-none cursor-pointer text-xs uppercase tracking-widest transition-transform hover:scale-105"
+              className="btn-brand hover:shadow-lg text-white font-bold px-6 py-3 rounded-none flex items-center select-none cursor-pointer text-xs uppercase tracking-widest transition-transform hover:scale-105"
             >
-              Configura il mio Progetto <ArrowRight className="w-4 h-4" />
+              Configura il mio Progetto
             </button>
           </div>
         </div>
@@ -203,15 +203,15 @@ const AIPlanner = React.memo(() => {
           <div className="flex justify-between items-center pt-4 border-t border-white/10/50">
             <button
               onClick={handlePrev}
-              className="flex items-center gap-1.5 text-xs font-bold uppercase text-white/90 hover:text-white/95"
+              className="flex items-center gap-1.5 text-xs font-bold uppercase text-white/90 hover:text-white/95 cursor-pointer"
             >
-              <ArrowLeft className="w-4 h-4" /> Indietro
+              Indietro
             </button>
             <button
               onClick={handleNext}
-              className="grad-electric hover:shadow text-white font-bold px-5 py-2.5 rounded-none flex items-center gap-1.5 text-xs uppercase tracking-widest cursor-pointer"
+              className="btn-brand hover:shadow text-white font-bold px-5 py-2.5 rounded-none flex items-center text-xs uppercase tracking-widest cursor-pointer"
             >
-              Prosegui <ArrowRight className="w-4 h-4" />
+              Prosegui
             </button>
           </div>
         </div>
@@ -263,15 +263,15 @@ const AIPlanner = React.memo(() => {
           <div className="flex justify-between items-center pt-4 border-t border-white/10/50">
             <button
               onClick={handlePrev}
-              className="flex items-center gap-1.5 text-xs font-bold uppercase text-white/90 hover:text-white/95"
+              className="flex items-center gap-1.5 text-xs font-bold uppercase text-white/90 hover:text-white/95 cursor-pointer"
             >
-              <ArrowLeft className="w-4 h-4" /> Indietro
+              Indietro
             </button>
             <button
               onClick={handleNext}
-              className="grad-electric hover:shadow text-white font-bold px-5 py-2.5 rounded-none flex items-center gap-1.5 text-xs uppercase tracking-widest cursor-pointer"
+              className="btn-brand hover:shadow text-white font-bold px-5 py-2.5 rounded-none flex items-center text-xs uppercase tracking-widest cursor-pointer"
             >
-              Prosegui <ArrowRight className="w-4 h-4" />
+              Prosegui
             </button>
           </div>
         </div>
@@ -351,15 +351,15 @@ const AIPlanner = React.memo(() => {
           <div className="flex justify-between items-center pt-4 border-t border-white/10/50">
             <button
               onClick={handlePrev}
-              className="flex items-center gap-1.5 text-xs font-bold uppercase text-white/90 hover:text-white/95"
+              className="flex items-center gap-1.5 text-xs font-bold uppercase text-white/90 hover:text-white/95 cursor-pointer"
             >
-              <ArrowLeft className="w-4 h-4" /> Indietro
+              Indietro
             </button>
             <button
               onClick={handleNext}
-              className="grad-sunset hover:shadow-lg text-white font-bold px-6 py-2.5 rounded-none flex items-center gap-1.5 text-xs uppercase tracking-widest cursor-pointer transition-transform hover:scale-102"
+              className="btn-brand hover:shadow-lg text-white font-bold px-6 py-2.5 rounded-none flex items-center text-xs uppercase tracking-widest cursor-pointer transition-transform hover:scale-102"
             >
-              Riepilogo Progetto <Send className="w-4 h-4" />
+              Riepilogo Progetto
             </button>
           </div>
         </div>

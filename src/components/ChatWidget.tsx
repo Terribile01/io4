@@ -386,18 +386,18 @@ export const ChatWidget: React.FC = () => {
                     setIsOpen(false);
                     window.location.hash = "#ai-planner";
                   }}
-                  className="py-2 bg-[#BF5AF2]/10 hover:bg-[#BF5AF2]/20 border border-[#BF5AF2]/20 rounded-xl flex items-center justify-center gap-2 text-[8px] font-bold uppercase tracking-widest text-[#BF5AF2] transition-all"
+                  className="py-2 btn-brand rounded-none flex items-center justify-center text-[8px] font-bold uppercase tracking-widest text-white transition-all"
                 >
-                  Configura la tua Strategia <ArrowRight className="w-3 h-3" />
+                  Configura la tua Strategia
                 </button>
                 <button
                   onClick={() => {
                     setIsOpen(false);
                     window.location.hash = "#contatti";
                   }}
-                  className="py-2 bg-accent-orange/10 hover:bg-accent-orange/20 border border-accent-orange/20 rounded-xl flex items-center justify-center gap-2 text-[8px] font-bold uppercase tracking-widest text-accent-orange transition-all"
+                  className="py-2 btn-brand rounded-none flex items-center justify-center text-[8px] font-bold uppercase tracking-widest text-white transition-all"
                 >
-                  Parliamo del tuo Progetto <ArrowRight className="w-3 h-3" />
+                  Parliamo del tuo Progetto
                 </button>
               </div>
             </div>

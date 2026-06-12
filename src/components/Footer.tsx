@@ -40,7 +40,7 @@ export const Footer = React.memo(({ onPrivacyOpen, onAboutOpen, onServiceSelect 
               </button>
               <div className="space-y-2">
                 <div className="text-[10px] font-bold uppercase tracking-widest text-white/90 flex items-center gap-1">
-                  Servizi <ChevronRight className="w-2.5 h-2.5 rotate-90" />
+                  Servizi
                 </div>
                 <div className="flex flex-col gap-2 pl-2 border-l border-white/10">
                   {Object.keys(SERVICES_DATA).map((key) => (
@@ -103,7 +103,19 @@ export const Footer = React.memo(({ onPrivacyOpen, onAboutOpen, onServiceSelect 
                 className="w-10 h-10 rounded-full bg-[#25D366] flex items-center justify-center text-white hover:scale-110 transition-transform"
                 title="Condividi su WhatsApp"
               >
-                <MessageCircle className="w-5 h-5" />
+                <div
+                  className="w-5 h-5 bg-current"
+                  style={{
+                    maskImage: 'url(https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/whatsapp.svg)',
+                    WebkitMaskImage: 'url(https://cdn.jsdelivr.net/npm/simple-icons@v13/icons/whatsapp.svg)',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskPosition: 'center',
+                    WebkitMaskPosition: 'center',
+                    maskSize: 'contain',
+                    WebkitMaskSize: 'contain'
+                  }}
+                />
               </a>
               <a
                 href={`https://t.me/share/url?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent("Guarda questo sito!")}`}

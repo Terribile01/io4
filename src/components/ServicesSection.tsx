@@ -39,7 +39,7 @@ export const ServicesSection = React.memo(() => {
           <div className="pt-6 border-t border-white/10/50 mt-6 flex justify-between items-center text-xs">
             <span className="font-medium text-white/95 font-mono">Web Design</span>
             <a href="#comparativa" className="text-accent-blue hover:underline flex items-center gap-1">
-              Scopri di più <ArrowRight className="w-3.5 h-3.5" />
+              Scopri di più
             </a>
           </div>
         </div>
@@ -57,7 +57,7 @@ export const ServicesSection = React.memo(() => {
           <div className="pt-6 border-t border-white/10/50 mt-6 flex justify-between items-center text-xs">
             <span className="font-medium text-white/95 font-mono">Lead Gen</span>
             <a href="#calcolatore" className="text-accent-pink hover:underline flex items-center gap-1">
-              Prova il simulatore <ArrowRight className="w-3.5 h-3.5" />
+              Prova il simulatore
             </a>
           </div>
         </div>
@@ -75,7 +75,7 @@ export const ServicesSection = React.memo(() => {
           <div className="pt-6 border-t border-white/10/50 mt-6 flex justify-between items-center text-xs">
             <span className="font-medium text-white/95 font-mono">Marketing</span>
             <a href="#contatti" className="text-accent-orange hover:underline flex items-center gap-1">
-              Chiedi info <ArrowRight className="w-3.5 h-3.5" />
+              Chiedi info
             </a>
           </div>
         </div>

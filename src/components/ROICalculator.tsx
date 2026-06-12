@@ -314,7 +314,7 @@ const ROICalculator = React.memo(() => {
         </div>
         <a 
           href="#contatti"
-          className="grad-electric text-white hover:shadow-lg transition-all px-4 py-2.5 rounded-none font-bold text-center w-full sm:w-auto shrink-0 uppercase tracking-widest text-[10px]"
+          className="btn-brand text-white hover:shadow-lg transition-all px-4 py-2.5 rounded-none font-bold text-center w-full sm:w-auto shrink-0 uppercase tracking-widest text-[10px]"
         >
           Chiedimi una consulenza
         </a>
