@@ -384,9 +384,9 @@ ${dynamicDetails}
                 <button
                   type="button"
                   onClick={prevStep}
-                  className="flex-1 py-3 border border-white/10 hover:bg-white/5 text-white/70 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all"
+                  className="flex-1 py-3 border-[4px] border-white hover:bg-white/5 text-white/70 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all"
                 >
-                  <ChevronLeft className="w-4 h-4" /> Indietro
+                  Indietro
                 </button>
               )}
 
@@ -395,18 +395,18 @@ ${dynamicDetails}
                   type="button"
                   disabled={step === 1 && (!businessName || !clientName)}
                   onClick={nextStep}
-                  className="flex-[2] bg-white text-black hover:bg-accent-blue hover:text-white disabled:opacity-30 disabled:cursor-not-allowed py-3 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all group"
+                  className="flex-[2] bg-white text-black hover:bg-accent-blue hover:text-white disabled:opacity-30 disabled:cursor-not-allowed py-3 border-[4px] border-white text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all group"
                 >
-                  Continua <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  Continua
                 </button>
               ) : (
                 <button
                   type="button"
                   onClick={handleSubmitContact}
                   disabled={!privacyAccepted || !phone}
-                  className="flex-[2] grad-sunset text-white hover:shadow-[0_0_20px_rgba(255,55,95,0.4)] disabled:opacity-30 disabled:cursor-not-allowed py-3 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all"
+                  className="flex-[2] btn-brand text-white hover:shadow-[0_0_20px_rgba(255,55,95,0.4)] disabled:opacity-30 disabled:cursor-not-allowed py-3 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all"
                 >
-                  Invia Progetto <Send className="w-4 h-4" />
+                  Invia Progetto
                 </button>
               )}
             </div>

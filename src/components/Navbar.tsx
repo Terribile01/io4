@@ -40,7 +40,8 @@ export const Navbar = React.memo(({ onAboutOpen, onServiceSelect, onMobileMenuTo
         <div className="flex items-center gap-3">
           <button
             onClick={onMobileMenuToggle}
-            className="text-white/90 hover:text-white p-1 cursor-pointer pointer-events-auto"
+            className="text-white/90 hover:text-white p-2 md:p-4 cursor-pointer pointer-events-auto border-[4px] border-white transition-all active:scale-95"
+            aria-label="Menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6 md:w-10 md:h-10" /> : <Menu className="w-6 h-6 md:w-10 md:h-10" />}
           </button>

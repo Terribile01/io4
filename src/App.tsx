@@ -239,7 +239,7 @@ export default function App() {
                 <div className="space-y-6">
                   <div className="w-full aspect-square rounded-2xl overflow-hidden border border-white/10">
                     <img
-                      src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop"
+                      src="/assets/uploads/maria%20teresa%20rogani.jpg"
                       alt="Maria Teresa Rogani"
                       className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
                     />
@@ -251,26 +251,37 @@ export default function App() {
                     </span>
                     <h3 className="font-display text-2xl font-bold">Maria Teresa Rogani</h3>
                     <p className="text-sm text-white/90 leading-relaxed font-light">
-                      Sono una libera professionista che aiuta le piccole e medie imprese a farsi strada nel mondo digitale. Mi occupo di creare siti web che funzionano davvero e di portare nuovi clienti attraverso strategie di marketing mirate.
+                      Il mio approccio al web nasce da basi solide: un diploma in Grafica Pubblicitaria e una laurea in Comunicazione Visiva. Questo mi permette di non limitarmi all'aspetto estetico, ma di costruire progetti dove la forma serve la funzione.
                     </p>
                     <p className="text-sm text-white/95 leading-relaxed font-light">
-                      A differenza delle grandi agenzie, con me avrai un rapporto diretto e trasparente. Il mio obiettivo è farti ottenere risultati concreti, senza tecnicismi inutili, lavorando insieme per far crescere la tua attività.
+                      Con Facilissimo Web, aiuto le microimprese a costruire una presenza digitale consapevole e autonoma. Mi occupo di creare siti Web che funzionano davvero e presentarti a nuovi clienti attraverso strategie di marketing mirate.
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 gap-3 pt-4">
-                    <div className="flex items-center gap-3 p-4 bg-white/5 border border-white/10 rounded-xl">
-                      <Check className="w-5 h-5 text-green-500" />
-                      <span className="text-xs font-bold uppercase tracking-wider">Rapporto Diretto</span>
-                    </div>
-                    <div className="flex items-center gap-3 p-4 bg-white/5 border border-white/10 rounded-xl">
-                      <Check className="w-5 h-5 text-green-500" />
-                      <span className="text-xs font-bold uppercase tracking-wider">Zero Costi Nascosti</span>
-                    </div>
-                    <div className="flex items-center gap-3 p-4 bg-white/5 border border-white/10 rounded-xl">
-                      <Check className="w-5 h-5 text-green-500" />
-                      <span className="text-xs font-bold uppercase tracking-wider">Risultati Concreti</span>
-                    </div>
+                  <div className="space-y-3 pt-4 border-t border-white/10">
+                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-accent-orange mb-2">Competenze Principali</h4>
+                    <ul className="space-y-2">
+                      <li className="flex items-center gap-2 text-xs font-medium text-white/80 uppercase tracking-wider">
+                        <Check className="w-3.5 h-3.5 text-green-500 shrink-0" />
+                        Grafica Pubblicitaria & Brand Identity
+                      </li>
+                      <li className="flex items-center gap-2 text-xs font-medium text-white/80 uppercase tracking-wider">
+                        <Check className="w-3.5 h-3.5 text-green-500 shrink-0" />
+                        Comunicazione Visiva & UX Design
+                      </li>
+                      <li className="flex items-center gap-2 text-xs font-medium text-white/80 uppercase tracking-wider">
+                        <Check className="w-3.5 h-3.5 text-green-500 shrink-0" />
+                        Web Design & Sviluppo Strategico
+                      </li>
+                      <li className="flex items-center gap-2 text-xs font-medium text-white/80 uppercase tracking-wider">
+                        <Check className="w-3.5 h-3.5 text-green-500 shrink-0" />
+                        Marketing per Microimprese
+                      </li>
+                      <li className="flex items-center gap-2 text-xs font-medium text-white/80 uppercase tracking-wider">
+                        <Check className="w-3.5 h-3.5 text-green-500 shrink-0" />
+                        Consulenza Digitale Indipendente
+                      </li>
+                    </ul>
                   </div>
 
                   <div className="pt-8">
